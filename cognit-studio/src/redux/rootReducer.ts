@@ -1,11 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit';
+import authReducer from './auth/authSlice';
 
 /**
  * Root reducer que combinará todos os slices da aplicação.
  * Inicialmente vazio – módulos serão adicionados conforme implementados.
  */
 const rootReducer = combineReducers({
-  // auth: authReducer,
+  auth: authReducer,
   // chat: chatReducer,
   // ui: uiReducer,
 });
