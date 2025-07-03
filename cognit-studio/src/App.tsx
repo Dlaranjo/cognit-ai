@@ -1,37 +1,34 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './styles/globals.css';
+import PaginaLogin from './pages/Login/Login';
+import PaginaDashboard from './pages/Dashboard/Dashboard';
+import RotaProtegida from './components/organisms/RotaProtegida/RotaProtegida';
+import { useAutenticacao } from './hooks/useAutenticacao';
 
-const App: React.FC = () => {
-  return (
-    <div className="app">
-      <header className="app-header">
-        <h1>🤖 Cognit Studio</h1>
-        <p>Agregador de LLMs - Em desenvolvimento</p>
-      </header>
-      
-      <main className="app-main">
-        <div className="status-card">
-          <h2>✅ Setup Concluído</h2>
-          <ul>
-            <li>React + TypeScript configurado</li>
-            <li>Estrutura Atomic Design criada</li>
-            <li>Redux Toolkit instalado</li>
-            <li>ESLint + Prettier configurados</li>
-          </ul>
-        </div>
-        
-        <div className="next-steps">
-          <h3>🎯 Próximos Passos:</h3>
-          <ol>
-            <li>Implementar Redux store</li>
-            <li>Criar componentes atoms</li>
-            <li>Configurar React Router</li>
-            <li>Adicionar autenticação mockada</li>
-          </ol>
-        </div>
-      </main>
-    </div>
-  );
+// Componente auxiliar para decidir rota inicial
+const RedirecionarRaiz: React.FC = () => {
+  const { autenticado } = useAutenticacao();
+  return <Navigate to={autenticado ? '/dashboard' : '/login'} replace />;
 };
+
+const App: React.FC = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<RedirecionarRaiz />} />
+      <Route path="/login" element={<PaginaLogin />} />
+      <Route
+        path="/dashboard"
+        element={
+          <RotaProtegida>
+            <PaginaDashboard />
+          </RotaProtegida>
+        }
+      />
+      {/* Redirect geral */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  </BrowserRouter>
+);
 
 export default App;
