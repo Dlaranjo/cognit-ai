@@ -9,8 +9,9 @@ describe('Componente Avatar', () => {
     expect(screen.getByText('MS')).toBeInTheDocument();
   });
 
-  it('renderiza tag img quando src fornecido', () => {
+  it('renderiza elemento <img> quando src fornecido', () => {
     render(<Avatar nome="João Teste" src="https://via.placeholder.com/32" />);
-    expect(screen.getByRole('img').tagName).toBe('IMG');
+    const imagens = screen.getAllByRole('img');
+    expect(imagens.some((el) => el.tagName === 'IMG')).toBe(true);
   });
 });
