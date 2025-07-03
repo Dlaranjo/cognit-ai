@@ -1,0 +1,41 @@
+.sidebarNav {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.item {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: var(--spacing-sm);
+  border-radius: 4px;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.item:hover,
+.item:focus {
+  background: var(--color-secondary);
+  outline: none;
+}
+
+.item--ativo {
+  background: var(--color-primary-light);
+  color: var(--color-primary-contrast);
+}
+
+.titulo {
+  font-size: 0.9rem;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hora {
+  font-size: 0.7rem;
+  color: var(--color-text-secondary);
+}
