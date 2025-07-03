@@ -1,0 +1,214 @@
+# Cognit Studio - Cursor Rules
+
+## PROJECT OVERVIEW
+Cognit Studio é um agregador de LLMs em React/TypeScript que permite interação unificada com múltiplos provedores de IA. Utiliza SSO Google (IEBT), chat em tempo real com streaming, upload de arquivos, e histórico de conversas.
+
+## CORE TECHNOLOGIES & PATTERNS
+- **Frontend**: React 18+ + TypeScript (strict mode)
+- **State**: Redux Toolkit com módulos (auth, chat, ui)
+- **Routing**: React Router v6
+- **HTTP**: Axios com interceptors
+- **Auth**: Google SSO + JWT storage
+- **Architecture**: Atomic Design (atoms/molecules/organisms)
+- **Styling**: CSS Modules + CSS Variables
+- **Testing**: Jest + React Testing Library
+
+## MANDATORY PROJECT STRUCTURE
+```
+src/
+├── api/              # API calls & axios config
+├── components/       # Atomic Design components
+│   ├── atoms/        # Basic UI elements
+│   ├── molecules/    # Component combinations  
+│   └── organisms/    # Complex sections
+├── pages/            # Route components
+├── hooks/            # Custom hooks
+├── redux/            # State management
+│   ├── auth/         # Authentication module
+│   ├── chat/         # Chat/conversations module
+│   └── ui/           # UI state module
+├── shared/           # Utils, config, types
+└── styles/           # Global styles & variables
+```
+
+## CRITICAL DEVELOPMENT RULES
+
+### 1. COMPONENT STANDARDS
+- All components MUST be TypeScript with proper interfaces
+- Use functional components with hooks only
+- Follow Atomic Design hierarchy strictly
+- Each component needs: Component.tsx, Component.types.ts, Component.module.css
+- Export default AND named exports
+- Use React.memo for performance when appropriate
+
+### 2. STATE MANAGEMENT
+- Redux for global state ONLY (auth, chat, ui)
+- Use Redux Toolkit (createSlice, createAsyncThunk)
+- Local state with useState for component-specific data
+- Custom hooks for reusable stateful logic
+- Selectors in separate files (authSelectors.ts, etc.)
+
+### 3. API INTEGRATION
+- All API calls through dedicated service files (authApi.ts, chatApi.ts)
+- Use axios interceptors for auth headers
+- Handle loading/error states consistently
+- Implement retry logic for failed requests
+- Type all API responses and requests
+
+### 4. ENVIRONMENT & CONFIG
+- Access env vars ONLY through src/shared/config.ts
+- Never use process.env directly in components
+- Required vars: API_BASE_URL, GOOGLE_CLIENT_ID, WS_URL
+
+### 5. AUTHENTICATION FLOW
+- SSO Google login with JWT storage
+- Auto-logout on token expiry
+- Protected routes with route guards
+- User avatar from Google profile (JWT payload)
+
+## KEY FEATURES TO IMPLEMENT
+
+### Chat Interface
+- Real-time messaging with streaming responses
+- File upload support (image, text, PDF)
+- Provider/model selection
+- Auto-generated chat titles
+- Like/dislike feedback system
+- Copy response functionality
+- Regenerate response option
+
+### Conversation Management
+- Chat history with infinite scroll
+- Soft-delete conversations
+- Search conversations (ilike)
+- Favorite conversations
+- Auto-generated titles from AI
+
+## CODING STANDARDS
+
+### Language Requirements
+- **DEVELOPMENT LANGUAGE**: All development must be in PORTUGUESE
+- Comments, variable names, function names: in Portuguese
+- User-facing messages and labels: in Portuguese
+- Documentation and JSDoc: in Portuguese
+- Only keep English for: technical keywords, library names, and standard web APIs
+
+### Naming Conventions
+- Components: PascalCase (CartaoUsuario, JanelaChat)
+- Files: camelCase (cartaoUsuario.tsx, janelaChat.tsx)
+- Variables/Functions: camelCase (enviarMensagem, obterUsuario)
+- Constants: UPPER_SNAKE_CASE (TIPOS_ARQUIVO, URL_BASE_API)
+- CSS classes: kebab-case with BEM methodology (cartao-usuario__avatar)
+
+### TypeScript Requirements
+- Strict mode enabled
+- Explicit return types for functions
+- Interface definitions for all props/state
+- Generic types where appropriate
+- No 'any' types allowed
+
+### Performance Optimization
+- Lazy load pages with React.lazy()
+- Virtualize large lists
+- Memoize expensive calculations
+- Code splitting by routes
+- Optimize bundle size
+
+## TESTING REQUIREMENTS
+- Unit tests for all components
+- Integration tests for user flows
+- Mock API calls in tests
+- Maintain 80%+ code coverage
+- Test accessibility compliance
+
+## RESPONSIVE DESIGN
+- Mobile-first approach
+- Breakpoints: 640px (sm), 768px (md), 1024px (lg), 1280px (xl)
+- Touch-friendly interfaces
+- Progressive enhancement
+
+## ERROR HANDLING
+- Global error boundaries
+- User-friendly error messages
+- Network error recovery
+- Loading states for all async operations
+- Graceful degradation
+
+## ACCESSIBILITY (A11Y)
+- Semantic HTML elements
+- ARIA labels where needed
+- Keyboard navigation support
+- Color contrast compliance
+- Screen reader compatibility
+
+## COMMIT STANDARDS
+Use Conventional Commits:
+- feat: new feature
+- fix: bug fix  
+- docs: documentation
+- style: formatting
+- refactor: code restructuring
+- test: adding tests
+- chore: maintenance
+
+## WHEN GENERATING CODE:
+1. Always follow the exact folder structure above
+2. Include proper TypeScript interfaces WITH PORTUGUESE NAMES
+3. Implement error handling and loading states
+4. Add responsive CSS with mobile-first approach
+5. Include accessibility attributes
+6. Write corresponding tests WITH PORTUGUESE DESCRIPTIONS
+7. Follow Redux patterns for state management
+8. Use custom hooks for reusable logic
+9. Implement proper error boundaries
+10. Add proper JSDoc comments in PORTUGUESE for complex functions
+11. ALL variable names, function names, and comments MUST be in Portuguese
+12. User-facing text and error messages MUST be in Portuguese
+
+## COMMON PATTERNS TO USE:
+- Custom hooks for API calls (useAutenticacao, useChat)
+- Higher-order components for route protection (comProtecaoRota)
+- Context providers for theme/localization (ProvedorTema)
+- Compound components for complex UI
+- Render props for data sharing
+- Error boundaries for component isolation (LimiteErro)
+
+## AVOID:
+- Class components
+- Direct DOM manipulation
+- Inline styles (use CSS modules)
+- Multiple useState for related data (use useReducer)
+- Props drilling (use context or Redux)
+- Mutating state directly
+- console.log in production code
+- Hardcoded strings (use constants)
+- English variable/function names (ALWAYS use Portuguese)
+- English comments or documentation
+- English user-facing messages
+
+## PORTUGUESE EXAMPLES:
+```typescript
+// ✅ CORRETO - Português
+interface PropriedadesBotao {
+  titulo: string;
+  aoClicar: () => void;
+  carregando?: boolean;
+}
+
+const enviarMensagem = async (conteudo: string): Promise<RespostaMensagem> => {
+  // Envia mensagem para a API
+  try {
+    const resposta = await chatApi.enviarMensagem({ conteudo });
+    return resposta.dados;
+  } catch (erro) {
+    throw new Error('Erro ao enviar mensagem');
+  }
+};
+
+// ❌ INCORRETO - Inglês
+interface ButtonProps {
+  title: string;
+  onClick: () => void;
+  loading?: boolean;
+}
+```
