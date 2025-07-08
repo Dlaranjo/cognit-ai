@@ -1,0 +1,187 @@
+/* Reset CSS Moderno - Cognit Studio */
+
+/* === RESET BÁSICO === */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* === HTML E BODY === */
+html {
+  line-height: var(--line-height-normal);
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: var(--font-family-base);
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+}
+
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+  color: var(--theme-text);
+  background-color: var(--theme-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* === ELEMENTOS DE TEXTO === */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--theme-text);
+}
+
+h1 { font-size: var(--font-size-xxxl); }
+h2 { font-size: var(--font-size-xxl); }
+h3 { font-size: var(--font-size-xl); }
+h4 { font-size: var(--font-size-lg); }
+h5 { font-size: var(--font-size-base); }
+h6 { font-size: var(--font-size-sm); }
+
+p {
+  margin-bottom: var(--spacing-md);
+  color: var(--theme-text);
+}
+
+small {
+  font-size: var(--font-size-sm);
+  color: var(--theme-text-muted);
+}
+
+/* === LISTAS === */
+ul, ol {
+  list-style: none;
+}
+
+/* === LINKS === */
+a {
+  color: var(--theme-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--theme-primary-hover);
+}
+
+/* === FORMULÁRIOS === */
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+  margin: 0;
+}
+
+button, select {
+  text-transform: none;
+}
+
+button, [type='button'], [type='reset'], [type='submit'] {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+  border: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+input, textarea {
+  border: var(--border-width-thin) solid var(--theme-border);
+  border-radius: var(--border-radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--theme-background-elevated);
+  color: var(--theme-text);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--theme-primary);
+  box-shadow: 0 0 0 3px var(--theme-primary-light);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--theme-text-subtle);
+}
+
+/* === TABELAS === */
+table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+/* === ELEMENTOS VISUAIS === */
+hr {
+  height: 0;
+  color: inherit;
+  border-top-width: var(--border-width-thin);
+  border-color: var(--theme-border);
+}
+
+img, svg {
+  display: block;
+  vertical-align: middle;
+  max-width: 100%;
+  height: auto;
+}
+
+/* === ACESSIBILIDADE === */
+[hidden] {
+  display: none !important;
+}
+
+/* Foco visível melhorado */
+:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* === SCROLLBARS CUSTOMIZADAS === */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--theme-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--theme-border);
+  border-radius: var(--border-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-text-subtle);
+}
+
+/* === SELEÇÃO DE TEXTO === */
+::selection {
+  background-color: var(--theme-primary-light);
+  color: var(--theme-text);
+}
+
+/* === UTILITÁRIOS GLOBAIS === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+} 

@@ -1,0 +1,309 @@
+/* Tooltip - Componente Atom */
+
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  position: absolute;
+  z-index: var(--z-tooltip);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--theme-background-elevated);
+  border: var(--border-width-thin) solid var(--theme-border);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--theme-shadow-lg);
+  font-size: var(--font-size-sm);
+  color: var(--theme-text);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+  transition: all var(--transition-fast);
+  pointer-events: none;
+  max-width: 200px;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.tooltip--visivel {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.tooltip--interativo {
+  pointer-events: auto;
+  cursor: auto;
+}
+
+/* === TAMANHOS === */
+.tooltip--pequeno {
+  max-width: 150px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+}
+
+.tooltip--medio {
+  max-width: 200px;
+}
+
+.tooltip--grande {
+  max-width: 300px;
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
+/* === POSIÇÕES === */
+.tooltip--cima {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.95);
+  margin-bottom: var(--spacing-xs);
+}
+
+.tooltip--cima.tooltip--visivel {
+  transform: translateX(-50%) scale(1);
+}
+
+.tooltip--baixo {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.95);
+  margin-top: var(--spacing-xs);
+}
+
+.tooltip--baixo.tooltip--visivel {
+  transform: translateX(-50%) scale(1);
+}
+
+.tooltip--esquerda {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  margin-right: var(--spacing-xs);
+}
+
+.tooltip--esquerda.tooltip--visivel {
+  transform: translateY(-50%) scale(1);
+}
+
+.tooltip--direita {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  margin-left: var(--spacing-xs);
+}
+
+.tooltip--direita.tooltip--visivel {
+  transform: translateY(-50%) scale(1);
+}
+
+/* === SETAS === */
+.seta {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+/* Seta para cima */
+.tooltip--cima .seta {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: var(--spacing-xs) var(--spacing-xs) 0 var(--spacing-xs);
+  border-color: var(--theme-background-elevated) transparent transparent transparent;
+}
+
+.tooltip--cima .seta::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: -4px;
+  border-width: 5px 4px 0 4px;
+  border-style: solid;
+  border-color: var(--theme-border) transparent transparent transparent;
+}
+
+/* Seta para baixo */
+.tooltip--baixo .seta {
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 0 var(--spacing-xs) var(--spacing-xs) var(--spacing-xs);
+  border-color: transparent transparent var(--theme-background-elevated) transparent;
+}
+
+.tooltip--baixo .seta::before {
+  content: '';
+  position: absolute;
+  bottom: -7px;
+  left: -4px;
+  border-width: 0 4px 5px 4px;
+  border-style: solid;
+  border-color: transparent transparent var(--theme-border) transparent;
+}
+
+/* Seta para esquerda */
+.tooltip--esquerda .seta {
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: var(--spacing-xs) 0 var(--spacing-xs) var(--spacing-xs);
+  border-color: transparent transparent transparent var(--theme-background-elevated);
+}
+
+.tooltip--esquerda .seta::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: -4px;
+  border-width: 4px 0 4px 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent var(--theme-border);
+}
+
+/* Seta para direita */
+.tooltip--direita .seta {
+  right: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: var(--spacing-xs) var(--spacing-xs) var(--spacing-xs) 0;
+  border-color: transparent var(--theme-background-elevated) transparent transparent;
+}
+
+.tooltip--direita .seta::before {
+  content: '';
+  position: absolute;
+  right: -7px;
+  top: -4px;
+  border-width: 4px 5px 4px 0;
+  border-style: solid;
+  border-color: transparent var(--theme-border) transparent transparent;
+}
+
+/* === ANIMAÇÕES === */
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes tooltipFadeOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.tooltip--animando-entrada {
+  animation: tooltipFadeIn var(--transition-fast) ease-out;
+}
+
+.tooltip--animando-saida {
+  animation: tooltipFadeOut var(--transition-fast) ease-in;
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 640px) {
+  .tooltip {
+    max-width: 90vw;
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .tooltip--grande {
+    max-width: 90vw;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  /* Simplificar setas no mobile */
+  .seta {
+    display: none;
+  }
+}
+
+/* === TEMA ESCURO === */
+[data-theme="dark"] .tooltip {
+  background-color: var(--theme-background-elevated);
+  border-color: var(--theme-border);
+  color: var(--theme-text);
+}
+
+[data-theme="dark"] .seta {
+  border-color: var(--theme-background-elevated);
+}
+
+[data-theme="dark"] .seta::before {
+  border-color: var(--theme-border);
+}
+
+/* === ESTADOS ESPECIAIS === */
+.tooltip--erro {
+  background-color: var(--color-danger-light);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+
+.tooltip--sucesso {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.tooltip--aviso {
+  background-color: var(--color-warning-light);
+  border-color: var(--color-warning);
+  color: var(--color-warning);
+}
+
+.tooltip--info {
+  background-color: var(--color-info-light);
+  border-color: var(--color-info);
+  color: var(--color-info);
+}
+
+/* === ACESSIBILIDADE === */
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    transition: opacity var(--transition-fast);
+    transform: none !important;
+  }
+  
+  .tooltip--visivel {
+    transform: none !important;
+  }
+  
+  .tooltip--animando-entrada,
+  .tooltip--animando-saida {
+    animation: none;
+  }
+}
+
+/* === CONTEÚDO RICO === */
+.tooltip--rico {
+  white-space: normal;
+  text-align: left;
+  line-height: var(--line-height-normal);
+}
+
+.tooltip--rico h4 {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.tooltip--rico p {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+} 

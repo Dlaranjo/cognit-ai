@@ -1,0 +1,188 @@
+/* Botão - Estilos CSS Modules */
+
+.botao {
+  /* Base do botão */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  
+  /* Tipografia */
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+  
+  /* Layout */
+  border: var(--border-width-thin) solid transparent;
+  border-radius: 8px; /* Bordas mais suaves */
+  cursor: pointer;
+  
+  /* Transições */
+  transition: all 0.2s ease-in-out; /* Transição mais suave */
+  
+  /* Estados */
+  user-select: none;
+  outline: none;
+}
+
+.botao:hover {
+  transform: translateY(-2px); /* Efeito de elevação sutil */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.botao:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* === VARIANTES === */
+
+/* Botão Primário */
+.botao--primario {
+  background-color: var(--color-primary);
+  color: white;
+  border: 1px solid var(--color-primary);
+}
+
+.botao--primario:hover {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.botao--primario:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Botão Secundário */
+.botao--secundario {
+  background-color: white;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.botao--secundario:hover {
+  background-color: #f7f7f7;
+  border-color: #d1d1d1;
+}
+
+.botao--secundario:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Botão Perigo */
+.botao--perigo {
+  background-color: var(--color-danger);
+  color: var(--color-text-inverse);
+  border-color: var(--color-danger);
+}
+
+.botao--perigo:hover:not(:disabled) {
+  background-color: #c82333;
+  border-color: #c82333;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.botao--perigo:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Botão Fantasma */
+.botao--fantasma {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--color-primary);
+}
+
+.botao--fantasma:hover {
+  background-color: var(--color-primary-light);
+}
+
+.botao--fantasma:active:not(:disabled) {
+  background-color: var(--theme-primary-light);
+}
+
+/* === TAMANHOS === */
+
+.botao--pequeno {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  min-height: 2rem;
+}
+
+.botao--medio {
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: var(--font-size-base);
+  min-height: 2.5rem;
+}
+
+.botao--grande {
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: var(--font-size-lg);
+  min-height: 3rem;
+}
+
+/* === MODIFICADORES === */
+
+.botao--largura-completa {
+  width: 100%;
+}
+
+.botao--carregando {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.botao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* === FOCO === */
+.botao:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* === ÍCONES NO BOTÃO === */
+.botao .icone {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+}
+
+/* === SPINNER DE CARREGAMENTO === */
+.spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 640px) {
+  .botao--grande {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    min-height: 2.75rem;
+  }
+  
+  .botao--medio {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    min-height: 2.25rem;
+  }
+} 

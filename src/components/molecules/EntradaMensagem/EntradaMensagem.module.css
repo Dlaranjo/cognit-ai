@@ -1,0 +1,320 @@
+/* EntradaMensagem - Molecule */
+.container {
+  position: relative;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  transition: all var(--transition-duration) var(--transition-timing);
+  box-shadow: var(--shadow-sm);
+}
+
+.container:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.focado {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.arrastando {
+  border-color: var(--color-primary);
+  background: var(--color-primary-light);
+  border-style: dashed;
+}
+
+.carregando {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.desabilitado {
+  opacity: 0.5;
+  pointer-events: none;
+  background: var(--color-gray-50);
+}
+
+/* Anexos */
+.anexos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.anexo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-gray-100);
+  border-radius: var(--border-radius-md);
+  font-size: var(--font-size-sm);
+}
+
+.nomeAnexo {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.tamanhoAnexo {
+  color: var(--color-text-light);
+  font-size: var(--font-size-xs);
+}
+
+.enviando {
+  color: var(--color-primary);
+  font-size: var(--font-size-xs);
+}
+
+.erro {
+  color: var(--color-danger);
+  font-size: var(--font-size-xs);
+}
+
+.removerAnexo {
+  background: none;
+  border: none;
+  color: var(--color-text-light);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-duration);
+}
+
+.removerAnexo:hover {
+  background: var(--color-danger-light);
+  color: var(--color-danger);
+}
+
+/* Entrada principal */
+.entrada {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+}
+
+.textarea {
+  flex: 1;
+  min-height: 24px;
+  max-height: 144px; /* 6 linhas */
+  padding: var(--spacing-sm);
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: 1.5;
+  color: var(--color-text);
+  resize: none;
+  overflow-y: auto;
+}
+
+.textarea::placeholder {
+  color: var(--color-text-light);
+}
+
+.textarea:disabled {
+  color: var(--color-text-light);
+  cursor: not-allowed;
+}
+
+/* Scrollbar customizada */
+.textarea::-webkit-scrollbar {
+  width: 4px;
+}
+
+.textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.textarea::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+.textarea::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-light);
+}
+
+/* Ações */
+.acoes {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.botaoAnexo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  border-radius: var(--border-radius-md);
+  color: var(--color-text-light);
+  cursor: pointer;
+  transition: all var(--transition-duration);
+  font-size: var(--font-size-lg);
+}
+
+.botaoAnexo:hover {
+  background: var(--color-gray-100);
+  color: var(--color-primary);
+}
+
+.botaoAnexo:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.contador {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-light);
+  min-width: 24px;
+  text-align: center;
+}
+
+.contadorAviso {
+  color: var(--color-warning);
+  font-weight: var(--font-weight-medium);
+}
+
+.botaoEnviar {
+  min-width: 40px;
+  height: 32px;
+  border-radius: var(--border-radius-md) !important;
+}
+
+/* Sugestões */
+.sugestoes {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-bottom: none;
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  box-shadow: var(--shadow-lg);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+.sugestao {
+  display: block;
+  width: 100%;
+  padding: var(--spacing-sm);
+  background: none;
+  border: none;
+  text-align: left;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: background-color var(--transition-duration);
+  font-size: var(--font-size-sm);
+}
+
+.sugestao:hover,
+.sugestaoAtiva {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.sugestao:not(:last-child) {
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Input de arquivo oculto */
+.inputArquivo {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Estados responsivos */
+@media (max-width: 768px) {
+  .container {
+    border-radius: var(--border-radius-md);
+  }
+  
+  .entrada {
+    padding: var(--spacing-xs);
+    gap: var(--spacing-xs);
+  }
+  
+  .textarea {
+    font-size: var(--font-size-sm);
+  }
+  
+  .botaoAnexo {
+    width: 28px;
+    height: 28px;
+    font-size: var(--font-size-base);
+  }
+  
+  .botaoEnviar {
+    min-width: 36px;
+    height: 28px;
+  }
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sugestoes {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.anexo {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Estados de foco */
+.container:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .container {
+    background: var(--color-gray-800);
+    border-color: var(--color-gray-600);
+  }
+  
+  .anexo {
+    background: var(--color-gray-700);
+  }
+  
+  .textarea {
+    color: var(--color-gray-100);
+  }
+  
+  .textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+  
+  .sugestoes {
+    background: var(--color-gray-800);
+    border-color: var(--color-gray-600);
+  }
+  
+  .botaoAnexo:hover {
+    background: var(--color-gray-700);
+  }
+} 

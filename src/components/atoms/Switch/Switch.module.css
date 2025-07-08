@@ -1,0 +1,165 @@
+/* Switch - Componente Atom */
+
+.switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity var(--transition-fast);
+}
+
+.switch:hover .track {
+  box-shadow: var(--shadow-md);
+}
+
+.switch--desabilitado {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.switch--desabilitado .track {
+  pointer-events: none;
+}
+
+/* === TRACK (TRILHA) === */
+.track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: var(--border-radius-full);
+  transition: all var(--transition-fast);
+  border: var(--border-width-thin) solid var(--theme-border);
+  background-color: var(--theme-background-alt);
+}
+
+.track--ativo {
+  background-color: var(--theme-primary);
+  border-color: var(--theme-primary);
+}
+
+.track--focado {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* === THUMB (BOTÃO) === */
+.thumb {
+  position: absolute;
+  border-radius: var(--border-radius-full);
+  background-color: var(--theme-background-elevated);
+  border: var(--border-width-thin) solid var(--theme-border);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+  transform: translateX(0);
+}
+
+.thumb--ativo {
+  background-color: var(--color-secondary);
+  border-color: transparent;
+}
+
+/* === TAMANHOS === */
+
+/* Pequeno */
+.switch--pequeno .track {
+  width: 2.5rem;   /* 40px */
+  height: 1.25rem; /* 20px */
+}
+
+.switch--pequeno .thumb {
+  width: 1rem;     /* 16px */
+  height: 1rem;    /* 16px */
+  top: 0.125rem;   /* 2px */
+  left: 0.125rem;  /* 2px */
+}
+
+.switch--pequeno .thumb--ativo {
+  transform: translateX(1.25rem); /* 20px */
+}
+
+/* Médio (padrão) */
+.switch--medio .track {
+  width: 3rem;     /* 48px */
+  height: 1.5rem;  /* 24px */
+}
+
+.switch--medio .thumb {
+  width: 1.25rem;  /* 20px */
+  height: 1.25rem; /* 20px */
+  top: 0.125rem;   /* 2px */
+  left: 0.125rem;  /* 2px */
+}
+
+.switch--medio .thumb--ativo {
+  transform: translateX(1.5rem); /* 24px */
+}
+
+/* === RÓTULO === */
+.rotulo {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--theme-text);
+  cursor: pointer;
+  line-height: 1; /* Força o alinhamento vertical correto no flex container */
+  margin: 0; /* Garante que não haja margens inesperadas */
+}
+
+.switch--desabilitado .rotulo {
+  cursor: not-allowed;
+}
+
+/* === DESCRIÇÃO === */
+.descricao {
+  font-size: var(--font-size-xs);
+  color: var(--theme-text-muted);
+  margin-top: var(--spacing-xs);
+}
+
+/* === INPUT OCULTO === */
+.input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* === ESTADOS INTERATIVOS === */
+.switch:active .thumb {
+  transform: scale(0.95);
+}
+
+.switch--pequeno:active .thumb--ativo {
+  transform: translateX(1.25rem) scale(0.95);
+}
+
+.switch--medio:active .thumb--ativo {
+  transform: translateX(1.5rem) scale(0.95);
+}
+
+/* === RESPONSIVIDADE === */
+@media (max-width: 640px) {
+  .switch {
+    gap: var(--spacing-xs);
+  }
+  
+  .rotulo {
+    font-size: var(--font-size-xs);
+  }
+  
+  .descricao {
+    font-size: var(--font-size-xs);
+  }
+}
+
+/* === TEMA ESCURO === */
+[data-theme="dark"] .thumb {
+  background-color: var(--theme-background-elevated);
+  border-color: var(--theme-border);
+}
+
+[data-theme="dark"] .thumb--ativo {
+  background-color: var(--color-secondary);
+} 

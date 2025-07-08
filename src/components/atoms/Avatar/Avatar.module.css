@@ -1,0 +1,213 @@
+/* Avatar - Estilos CSS Modules */
+
+.avatar {
+  /* Base do avatar */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--theme-primary-light);
+  color: var(--theme-primary);
+  font-weight: var(--font-weight-semibold);
+  user-select: none;
+  flex-shrink: 0;
+  
+  /* Transições */
+  transition: all var(--transition-fast);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* === TAMANHOS === */
+
+.avatar--pequeno {
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--font-size-xs);
+}
+
+.avatar--medio {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: var(--font-size-sm);
+}
+
+.avatar--grande {
+  width: 3rem;
+  height: 3rem;
+  font-size: var(--font-size-base);
+}
+
+.avatar--extra-grande {
+  width: 4rem;
+  height: 4rem;
+  font-size: var(--font-size-lg);
+}
+
+/* === FORMATOS === */
+
+.avatar--circular {
+  border-radius: var(--border-radius-full);
+}
+
+.avatar--quadrado {
+  border-radius: 0;
+}
+
+.avatar--arredondado {
+  border-radius: var(--border-radius-md);
+}
+
+/* === ESTADOS === */
+
+.avatar--clicavel {
+  cursor: pointer;
+}
+
+.avatar--clicavel:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.avatar--clicavel:active {
+  transform: scale(0.95);
+}
+
+.avatar:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+/* === INICIAIS === */
+
+.iniciais {
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/* === FALLBACK === */
+
+.avatar--sem-imagem {
+  background: linear-gradient(135deg, var(--theme-primary-light), var(--theme-primary));
+  color: var(--theme-primary);
+}
+
+/* === INDICADOR DE STATUS === */
+
+.status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  height: 25%;
+  min-width: 0.5rem;
+  min-height: 0.5rem;
+  background-color: var(--color-success);
+  border: 2px solid var(--theme-background-elevated);
+  border-radius: var(--border-radius-full);
+  z-index: 1;
+}
+
+/* === CORES PERSONALIZADAS === */
+
+.avatar--cor-personalizada {
+  background-color: var(--cor-fundo-personalizada);
+  color: var(--cor-texto-personalizada);
+}
+
+/* === RESPONSIVIDADE === */
+
+@media (max-width: 640px) {
+  .avatar--extra-grande {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: var(--font-size-base);
+  }
+  
+  .avatar--grande {
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: var(--font-size-sm);
+  }
+}
+
+/* === VARIAÇÕES DE CORES PADRÃO === */
+
+.avatar--cor-azul {
+  background-color: #3B82F6;
+  color: white;
+}
+
+.avatar--cor-verde {
+  background-color: #10B981;
+  color: white;
+}
+
+.avatar--cor-roxo {
+  background-color: #8B5CF6;
+  color: white;
+}
+
+.avatar--cor-rosa {
+  background-color: #EC4899;
+  color: white;
+}
+
+.avatar--cor-amarelo {
+  background-color: #F59E0B;
+  color: white;
+}
+
+.avatar--cor-vermelho {
+  background-color: #EF4444;
+  color: white;
+}
+
+.avatar--cor-cinza {
+  background-color: #6B7280;
+  color: white;
+}
+
+/* === ANIMAÇÕES === */
+
+.avatar--carregando {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* === GRUPO DE AVATARES === */
+
+.avatar-group {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-group .avatar {
+  margin-left: -0.5rem;
+  border: 2px solid var(--theme-background-elevated);
+  z-index: 1;
+}
+
+.avatar-group .avatar:first-child {
+  margin-left: 0;
+}
+
+.avatar-group .avatar:hover {
+  z-index: 2;
+} 

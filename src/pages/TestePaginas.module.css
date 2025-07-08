@@ -1,0 +1,115 @@
+/* Página de Teste de Componentes */
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  background-color: var(--theme-background);
+  min-height: 100vh;
+}
+
+.container h1 {
+  color: var(--theme-primary);
+  text-align: center;
+  margin-bottom: var(--spacing-xxl);
+  font-size: var(--font-size-xxxl);
+}
+
+.secao {
+  margin-bottom: var(--spacing-xxl);
+  padding: var(--spacing-xl);
+  background-color: var(--theme-background-elevated);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.secao h2 {
+  color: var(--theme-text);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-xxl);
+  border-bottom: 2px solid var(--theme-primary);
+  padding-bottom: var(--spacing-sm);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.grid:last-child {
+  margin-bottom: 0;
+}
+
+/* Grupo de componentes */
+.grupo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-md, 8px);
+}
+
+.grupo h3 {
+  font-size: var(--font-size-xl);
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+}
+
+.showcase {
+  width: 100%;
+  position: relative;
+  overflow: hidden; /* Adicionado para conter elementos flutuantes */
+  border-radius: var(--border-radius-md, 8px); /* Garante que o conteúdo cortado respeite as bordas */
+}
+
+.grupo label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--theme-text-muted);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: var(--spacing-md);
+  }
+  
+  .secao {
+    padding: var(--spacing-md);
+  }
+  
+  .grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+  
+  .container h1 {
+    font-size: var(--font-size-xxl);
+  }
+  
+  .secao h2 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+/* Estilos específicos para demonstração */
+.secao ul {
+  list-style: none;
+  padding: 0;
+}
+
+.secao li {
+  padding: var(--spacing-xs) 0;
+  color: var(--theme-text-muted);
+}
+
+.secao p {
+  color: var(--theme-text-muted);
+  margin-bottom: var(--spacing-md);
+} 
