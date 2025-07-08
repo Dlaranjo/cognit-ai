@@ -1,9 +1,10 @@
-/* Input - Estilos CSS Modules */
+/* Input Moderno - Estilos CSS Modules */
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
+  width: 100%;
 }
 
 .label {
@@ -11,6 +12,7 @@
   font-weight: var(--font-weight-medium);
   color: var(--theme-text);
   margin-bottom: var(--spacing-xs);
+  transition: color var(--transition-normal);
 }
 
 .label--obrigatorio::after {
@@ -25,86 +27,101 @@
 }
 
 .input {
-  /* Base do input */
+  /* Base moderna do input */
   width: 100%;
   font-family: var(--font-family-base);
   font-weight: var(--font-weight-normal);
   color: var(--theme-text);
   background-color: var(--theme-background-elevated);
-  border: var(--border-width-thin) solid var(--theme-border);
-  border-radius: var(--border-radius-md);
+  border: 1px solid var(--theme-border);
+  border-radius: var(--border-radius-lg);
   
-  /* Transições */
-  transition: all var(--transition-fast);
+  /* Transições suaves */
+  transition: all var(--transition-normal);
   
   /* Estados */
   outline: none;
+  position: relative;
 }
 
 .input::placeholder {
   color: var(--theme-text-subtle);
+  transition: color var(--transition-normal);
 }
 
+/* Estados de foco modernos */
 .input:focus {
-  border-color: var(--theme-primary);
-  box-shadow: 0 0 0 3px var(--theme-primary-light);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+  background-color: var(--theme-background-elevated);
 }
 
 .input:hover:not(:disabled):not(:focus) {
-  border-color: var(--theme-text-muted);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .input:disabled {
-  opacity: 0.5;
+  opacity: 0.6;
   cursor: not-allowed;
-  background-color: var(--theme-background);
+  background-color: var(--theme-background-alt);
 }
 
 .input:read-only {
-  background-color: var(--theme-background);
+  background-color: var(--theme-background-alt);
   cursor: default;
 }
 
-/* === TAMANHOS === */
+/* === TAMANHOS MODERNOS === */
 
 .input--pequeno {
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   font-size: var(--font-size-sm);
-  min-height: 2rem;
+  min-height: 2.25rem;
+  border-radius: var(--border-radius-md);
 }
 
 .input--medio {
-  padding: var(--spacing-sm) var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
   font-size: var(--font-size-base);
-  min-height: 2.5rem;
+  min-height: 2.75rem;
+  border-radius: var(--border-radius-lg);
 }
 
 .input--grande {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-lg) var(--spacing-xl);
   font-size: var(--font-size-lg);
-  min-height: 3rem;
+  min-height: 3.25rem;
+  border-radius: var(--border-radius-xl);
 }
 
-/* === ESTADOS DE ERRO === */
+/* === ESTADOS DE ERRO MODERNOS === */
 
 .input--erro {
   border-color: var(--color-danger);
   background-color: var(--color-danger-light);
+  animation: shake 0.3s ease-in-out;
 }
 
 .input--erro:focus {
   border-color: var(--color-danger);
-  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
 }
 
-/* === ÍCONES === */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+/* === ÍCONES MODERNOS === */
 
 .input--com-icone-esquerda {
-  padding-left: 2.5rem;
+  padding-left: 3rem;
 }
 
 .input--com-icone-direita {
-  padding-right: 2.5rem;
+  padding-right: 3rem;
 }
 
 .icone {
@@ -113,28 +130,39 @@
   transform: translateY(-50%);
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--theme-text-muted);
+  color: var(--theme-text-subtle);
   pointer-events: none;
+  transition: color var(--transition-normal);
 }
 
 .icone--esquerda {
-  left: var(--spacing-sm);
+  left: var(--spacing-md);
 }
 
 .icone--direita {
-  right: var(--spacing-sm);
+  right: var(--spacing-md);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.icone--direita:hover {
+  color: var(--color-primary);
 }
 
 .input:focus + .icone,
 .input:focus ~ .icone {
-  color: var(--theme-primary);
+  color: var(--color-primary);
 }
 
-/* === MENSAGENS === */
+/* === MENSAGENS MODERNAS === */
 
 .mensagem {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   margin-top: var(--spacing-xs);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  animation: fadeIn var(--transition-normal) ease-out;
 }
 
 .mensagem--erro {
@@ -145,25 +173,40 @@
   color: var(--theme-text-muted);
 }
 
+.mensagem--sucesso {
+  color: var(--color-success);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* === RESPONSIVIDADE === */
 
 @media (max-width: 640px) {
   .input--grande {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
     font-size: var(--font-size-base);
-    min-height: 2.75rem;
+    min-height: 3rem;
   }
   
   .input--medio {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
     font-size: var(--font-size-sm);
-    min-height: 2.25rem;
+    min-height: 2.5rem;
   }
   
   .input--com-icone-esquerda,
   .input--com-icone-direita {
-    padding-left: 2.25rem;
-    padding-right: 2.25rem;
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
   }
   
   .icone {
@@ -174,7 +217,7 @@
 
 /* === VARIAÇÕES ESPECIAIS === */
 
-/* Input de busca */
+/* Input de busca moderno */
 .input[type="search"] {
   -webkit-appearance: none;
 }
@@ -199,7 +242,7 @@
   font-size: var(--font-size-sm);
 }
 
-/* Input de número */
+/* Input de número moderno */
 .input[type="number"] {
   -moz-appearance: textfield;
 }
@@ -208,4 +251,49 @@
 .input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-} 
+}
+
+/* === TEMA ESCURO === */
+[data-theme="dark"] .input {
+  background-color: var(--theme-background-elevated);
+  border-color: var(--theme-border);
+  color: var(--theme-text);
+}
+
+[data-theme="dark"] .input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+}
+
+[data-theme="dark"] .input--erro {
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* === ESTADOS DE VALIDAÇÃO VISUAL === */
+.input--sucesso {
+  border-color: var(--color-success);
+}
+
+.input--sucesso:focus {
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.input--aviso {
+  border-color: var(--color-warning);
+}
+
+.input--aviso:focus {
+  border-color: var(--color-warning);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+}
+
+/* === MICRO-INTERAÇÕES === */
+.input:focus::placeholder {
+  opacity: 0.7;
+  transform: translateY(-2px);
+}
+
+.label:has(+ .input-wrapper .input:focus) {
+  color: var(--color-primary);
+}

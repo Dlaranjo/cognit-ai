@@ -1,7 +1,7 @@
-/* Design Tokens - Cognit Studio */
+/* Design Tokens Melhorados - Cognit Studio */
 
 :root {
-  /* === CORES PRIMÁRIAS === */
+  /* === CORES PRIMÁRIAS MELHORADAS === */
   --color-primary: #FF6B35;
   --color-primary-hover: #FF5722;
   --color-primary-light: #FFE0D6;
@@ -13,33 +13,33 @@
   --color-secondary-light: #F8F9FA;
   --color-secondary-dark: #E9ECEF;
 
-  /* === CORES DE TEXTO === */
-  --color-text: #212529;
-  --color-text-light: #6C757D;
-  --color-text-lighter: #ADB5BD;
+  /* === CORES DE TEXTO MELHORADAS === */
+  --color-text: #1A1A1A;
+  --color-text-light: #4A5568;
+  --color-text-lighter: #718096;
   --color-text-inverse: #FFFFFF;
 
-  /* === CORES DE FUNDO === */
-  --color-background: #FAFAFA;
+  /* === CORES DE FUNDO MODERNAS === */
+  --color-background: #FAFBFC;
   --color-background-alt: #FFFFFF;
-  --color-background-dark: #F8F9FA;
+  --color-background-dark: #F7FAFC;
 
-  /* === CORES DE BORDA === */
-  --color-border: #E0E0E0;
-  --color-border-light: #F0F0F0;
-  --color-border-dark: #CCCCCC;
+  /* === CORES DE BORDA SUAVES === */
+  --color-border: #E2E8F0;
+  --color-border-light: #F1F5F9;
+  --color-border-dark: #CBD5E0;
 
-  /* === CORES DE STATUS === */
-  --color-success: #28A745;
-  --color-success-light: #D4EDDA;
-  --color-warning: #FFC107;
-  --color-warning-light: #FFF3CD;
-  --color-danger: #DC3545;
-  --color-danger-light: #F8D7DA;
-  --color-info: #17A2B8;
-  --color-info-light: #D1ECF1;
+  /* === CORES DE STATUS VIBRANTES === */
+  --color-success: #10B981;
+  --color-success-light: #D1FAE5;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FEF3C7;
+  --color-danger: #EF4444;
+  --color-danger-light: #FEE2E2;
+  --color-info: #3B82F6;
+  --color-info-light: #DBEAFE;
 
-  /* === ESPAÇAMENTOS === */
+  /* === ESPAÇAMENTOS HARMÔNICOS === */
   --spacing-xs: 0.25rem;    /* 4px */
   --spacing-sm: 0.5rem;     /* 8px */
   --spacing-md: 1rem;       /* 16px */
@@ -48,9 +48,9 @@
   --spacing-xxl: 3rem;      /* 48px */
   --spacing-xxxl: 4rem;     /* 64px */
 
-  /* === TIPOGRAFIA === */
+  /* === TIPOGRAFIA MODERNA === */
   --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-  --font-family-mono: 'Fira Code', 'Monaco', 'Consolas', 'Ubuntu Mono', monospace;
+  --font-family-mono: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'Ubuntu Mono', monospace;
 
   --font-size-xs: 0.75rem;   /* 12px */
   --font-size-sm: 0.875rem;  /* 14px */
@@ -70,36 +70,32 @@
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
 
-  /* === BREAKPOINTS === */
-  --breakpoint-sm: 640px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1280px;
-  --breakpoint-xxl: 1536px;
-
-  /* === SOMBRAS === */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  /* === SOMBRAS MODERNAS === */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-  /* === BORDAS === */
+  /* === BORDAS MODERNAS === */
+  --border-radius-xs: 0.125rem; /* 2px */
   --border-radius-sm: 0.25rem;  /* 4px */
   --border-radius-md: 0.375rem; /* 6px */
   --border-radius-lg: 0.5rem;   /* 8px */
   --border-radius-xl: 0.75rem;  /* 12px */
+  --border-radius-2xl: 1rem;    /* 16px */
   --border-radius-full: 9999px;
 
   --border-width-thin: 1px;
   --border-width-medium: 2px;
   --border-width-thick: 4px;
 
-  /* === TRANSIÇÕES === */
-  --transition-fast: 150ms ease-in-out;
-  --transition-normal: 250ms ease-in-out;
-  --transition-slow: 350ms ease-in-out;
+  /* === TRANSIÇÕES SUAVES === */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* === Z-INDEX === */
+  /* === Z-INDEX ORGANIZADOS === */
   --z-dropdown: 1000;
   --z-sticky: 1020;
   --z-fixed: 1030;
@@ -107,4 +103,4 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
-} 
+}
