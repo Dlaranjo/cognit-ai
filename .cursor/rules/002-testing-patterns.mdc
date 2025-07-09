@@ -1,0 +1,239 @@
+---
+globs: *.test.*, *.spec.*
+alwaysApply: false
+---
+# Padrões de Teste - Jest + React Testing Library
+
+## Estrutura de Teste Padrão
+```typescript
+// ✅ CORRETO - Estrutura de teste completa
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { ProvedorTeste } from '../../../shared/utils/provedorTeste';
+import { CartaoUsuario } from './CartaoUsuario';
+
+describe('CartaoUsuario', () => {
+  const propsBasicas = {
+    usuario: {
+      id: '1',
+      nome: 'João Silva',
+      email: 'joao@iebt.org.br',
+      avatar: 'https://avatar.url'
+    },
+    aoClicar: jest.fn()
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('renderiza informações do usuário corretamente', () => {
+    render(
+      <ProvedorTeste>
+        <CartaoUsuario {...propsBasicas} />
+      </ProvedorTeste>
+    );
+
+    expect(screen.getByText('João Silva')).toBeInTheDocument();
+    expect(screen.getByText('joao@iebt.org.br')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: /avatar/i })).toHaveAttribute('src', 'https://avatar.url');
+  });
+
+  it('chama função aoClicar quando cartão é clicado', () => {
+    render(
+      <ProvedorTeste>
+        <CartaoUsuario {...propsBasicas} />
+      </ProvedorTeste>
+    );
+
+    fireEvent.click(screen.getByRole('button'));
+    expect(propsBasicas.aoClicar).toHaveBeenCalledTimes(1);
+    expect(propsBasicas.aoClicar).toHaveBeenCalledWith(propsBasicas.usuario);
+  });
+});
+```
+
+## Mocking de APIs e Serviços
+```typescript
+// ✅ CORRETO - Mock de serviços API
+jest.mock('../../../api/chatApi', () => ({
+  enviarMensagem: jest.fn(),
+  obterHistoricoChat: jest.fn(),
+  excluirConversa: jest.fn()
+}));
+
+jest.mock('../../../hooks/useAutenticacao', () => ({
+  useAutenticacao: () => ({
+    usuario: {
+      id: '1',
+      nome: 'Usuário Teste',
+      email: 'teste@iebt.org.br'
+    },
+    autenticado: true,
+    carregando: false,
+    fazerLogin: jest.fn(),
+    fazerLogout: jest.fn()
+  })
+}));
+```
+
+## Testes de Hooks Customizados
+```typescript
+// ✅ CORRETO - Teste de hook customizado
+import { renderHook, act } from '@testing-library/react';
+import { useChat } from './useChat';
+import { ProvedorRedux } from '../../../shared/utils/provedorRedux';
+
+describe('useChat', () => {
+  const wrapper = ({ children }: { children: React.ReactNode }) => (
+    <ProvedorRedux>{children}</ProvedorRedux>
+  );
+
+  it('envia mensagem corretamente', async () => {
+    const { result } = renderHook(() => useChat(), { wrapper });
+
+    act(() => {
+      result.current.enviarMensagem('Olá, como você está?');
+    });
+
+    await waitFor(() => {
+      expect(result.current.carregando).toBe(false);
+    });
+
+    expect(result.current.mensagens).toHaveLength(1);
+    expect(result.current.mensagens[0].conteudo).toBe('Olá, como você está?');
+  });
+});
+```
+
+## Testes de Integração Redux
+```typescript
+// ✅ CORRETO - Teste de slice Redux
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer, { fazerLogin, fazerLogout } from './authSlice';
+
+describe('authSlice', () => {
+  let store: ReturnType<typeof configureStore>;
+
+  beforeEach(() => {
+    store = configureStore({
+      reducer: { auth: authReducer }
+    });
+  });
+
+  it('atualiza estado corretamente no login bem-sucedido', async () => {
+    const credenciais = { email: 'teste@iebt.org.br', senha: 'senha123' };
+    
+    await store.dispatch(fazerLogin(credenciais));
+    
+    const estadoAuth = store.getState().auth;
+    expect(estadoAuth.autenticado).toBe(true);
+    expect(estadoAuth.usuario).toBeDefined();
+    expect(estadoAuth.erro).toBeNull();
+  });
+});
+```
+
+## Testes de Acessibilidade
+```typescript
+// ✅ CORRETO - Testes de acessibilidade
+import { axe, toHaveNoViolations } from 'jest-axe';
+
+expect.extend(toHaveNoViolations);
+
+describe('Acessibilidade - CartaoUsuario', () => {
+  it('não deve ter violações de acessibilidade', async () => {
+    const { container } = render(
+      <ProvedorTeste>
+        <CartaoUsuario {...propsBasicas} />
+      </ProvedorTeste>
+    );
+
+    const resultados = await axe(container);
+    expect(resultados).toHaveNoViolations();
+  });
+
+  it('suporta navegação por teclado', () => {
+    render(
+      <ProvedorTeste>
+        <CartaoUsuario {...propsBasicas} />
+      </ProvedorTeste>
+    );
+
+    const botao = screen.getByRole('button');
+    botao.focus();
+    
+    expect(botao).toHaveFocus();
+    
+    fireEvent.keyDown(botao, { key: 'Enter' });
+    expect(propsBasicas.aoClicar).toHaveBeenCalled();
+  });
+});
+```
+
+## Mock de WebSocket e Streaming
+```typescript
+// ✅ CORRETO - Mock de WebSocket para chat streaming
+class MockWebSocket {
+  onopen: ((event: Event) => void) | null = null;
+  onmessage: ((event: MessageEvent) => void) | null = null;
+  onerror: ((event: Event) => void) | null = null;
+  onclose: ((event: CloseEvent) => void) | null = null;
+
+  send = jest.fn();
+  close = jest.fn();
+
+  simularMensagemRecebida(dados: any) {
+    if (this.onmessage) {
+      this.onmessage({ data: JSON.stringify(dados) } as MessageEvent);
+    }
+  }
+}
+
+global.WebSocket = MockWebSocket as any;
+```
+
+## Utilitários de Teste
+```typescript
+// ✅ CORRETO - Utilitários para testes
+export const criarUsuarioMock = (sobrescrevers = {}): Usuario => ({
+  id: '1',
+  nome: 'Usuário Teste',
+  email: 'teste@iebt.org.br',
+  avatar: 'https://avatar.teste.com',
+  criadoEm: new Date().toISOString(),
+  ...sobrescrevers
+});
+
+export const criarMensagemMock = (sobrescrevers = {}): Mensagem => ({
+  id: '1',
+  conteudo: 'Mensagem de teste',
+  remetente: 'usuario',
+  criadaEm: new Date().toISOString(),
+  status: 'enviada',
+  ...sobrescrevers
+});
+
+export const renderizarComProvedores = (ui: React.ReactElement) => {
+  return render(
+    <ProvedorRedux>
+      <ProvedorTema>
+        {ui}
+      </ProvedorTema>
+    </ProvedorRedux>
+  );
+};
+```
+
+## Padrões de Coverage
+- **Mínimo**: 80% de cobertura geral
+- **Componentes críticos**: 95% (auth, chat, upload)
+- **Utilitários**: 100%
+- **Configuração**: coverage reportado em HTML e texto
+
+## Padrões a Evitar
+- ❌ Testes que dependem de implementação interna
+- ❌ Snapshots desnecessários
+- ❌ Mocks excessivamente complexos
+- ❌ Assertions vagas como `toBeTruthy()`
+- ❌ Testes que testam bibliotecas externas
+- ❌ Setup/teardown desnecessário entre testes

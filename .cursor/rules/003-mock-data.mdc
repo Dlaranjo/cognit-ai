@@ -1,0 +1,212 @@
+---
+alwaysApply: false
+---
+# Dados Mockados - Sistema de Desenvolvimento
+
+## Uso dos Dados Mockados
+Este arquivo é ativado apenas quando invocado manualmente com @003-mock-data para trabalhar com simulação de dados durante desenvolvimento frontend.
+
+## Estruturas de Dados Disponíveis
+```typescript
+// ✅ Usuários IEBT simulados
+export const usuariosMock: Usuario[] = [
+  {
+    id: 'usr_001',
+    nome: 'Ana Carolina Santos',
+    email: 'ana.santos@iebt.org.br',
+    avatar: 'https://randomuser.me/api/portraits/women/1.jpg',
+    departamento: 'Tecnologia',
+    cargo: 'Desenvolvedora Senior',
+    criadoEm: '2024-01-15T10:30:00Z'
+  },
+  // ... mais usuários
+];
+
+// ✅ Conversas de chat simuladas
+export const conversasMock: Conversa[] = [
+  {
+    id: 'conv_001',
+    titulo: 'Análise de Dados - Relatório Q4',
+    usuarioId: 'usr_001',
+    provedor: 'claude',
+    modelo: 'claude-3-sonnet',
+    mensagens: mensagensMock,
+    criadaEm: '2024-12-20T14:22:00Z',
+    atualizadaEm: '2024-12-20T15:45:00Z',
+    favorita: false
+  }
+  // ... mais conversas
+];
+```
+
+## Simulação de Streaming
+```typescript
+// ✅ CORRETO - Simulação de resposta streaming
+export const simularStreamingResposta = (conteudo: string, onChunk: (chunk: string) => void) => {
+  const palavras = conteudo.split(' ');
+  let indice = 0;
+  
+  const enviarProximoChunk = () => {
+    if (indice < palavras.length) {
+      const chunk = palavras[indice] + ' ';
+      onChunk(chunk);
+      indice++;
+      setTimeout(enviarProximoChunk, 50 + Math.random() * 100);
+    }
+  };
+  
+  setTimeout(enviarProximoChunk, 100);
+};
+```
+
+## APIs Mockadas
+```typescript
+// ✅ CORRETO - Chat API mockada
+export const chatApiMock = {
+  enviarMensagem: async (dados: EnviarMensagemRequest): Promise<RespostaChat> => {
+    await delay(1000 + Math.random() * 2000);
+    
+    const respostaMock = gerarRespostaMockAleatoria();
+    return {
+      sucesso: true,
+      dados: {
+        mensagem: {
+          id: gerarId(),
+          conteudo: respostaMock,
+          remetente: 'assistente',
+          criadaEm: new Date().toISOString(),
+          status: 'recebida',
+          provedor: dados.provedor,
+          modelo: dados.modelo
+        }
+      }
+    };
+  },
+  
+  obterConversas: async (): Promise<Conversa[]> => {
+    await delay(500);
+    return conversasMock;
+  }
+};
+```
+
+## Upload de Arquivos Mock
+```typescript
+// ✅ CORRETO - Upload mock com progresso
+export const uploadApiMock = {
+  uploadArquivo: async (
+    arquivo: File, 
+    onProgresso?: (progresso: number) => void
+  ): Promise<ResultadoUpload> => {
+    // Simular progresso
+    for (let i = 0; i <= 100; i += 10) {
+      await delay(100);
+      onProgresso?.(i);
+    }
+    
+    return {
+      sucesso: true,
+      dados: {
+        id: gerarId(),
+        nomeOriginal: arquivo.name,
+        tamanho: arquivo.size,
+        tipo: arquivo.type,
+        url: `https://mock.storage.com/${arquivo.name}`,
+        processadoEm: new Date().toISOString()
+      }
+    };
+  }
+};
+```
+
+## WebSocket Mock para Chat em Tempo Real
+```typescript
+// ✅ CORRETO - WebSocket simulado
+export class WebSocketMock {
+  private listeners: Map<string, Function[]> = new Map();
+  
+  on(evento: string, callback: Function) {
+    if (!this.listeners.has(evento)) {
+      this.listeners.set(evento, []);
+    }
+    this.listeners.get(evento)!.push(callback);
+  }
+  
+  emit(evento: string, dados: any) {
+    const callbacks = this.listeners.get(evento) || [];
+    callbacks.forEach(callback => callback(dados));
+  }
+  
+  simularMensagemRecebida(mensagem: Mensagem) {
+    setTimeout(() => {
+      this.emit('mensagem', mensagem);
+    }, Math.random() * 2000 + 500);
+  }
+}
+```
+
+## Utilitários de Geração
+```typescript
+// ✅ CORRETO - Utilitários para dados aleatórios
+export const gerarUsuarioAleatorio = (): Usuario => ({
+  id: gerarId(),
+  nome: escolherAleatorio(nomes) + ' ' + escolherAleatorio(sobrenomes),
+  email: `${gerarUsername()}@iebt.org.br`,
+  avatar: `https://randomuser.me/api/portraits/${escolherAleatorio(['men', 'women'])}/${Math.floor(Math.random() * 99)}.jpg`,
+  departamento: escolherAleatorio(['Tecnologia', 'Marketing', 'Vendas', 'RH', 'Financeiro']),
+  cargo: escolherAleatorio(['Analista', 'Coordenador', 'Gerente', 'Diretor']),
+  criadoEm: gerarDataAleatoria().toISOString()
+});
+
+export const gerarMensagemAleatoria = (remetente: 'usuario' | 'assistente' = 'assistente'): string => {
+  const respostasAssistente = [
+    'Entendo sua pergunta. Vou analisar os dados e fornecer uma resposta detalhada.',
+    'Com base nas informações fornecidas, posso sugerir algumas abordagens interessantes.',
+    'Essa é uma questão complexa. Vamos dividir em partes menores para facilitar o entendimento.',
+    // ... mais respostas
+  ];
+  
+  const perguntasUsuario = [
+    'Como posso melhorar a performance da aplicação?',
+    'Qual a melhor estratégia para implementar autenticação?',
+    'Você pode me ajudar a analisar estes dados?',
+    // ... mais perguntas
+  ];
+  
+  return remetente === 'assistente' 
+    ? escolherAleatorio(respostasAssistente)
+    : escolherAleatorio(perguntasUsuario);
+};
+```
+
+## Configuração de Ambiente Mock
+```typescript
+// ✅ CORRETO - Configuração para desenvolvimento
+export const configurarAmbienteMock = () => {
+  // Substituir APIs reais por mocks
+  if (process.env.NODE_ENV === 'development') {
+    window.chatApi = chatApiMock;
+    window.uploadApi = uploadApiMock;
+    window.authApi = authApiMock;
+    
+    // Adicionar dados ao localStorage para persistência
+    if (!localStorage.getItem('conversas-mock')) {
+      localStorage.setItem('conversas-mock', JSON.stringify(conversasMock));
+    }
+    
+    console.log('🔧 Ambiente mock configurado para desenvolvimento');
+  }
+};
+```
+
+## Referências aos Arquivos Mock
+- @docs/dados-mockados.md - Especificação completa
+- @src/shared/mocks/ - Implementação dos mocks
+- @src/shared/utils/mockHelpers.ts - Utilitários de geração
+
+## Quando Usar Este Sistema
+- Desenvolvimento frontend sem backend
+- Testes de interface e UX
+- Demonstrações e protótipos
+- Desenvolvimento offline
+- Validação de fluxos de usuário

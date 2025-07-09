@@ -1,0 +1,117 @@
+---
+globs: *.ts, *.tsx
+alwaysApply: false
+---
+# TypeScript - Padrões Especializados
+
+## Tipagem Rigorosa
+- Sempre usar `strict: true` no tsconfig.json
+- Tipos de retorno explícitos para todas as funções
+- Interfaces para todas as props e estado
+- Usar tipos genéricos quando apropriado
+- Proibido uso de `any` - usar `unknown` se necessário
+
+## Interfaces e Tipos
+```typescript
+// ✅ CORRETO - Interface com português
+interface PropriedadesCartao {
+  titulo: string;
+  conteudo: string;
+  aoClicar?: (evento: MouseEvent) => void;
+  carregando?: boolean;
+}
+
+// ✅ CORRETO - Tipo de união discriminada
+type StatusMensagem = 
+  | { tipo: 'carregando' }
+  | { tipo: 'sucesso'; dados: RespostaMensagem }
+  | { tipo: 'erro'; erro: string };
+```
+
+## Convenções de Arquivo
+- Interfaces: `NomeInterface.types.ts`
+- Utilitários: `nomeUtility.utils.ts`
+- Constantes: `nomeConstantes.constants.ts`
+- Tipos de API: `nomeApi.types.ts`
+
+## Padrões de Hook Customizado
+```typescript
+// ✅ CORRETO - Hook com tipagem completa
+export const useAutenticacao = (): UseAutenticacaoReturn => {
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
+  const [carregando, setCarregando] = useState<boolean>(false);
+  
+  const fazerLogin = useCallback(async (credenciais: CredenciaisLogin): Promise<void> => {
+    setCarregando(true);
+    try {
+      const resposta = await authApi.login(credenciais);
+      setUsuario(resposta.dados.usuario);
+    } catch (erro) {
+      throw new Error(`Erro no login: ${erro}`);
+    } finally {
+      setCarregando(false);
+    }
+  }, []);
+
+  return { usuario, carregando, fazerLogin };
+};
+```
+
+## Padrões Redux com TypeScript
+```typescript
+// ✅ CORRETO - Slice tipado
+const chatSlice = createSlice({
+  name: 'chat',
+  initialState: estadoInicialChat,
+  reducers: {
+    adicionarMensagem: (state, action: PayloadAction<NovaMensagem>) => {
+      state.mensagens.push(action.payload);
+    },
+    atualizarStatusMensagem: (state, action: PayloadAction<{ id: string; status: StatusMensagem }>) => {
+      const mensagem = state.mensagens.find(m => m.id === action.payload.id);
+      if (mensagem) {
+        mensagem.status = action.payload.status;
+      }
+    }
+  }
+});
+```
+
+## Tratamento de Erro Tipado
+```typescript
+// ✅ CORRETO - Tipos de erro específicos
+class ErroAutenticacao extends Error {
+  constructor(
+    message: string,
+    public readonly codigo: CodigoErroAuth,
+    public readonly detalhes?: Record<string, unknown>
+  ) {
+    super(message);
+    this.name = 'ErroAutenticacao';
+  }
+}
+
+// ✅ CORRETO - Validação com tipos
+const validarCredenciais = (credenciais: unknown): credenciais is CredenciaisLogin => {
+  return (
+    typeof credenciais === 'object' &&
+    credenciais !== null &&
+    'email' in credenciais &&
+    'senha' in credenciais &&
+    typeof (credenciais as any).email === 'string' &&
+    typeof (credenciais as any).senha === 'string'
+  );
+};
+```
+
+## Otimizações de Performance
+- Usar `React.memo` com tipos apropriados
+- `useCallback` e `useMemo` com dependências tipadas
+- Lazy loading com tipos preservados
+
+## Padrões a Evitar
+- ❌ `any` type
+- ❌ `@ts-ignore` comentários
+- ❌ Interfaces vazias
+- ❌ Mutação direta de props tipadas
+- ❌ Funções sem tipo de retorno explícito
