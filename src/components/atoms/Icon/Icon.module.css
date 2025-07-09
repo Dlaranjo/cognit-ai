@@ -1,0 +1,360 @@
+/* Icon System - Estilos CSS Modules */
+
+.icon {
+  /* Base do ícone */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  
+  /* Transições */
+  transition: var(--transition-color);
+  
+  /* Remover estilos de button quando clicável */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  cursor: inherit;
+  outline: none;
+}
+
+.icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* === TAMANHOS === */
+
+.icon--xs {
+  width: 0.75rem;    /* 12px */
+  height: 0.75rem;
+}
+
+.icon--sm {
+  width: 1rem;       /* 16px */
+  height: 1rem;
+}
+
+.icon--md {
+  width: 1.25rem;    /* 20px */
+  height: 1.25rem;
+}
+
+.icon--lg {
+  width: 1.5rem;     /* 24px */
+  height: 1.5rem;
+}
+
+.icon--xl {
+  width: 2rem;       /* 32px */
+  height: 2rem;
+}
+
+.icon--2xl {
+  width: 2.5rem;     /* 40px */
+  height: 2.5rem;
+}
+
+/* === CORES === */
+
+.icon--primary {
+  color: var(--color-primary-600);
+}
+
+.icon--secondary {
+  color: var(--color-text-secondary);
+}
+
+.icon--success {
+  color: var(--color-success-600);
+}
+
+.icon--warning {
+  color: var(--color-warning-600);
+}
+
+.icon--danger {
+  color: var(--color-danger-600);
+}
+
+.icon--info {
+  color: var(--color-info-600);
+}
+
+.icon--neutral {
+  color: var(--color-neutral-600);
+}
+
+.icon--inherit {
+  color: inherit;
+}
+
+/* === VARIANTES === */
+
+.icon--solid svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.icon--outline svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.icon--mini svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+/* === ESTADOS === */
+
+.icon--girando {
+  animation: iconSpin 1s linear infinite;
+}
+
+.icon--clicavel {
+  cursor: pointer;
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-1);
+  margin: calc(var(--spacing-1) * -1);
+  transition: var(--transition-color), var(--transition-background);
+}
+
+.icon--clicavel:hover {
+  background-color: var(--color-background-secondary);
+  color: var(--color-primary-600);
+}
+
+.icon--clicavel:active {
+  background-color: var(--color-background-tertiary);
+  transform: scale(0.95);
+}
+
+.icon--clicavel:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  box-shadow: var(--ring-primary);
+}
+
+/* === ANIMAÇÕES === */
+
+@keyframes iconSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* === VARIAÇÕES ESPECIAIS === */
+
+/* Ícone de loading com pulso */
+.icon--loading {
+  animation: iconPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Ícone com bounce */
+.icon--bounce {
+  animation: iconBounce 0.6s ease-in-out;
+}
+
+@keyframes iconBounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Ícone com shake para erros */
+.icon--shake {
+  animation: iconShake 0.5s ease-in-out;
+}
+
+@keyframes iconShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+/* === CONTEXTOS ESPECIAIS === */
+
+/* Ícone em badge */
+.icon--badge {
+  position: relative;
+}
+
+.icon--badge::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: var(--color-danger-500);
+  border-radius: 50%;
+  border: 2px solid var(--color-background-primary);
+}
+
+/* Ícone em button */
+button .icon {
+  pointer-events: none;
+}
+
+/* Ícone em input */
+input + .icon,
+.icon + input {
+  pointer-events: none;
+}
+
+/* === TEMA ESCURO === */
+
+[data-theme="dark"] .icon--clicavel:hover {
+  background-color: var(--color-background-secondary);
+}
+
+[data-theme="dark"] .icon--clicavel:active {
+  background-color: var(--color-background-tertiary);
+}
+
+/* === RESPONSIVIDADE === */
+
+@media (max-width: 640px) {
+  .icon--2xl {
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .icon--xl {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  .icon--clicavel {
+    padding: var(--spacing-2);
+    margin: calc(var(--spacing-2) * -1);
+  }
+}
+
+/* === UTILITÁRIOS === */
+
+/* Ícone inline com texto */
+.icon--inline {
+  vertical-align: middle;
+  margin-right: var(--spacing-1);
+}
+
+/* Ícone centralizado */
+.icon--center {
+  margin: 0 auto;
+}
+
+/* Ícone com margem direita */
+.icon--mr-1 {
+  margin-right: var(--spacing-1);
+}
+
+.icon--mr-2 {
+  margin-right: var(--spacing-2);
+}
+
+.icon--mr-3 {
+  margin-right: var(--spacing-3);
+}
+
+/* Ícone com margem esquerda */
+.icon--ml-1 {
+  margin-left: var(--spacing-1);
+}
+
+.icon--ml-2 {
+  margin-left: var(--spacing-2);
+}
+
+.icon--ml-3 {
+  margin-left: var(--spacing-3);
+}
+
+/* Ícone desabilitado */
+.icon--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* === ACESSIBILIDADE === */
+
+/* Melhorar contraste em modo de alto contraste */
+@media (prefers-contrast: high) {
+  .icon--primary {
+    color: var(--color-primary-700);
+  }
+  
+  .icon--secondary {
+    color: var(--color-text-primary);
+  }
+  
+  .icon--success {
+    color: var(--color-success-700);
+  }
+  
+  .icon--warning {
+    color: var(--color-warning-700);
+  }
+  
+  .icon--danger {
+    color: var(--color-danger-700);
+  }
+  
+  .icon--info {
+    color: var(--color-info-700);
+  }
+}
+
+/* Reduzir animações para usuários que preferem menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  .icon--girando {
+    animation: none;
+  }
+  
+  .icon--loading {
+    animation: none;
+  }
+  
+  .icon--bounce {
+    animation: none;
+  }
+  
+  .icon--shake {
+    animation: none;
+  }
+  
+  .icon--clicavel {
+    transition: none;
+  }
+}

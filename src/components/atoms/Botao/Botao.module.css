@@ -8,24 +8,29 @@
   gap: var(--spacing-sm);
   
   /* Tipografia moderna */
-  font-family: var(--font-family-base);
-  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-sans);
+  font-weight: var(--typography-ui-weight);
+  font-size: var(--typography-ui-size);
+  line-height: var(--typography-ui-line-height);
   text-decoration: none;
   white-space: nowrap;
   
   /* Layout moderno */
-  border: none;
+  border: var(--border-button);
   border-radius: var(--border-radius-lg);
   cursor: pointer;
   
   /* Transições suaves */
-  transition: all var(--transition-normal);
+  transition: var(--transition-button);
   
   /* Estados */
   user-select: none;
   outline: none;
   position: relative;
   overflow: hidden;
+  
+  /* Elevação */
+  box-shadow: var(--elevation-button-rest);
 }
 
 /* Efeito ripple moderno */
@@ -54,93 +59,216 @@
 }
 
 .botao:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+  box-shadow: var(--elevation-button-hover);
 }
 
 .botao:active {
   transform: translateY(0);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--elevation-button-pressed);
 }
 
 /* === VARIANTES MODERNAS === */
 
 /* Botão Primário */
 .botao--primario {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
-  color: white;
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-primary-600) 100%);
+  color: var(--color-text-on-primary);
+  border-color: var(--color-primary-600);
+  box-shadow: var(--elevation-button-primary);
 }
 
 .botao--primario:hover {
-  background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary-dark) 100%);
-  box-shadow: var(--shadow-xl);
+  background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-primary-700) 100%);
+  border-color: var(--color-primary-700);
+  box-shadow: var(--elevation-button-hover);
 }
 
 .botao--primario:focus-visible {
-  outline: 2px solid var(--color-primary-light);
+  outline: 2px solid var(--color-primary-300);
   outline-offset: 2px;
+  box-shadow: var(--ring-primary);
 }
 
 /* Botão Secundário */
 .botao--secundario {
-  background: var(--theme-background-elevated);
-  color: var(--theme-text);
-  border: 1px solid var(--theme-border);
-  box-shadow: var(--shadow-sm);
+  background: var(--color-background-primary);
+  color: var(--color-text-primary);
+  border: var(--border-button);
+  box-shadow: var(--elevation-1);
 }
 
 .botao--secundario:hover {
-  background: var(--theme-background-alt);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  background: var(--color-background-secondary);
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-600);
+}
+
+.botao--secundario:focus-visible {
+  outline: 2px solid var(--color-primary-300);
+  outline-offset: 2px;
+  box-shadow: var(--ring-primary);
 }
 
 /* Botão Perigo */
 .botao--perigo {
-  background: linear-gradient(135deg, var(--color-danger) 0%, #DC2626 100%);
-  color: white;
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--color-danger-500) 0%, var(--color-danger-600) 100%);
+  color: var(--color-text-inverse);
+  border-color: var(--color-danger-600);
+  box-shadow: var(--shadow-danger);
 }
 
 .botao--perigo:hover {
-  background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
-  box-shadow: var(--shadow-xl);
+  background: linear-gradient(135deg, var(--color-danger-600) 0%, var(--color-danger-700) 100%);
+  border-color: var(--color-danger-700);
+  box-shadow: var(--elevation-button-hover);
+}
+
+.botao--perigo:focus-visible {
+  outline: 2px solid var(--color-danger-300);
+  outline-offset: 2px;
+  box-shadow: var(--ring-danger);
 }
 
 /* Botão Fantasma */
 .botao--fantasma {
   background: transparent;
-  color: var(--color-primary);
+  color: var(--color-primary-600);
   border: 1px solid transparent;
+  box-shadow: none;
 }
 
 .botao--fantasma:hover {
-  background: var(--color-primary-light);
-  border-color: var(--color-primary);
+  background: var(--color-primary-50);
+  border-color: var(--color-primary-200);
+  box-shadow: var(--elevation-1);
+}
+
+.botao--fantasma:focus-visible {
+  outline: 2px solid var(--color-primary-300);
+  outline-offset: 2px;
+  box-shadow: var(--ring-primary);
+}
+
+/* Botão Sucesso */
+.botao--sucesso {
+  background: linear-gradient(135deg, var(--color-success-500) 0%, var(--color-success-600) 100%);
+  color: var(--color-text-inverse);
+  border-color: var(--color-success-600);
+  box-shadow: var(--shadow-success);
+}
+
+.botao--sucesso:hover {
+  background: linear-gradient(135deg, var(--color-success-600) 0%, var(--color-success-700) 100%);
+  border-color: var(--color-success-700);
+  box-shadow: var(--elevation-button-hover);
+}
+
+.botao--sucesso:focus-visible {
+  outline: 2px solid var(--color-success-300);
+  outline-offset: 2px;
+  box-shadow: var(--ring-success);
+}
+
+/* Botão Aviso */
+.botao--aviso {
+  background: linear-gradient(135deg, var(--color-warning-500) 0%, var(--color-warning-600) 100%);
+  color: var(--color-text-inverse);
+  border-color: var(--color-warning-600);
+  box-shadow: var(--shadow-warning);
+}
+
+.botao--aviso:hover {
+  background: linear-gradient(135deg, var(--color-warning-600) 0%, var(--color-warning-700) 100%);
+  border-color: var(--color-warning-700);
+  box-shadow: var(--elevation-button-hover);
+}
+
+.botao--aviso:focus-visible {
+  outline: 2px solid var(--color-warning-300);
+  outline-offset: 2px;
+  box-shadow: var(--ring-warning);
+}
+
+/* Botão Info */
+.botao--info {
+  background: linear-gradient(135deg, var(--color-info-500) 0%, var(--color-info-600) 100%);
+  color: var(--color-text-inverse);
+  border-color: var(--color-info-600);
+  box-shadow: var(--shadow-info);
+}
+
+.botao--info:hover {
+  background: linear-gradient(135deg, var(--color-info-600) 0%, var(--color-info-700) 100%);
+  border-color: var(--color-info-700);
+  box-shadow: var(--elevation-button-hover);
+}
+
+.botao--info:focus-visible {
+  outline: 2px solid var(--color-info-300);
+  outline-offset: 2px;
+  box-shadow: var(--ring-info);
 }
 
 /* === TAMANHOS MODERNOS === */
 
 .botao--pequeno {
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-sm);
-  min-height: 2.25rem;
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: var(--typography-ui-small-size);
+  min-height: 2rem;
   border-radius: var(--border-radius-md);
 }
 
 .botao--medio {
-  padding: var(--spacing-md) var(--spacing-lg);
-  font-size: var(--font-size-base);
-  min-height: 2.75rem;
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--typography-ui-size);
+  min-height: 2.5rem;
   border-radius: var(--border-radius-lg);
 }
 
 .botao--grande {
-  padding: var(--spacing-lg) var(--spacing-xl);
-  font-size: var(--font-size-lg);
-  min-height: 3.25rem;
+  padding: var(--spacing-4) var(--spacing-6);
+  font-size: var(--typography-ui-large-size);
+  min-height: 3rem;
   border-radius: var(--border-radius-xl);
+}
+
+/* === DENSIDADES === */
+
+.botao--compact {
+  padding: var(--density-compact-padding-y) var(--density-compact-padding-x);
+  min-height: var(--density-compact-height);
+  gap: var(--density-compact-gap);
+}
+
+.botao--normal {
+  padding: var(--density-normal-padding-y) var(--density-normal-padding-x);
+  min-height: var(--density-normal-height);
+  gap: var(--density-normal-gap);
+}
+
+.botao--comfortable {
+  padding: var(--density-comfortable-padding-y) var(--density-comfortable-padding-x);
+  min-height: var(--density-comfortable-height);
+  gap: var(--density-comfortable-gap);
+}
+
+/* === FORMATOS === */
+
+.botao--retangular {
+  /* Formato padrão já aplicado */
+}
+
+.botao--circular {
+  border-radius: var(--border-radius-full);
+  aspect-ratio: 1;
+  padding: var(--spacing-3);
+}
+
+.botao--pill {
+  border-radius: var(--border-radius-full);
+  padding-left: var(--spacing-6);
+  padding-right: var(--spacing-6);
 }
 
 /* === MODIFICADORES === */
@@ -154,22 +282,34 @@
   opacity: 0.8;
 }
 
+.botao--somente-icone {
+  aspect-ratio: 1;
+}
+
+.botao--somente-icone .texto {
+  display: none;
+}
+
+.botao--com-icone {
+  gap: var(--spacing-2);
+}
+
 .botao:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
   transform: none !important;
-  box-shadow: none !important;
+  box-shadow: var(--shadow-xs) !important;
 }
 
 /* === SPINNER DE CARREGAMENTO MODERNO === */
 .spinner {
-  width: 1.2em;
-  height: 1.2em;
+  width: 1em;
+  height: 1em;
   border: 2px solid transparent;
   border-top: 2px solid currentColor;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  animation: spin var(--duration-normal) linear infinite;
 }
 
 @keyframes spin {
@@ -178,11 +318,33 @@
   }
 }
 
-/* === ÍCONES NO BOTÃO === */
-.botao .icone {
-  width: 1.2em;
-  height: 1.2em;
+/* === ÍCONES === */
+.icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
   flex-shrink: 0;
+}
+
+.icone--esquerda {
+  margin-right: var(--spacing-1);
+}
+
+.icone--direita {
+  margin-left: var(--spacing-1);
+}
+
+.texto {
+  display: inline-block;
+}
+
+/* === ESTADOS DE FOCO MELHORADOS === */
+.botao:focus-visible {
+  outline: 2px solid var(--color-primary-500);
+  outline-offset: 2px;
+  box-shadow: var(--ring-primary);
 }
 
 /* === RESPONSIVIDADE === */
@@ -202,33 +364,92 @@
 
 /* === TEMA ESCURO === */
 [data-theme="dark"] .botao--secundario {
-  background: var(--theme-background-elevated);
-  border-color: var(--theme-border);
-  color: var(--theme-text);
+  background: var(--color-background-primary);
+  border-color: var(--color-border-light);
+  color: var(--color-text-primary);
 }
 
 [data-theme="dark"] .botao--secundario:hover {
-  background: var(--theme-background-alt);
-  border-color: var(--color-primary);
+  background: var(--color-background-secondary);
+  border-color: var(--color-primary-400);
 }
 
 [data-theme="dark"] .botao--fantasma:hover {
-  background: rgba(255, 107, 53, 0.1);
+  background: var(--color-primary-50);
 }
 
-/* === ESTADOS DE FOCO MELHORADOS === */
-.botao:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+/* === RESPONSIVIDADE === */
+@media (max-width: 640px) {
+  .botao--grande {
+    padding: var(--spacing-3) var(--spacing-4);
+    font-size: var(--typography-ui-size);
+    min-height: 2.75rem;
+  }
+  
+  .botao--medio {
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--typography-ui-small-size);
+    min-height: 2.25rem;
+  }
+  
+  .botao--pill {
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+  }
 }
 
-/* === ANIMAÇÕES MICRO-INTERAÇÕES === */
+/* === MICRO-INTERAÇÕES === */
+.botao:active {
+  animation: buttonPress var(--duration-fast) var(--easing-ease-in-out);
+}
+
 @keyframes buttonPress {
   0% { transform: scale(1); }
   50% { transform: scale(0.98); }
   100% { transform: scale(1); }
 }
 
-.botao:active {
-  animation: buttonPress 0.1s ease-in-out;
+/* === VARIAÇÕES ESPECIAIS === */
+.botao--floating {
+  position: fixed;
+  bottom: var(--spacing-6);
+  right: var(--spacing-6);
+  z-index: var(--z-fixed);
+  border-radius: var(--border-radius-full);
+  box-shadow: var(--elevation-4);
 }
+
+.botao--floating:hover {
+  box-shadow: var(--elevation-5);
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* === GRUPOS DE BOTÕES === */
+.botao + .botao {
+  margin-left: var(--spacing-2);
+}
+
+.botao-group {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.botao-group .botao {
+  margin: 0;
+}
+
+.botao-group .botao:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.botao-group .botao:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.botao-group .botao:not(:first-child):not(:last-child) {
+  border-radius: 0;
+}
+
+/* Já movido para acima */

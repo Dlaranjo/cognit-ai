@@ -8,16 +8,18 @@
 }
 
 .label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--theme-text);
+  font-size: var(--typography-label-size);
+  font-weight: var(--typography-label-weight);
+  line-height: var(--typography-label-line-height);
+  letter-spacing: var(--typography-label-letter-spacing);
+  color: var(--color-text-primary);
   margin-bottom: var(--spacing-xs);
-  transition: color var(--transition-normal);
+  transition: var(--transition-color);
 }
 
 .label--obrigatorio::after {
   content: " *";
-  color: var(--color-danger);
+  color: var(--color-danger-500);
 }
 
 .input-wrapper {
@@ -29,47 +31,51 @@
 .input {
   /* Base moderna do input */
   width: 100%;
-  font-family: var(--font-family-base);
+  font-family: var(--font-family-sans);
   font-weight: var(--font-weight-normal);
-  color: var(--theme-text);
-  background-color: var(--theme-background-elevated);
-  border: 1px solid var(--theme-border);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-primary);
+  border: var(--border-input);
   border-radius: var(--border-radius-lg);
   
   /* Transições suaves */
-  transition: all var(--transition-normal);
+  transition: var(--transition-input);
   
   /* Estados */
   outline: none;
   position: relative;
+  box-shadow: var(--elevation-input-rest);
 }
 
 .input::placeholder {
-  color: var(--theme-text-subtle);
-  transition: color var(--transition-normal);
+  color: var(--color-text-placeholder);
+  transition: var(--transition-color);
 }
 
 /* Estados de foco modernos */
 .input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px var(--color-primary-light);
-  background-color: var(--theme-background-elevated);
+  border-color: var(--color-primary-500);
+  box-shadow: var(--ring-primary);
+  background-color: var(--color-background-primary);
 }
 
 .input:hover:not(:disabled):not(:focus) {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-sm);
+  border-color: var(--color-primary-400);
+  box-shadow: var(--elevation-input-focus);
 }
 
 .input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background-color: var(--theme-background-alt);
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-disabled);
+  border-color: var(--color-border-light);
 }
 
 .input:read-only {
-  background-color: var(--theme-background-alt);
+  background-color: var(--color-background-secondary);
   cursor: default;
+  border-color: var(--color-border-light);
 }
 
 /* === TAMANHOS MODERNOS === */
@@ -95,17 +101,77 @@
   border-radius: var(--border-radius-xl);
 }
 
-/* === ESTADOS DE ERRO MODERNOS === */
+/* === DENSIDADES === */
 
-.input--erro {
-  border-color: var(--color-danger);
-  background-color: var(--color-danger-light);
+.input--compact {
+  padding: var(--density-compact-padding-y) var(--density-compact-padding-x);
+  min-height: var(--density-compact-height);
+  font-size: var(--font-size-sm);
+}
+
+.input--normal {
+  padding: var(--density-normal-padding-y) var(--density-normal-padding-x);
+  min-height: var(--density-normal-height);
+  font-size: var(--font-size-base);
+}
+
+.input--comfortable {
+  padding: var(--density-comfortable-padding-y) var(--density-comfortable-padding-x);
+  min-height: var(--density-comfortable-height);
+  font-size: var(--font-size-base);
+}
+
+/* === ESTADOS PROFISSIONAIS === */
+
+/* Estado normal (padrão) */
+.input--normal {
+  /* Estilos já aplicados na classe base */
+}
+
+/* Estado de carregamento */
+.input--loading {
+  border-color: var(--color-primary-300);
+  background-color: var(--color-primary-50);
+  position: relative;
+}
+
+.input--loading:focus {
+  border-color: var(--color-primary-500);
+  box-shadow: var(--ring-primary);
+}
+
+/* Estado de erro */
+.input--error {
+  border-color: var(--color-danger-500);
+  background-color: var(--color-danger-50);
   animation: shake 0.3s ease-in-out;
 }
 
-.input--erro:focus {
-  border-color: var(--color-danger);
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+.input--error:focus {
+  border-color: var(--color-danger-500);
+  box-shadow: var(--ring-danger);
+}
+
+/* Estado de sucesso */
+.input--success {
+  border-color: var(--color-success-500);
+  background-color: var(--color-success-50);
+}
+
+.input--success:focus {
+  border-color: var(--color-success-500);
+  box-shadow: var(--ring-success);
+}
+
+/* Estado de aviso */
+.input--warning {
+  border-color: var(--color-warning-500);
+  background-color: var(--color-warning-50);
+}
+
+.input--warning:focus {
+  border-color: var(--color-warning-500);
+  box-shadow: var(--ring-warning);
 }
 
 @keyframes shake {
@@ -130,9 +196,12 @@
   transform: translateY(-50%);
   width: 1.25rem;
   height: 1.25rem;
-  color: var(--theme-text-subtle);
+  color: var(--color-text-subtle);
   pointer-events: none;
-  transition: color var(--transition-normal);
+  transition: var(--transition-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .icone--esquerda {
@@ -146,18 +215,52 @@
 }
 
 .icone--direita:hover {
-  color: var(--color-primary);
+  color: var(--color-primary-500);
 }
 
 .input:focus + .icone,
 .input:focus ~ .icone {
-  color: var(--color-primary);
+  color: var(--color-primary-500);
+}
+
+/* Ícones de estado */
+.icone--estado {
+  pointer-events: none;
+  cursor: default;
+}
+
+.icone--erro {
+  color: var(--color-danger-500);
+}
+
+.icone--sucesso {
+  color: var(--color-success-500);
+}
+
+.icone--aviso {
+  color: var(--color-warning-500);
+}
+
+/* Spinner de carregamento */
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--color-primary-200);
+  border-top: 2px solid var(--color-primary-500);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 /* === MENSAGENS MODERNAS === */
 
 .mensagem {
-  font-size: var(--font-size-sm);
+  font-size: var(--typography-caption-size);
+  line-height: var(--typography-caption-line-height);
   margin-top: var(--spacing-xs);
   display: flex;
   align-items: flex-start;
@@ -166,15 +269,19 @@
 }
 
 .mensagem--erro {
-  color: var(--color-danger);
+  color: var(--color-danger-600);
 }
 
 .mensagem--ajuda {
-  color: var(--theme-text-muted);
+  color: var(--color-text-muted);
 }
 
 .mensagem--sucesso {
-  color: var(--color-success);
+  color: var(--color-success-600);
+}
+
+.mensagem--aviso {
+  color: var(--color-warning-600);
 }
 
 @keyframes fadeIn {
@@ -255,37 +362,53 @@
 
 /* === TEMA ESCURO === */
 [data-theme="dark"] .input {
-  background-color: var(--theme-background-elevated);
-  border-color: var(--theme-border);
-  color: var(--theme-text);
+  background-color: var(--color-background-primary);
+  border-color: var(--color-border-light);
+  color: var(--color-text-primary);
 }
 
 [data-theme="dark"] .input:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.2);
+  border-color: var(--color-primary-500);
+  box-shadow: var(--ring-primary);
 }
 
-[data-theme="dark"] .input--erro {
+[data-theme="dark"] .input--error {
   background-color: rgba(239, 68, 68, 0.1);
 }
 
-/* === ESTADOS DE VALIDAÇÃO VISUAL === */
-.input--sucesso {
-  border-color: var(--color-success);
+[data-theme="dark"] .input--success {
+  background-color: rgba(16, 185, 129, 0.1);
 }
 
-.input--sucesso:focus {
-  border-color: var(--color-success);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+[data-theme="dark"] .input--warning {
+  background-color: rgba(245, 158, 11, 0.1);
 }
 
-.input--aviso {
-  border-color: var(--color-warning);
+[data-theme="dark"] .input--loading {
+  background-color: rgba(255, 107, 53, 0.1);
 }
 
-.input--aviso:focus {
-  border-color: var(--color-warning);
-  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+/* === CONTADOR DE CARACTERES === */
+.contador {
+  display: flex;
+  justify-content: flex-end;
+  font-size: var(--typography-caption-size);
+  color: var(--color-text-muted);
+  margin-top: var(--spacing-1);
+  transition: var(--transition-color);
+}
+
+.contador--limite-proximo {
+  color: var(--color-warning-600);
+}
+
+.contador--limite-excedido {
+  color: var(--color-danger-600);
+  font-weight: var(--font-weight-semibold);
+}
+
+.contador-texto {
+  font-variant-numeric: tabular-nums;
 }
 
 /* === MICRO-INTERAÇÕES === */
@@ -295,5 +418,5 @@
 }
 
 .label:has(+ .input-wrapper .input:focus) {
-  color: var(--color-primary);
+  color: var(--color-primary-600);
 }

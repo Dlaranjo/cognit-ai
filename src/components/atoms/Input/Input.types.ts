@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 export type TipoInput = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
 export type TamanhoInput = 'pequeno' | 'medio' | 'grande';
+export type EstadoInput = 'normal' | 'loading' | 'error' | 'success' | 'warning';
+export type DensidadeInput = 'compact' | 'normal' | 'comfortable';
 
 export interface PropriedadesInput {
   /** Valor do input */
@@ -16,6 +18,12 @@ export interface PropriedadesInput {
   /** Tamanho do input */
   tamanho?: TamanhoInput;
   
+  /** Estado visual do input */
+  estado?: EstadoInput;
+  
+  /** Densidade do input */
+  densidade?: DensidadeInput;
+  
   /** Texto placeholder */
   placeholder?: string;
   
@@ -27,6 +35,12 @@ export interface PropriedadesInput {
   
   /** Mensagem de ajuda */
   ajuda?: string;
+  
+  /** Mensagem de sucesso */
+  sucesso?: string;
+  
+  /** Mensagem de aviso */
+  aviso?: string;
   
   /** Se o input é obrigatório */
   obrigatorio?: boolean;
@@ -64,4 +78,16 @@ export interface PropriedadesInput {
   /** Atributos de acessibilidade */
   'aria-label'?: string;
   'aria-describedby'?: string;
+  
+  /** Função de validação customizada */
+  validador?: (valor: string) => string | null;
+  
+  /** Valor máximo de caracteres */
+  maxCaracteres?: number;
+  
+  /** Mostrar contador de caracteres */
+  mostrarContador?: boolean;
+  
+  /** Referência para o elemento input */
+  ref?: React.RefObject<HTMLInputElement>;
 } 
