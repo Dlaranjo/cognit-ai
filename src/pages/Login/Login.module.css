@@ -136,7 +136,7 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 1rem 1.5rem;
-  background: #1a1a1a;
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-hover) 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -147,8 +147,8 @@
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.25),
-    0 1px 3px rgba(0, 0, 0, 0.15);
+    0 4px 12px rgba(255, 107, 53, 0.3),
+    0 1px 3px rgba(255, 107, 53, 0.2);
 }
 
 .loginButton::before {
@@ -166,9 +166,9 @@
 .loginButton:hover {
   transform: translateY(-1px);
   box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.3),
-    0 2px 6px rgba(0, 0, 0, 0.15);
-  background: #0f0f0f;
+    0 8px 24px rgba(255, 107, 53, 0.4),
+    0 2px 6px rgba(255, 107, 53, 0.25);
+  background: linear-gradient(135deg, var(--theme-primary-hover) 0%, var(--theme-primary-active) 100%);
 }
 
 .loginButton:hover::before {
@@ -178,12 +178,12 @@
 .loginButton:active {
   transform: translateY(0);
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.3),
-    0 1px 3px rgba(0, 0, 0, 0.15);
+    0 2px 8px rgba(255, 107, 53, 0.4),
+    0 1px 3px rgba(255, 107, 53, 0.25);
 }
 
 .loginButton:disabled {
-  background: var(--color-neutral-400);
+  background: var(--color-neutral-300);
   color: var(--color-neutral-600);
   cursor: not-allowed;
   transform: none;
@@ -244,20 +244,21 @@
 .featureIcon {
   width: 32px;
   height: 32px;
-  background: var(--color-neutral-200);
+  background: linear-gradient(135deg, var(--theme-primary-light) 0%, rgba(255, 107, 53, 0.1) 100%);
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   position: relative;
+  border: 1px solid rgba(255, 107, 53, 0.2);
 }
 
 .featureIcon::after {
   content: '';
   width: 16px;
   height: 16px;
-  background: var(--color-neutral-700);
+  background: var(--theme-primary);
 }
 
 .featureIcon:nth-child(1)::after {
@@ -394,11 +395,12 @@
 }
 
 [data-theme="dark"] .featureIcon {
-  background: rgba(255, 255, 255, 0.15);
+  background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(255, 107, 53, 0.1) 100%);
+  border: 1px solid rgba(255, 107, 53, 0.3);
 }
 
 [data-theme="dark"] .featureIcon::after {
-  background: var(--color-neutral-200);
+  background: var(--theme-primary);
 }
 
 [data-theme="dark"] .features {
@@ -407,7 +409,8 @@
 
 /* Alto contraste */
 [data-theme="high-contrast"] .loginButton {
-  border: 2px solid var(--theme-text);
+  border: 2px solid var(--theme-primary);
+  background: var(--theme-primary);
 }
 
 [data-theme="high-contrast"] .loginCard {
