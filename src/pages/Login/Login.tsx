@@ -25,25 +25,25 @@ const PaginaLogin: React.FC = () => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.loginCard}>
-        {/* Logo e Branding */}
-        <div className={styles.logoContainer}>
-          <div className={styles.logo}>🤖</div>
-          <h1 className={styles.subtitle}>Cognit Studio</h1>
-          <p className={styles.description}>
+        {/* Brand Identity */}
+        <div className={styles.brandContainer}>
+          <div className={styles.brandIcon} />
+          <h1 className={styles.brandName}>Cognit Studio</h1>
+          <p className={styles.brandTagline}>
             Agregador de LLMs para potencializar sua produtividade
           </p>
         </div>
 
-        {/* Conteúdo Principal */}
+        {/* Login Content */}
         <div className={styles.loginContent}>
-          <h2 className={styles.welcomeText}>
+          <h2 className={styles.welcomeTitle}>
             Bem-vindo de volta
           </h2>
-          <p className={styles.loginDescription}>
-            Acesse sua conta para continuar conversando com os melhores modelos de IA
+          <p className={styles.welcomeSubtitle}>
+            Acesse sua conta para continuar conversando com os melhores modelos de IA disponíveis
           </p>
 
-          {/* Botão de Login */}
+          {/* Login Button */}
           <button
             onClick={handleLogin}
             disabled={carregando}
@@ -58,31 +58,30 @@ const PaginaLogin: React.FC = () => {
             ) : (
               <>
                 <div className={styles.googleIcon} />
-                Entrar com Google
+                Continuar com Google
               </>
             )}
           </button>
         </div>
 
-        {/* Features */}
+        {/* Features Grid */}
         <div className={styles.features}>
-          <h3 className={styles.featuresTitle}>O que você pode fazer</h3>
-          <div className={styles.featuresList}>
+          <div className={styles.featuresGrid}>
             <div className={styles.featureItem}>
               <div className={styles.featureIcon} />
-              <span>Converse com múltiplos modelos de IA</span>
+              <span>Múltiplos modelos de IA</span>
             </div>
             <div className={styles.featureItem}>
               <div className={styles.featureIcon} />
-              <span>Upload de arquivos e documentos</span>
+              <span>Upload de documentos</span>
             </div>
             <div className={styles.featureItem}>
               <div className={styles.featureIcon} />
-              <span>Histórico completo de conversas</span>
+              <span>Histórico completo</span>
             </div>
             <div className={styles.featureItem}>
               <div className={styles.featureIcon} />
-              <span>Interface moderna e intuitiva</span>
+              <span>Interface intuitiva</span>
             </div>
           </div>
         </div>
