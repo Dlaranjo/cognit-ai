@@ -1,0 +1,169 @@
+# Cursor Rules - Cognit Studio
+
+## Objetivo
+Você é responsável por ajustes pontuais de UI e evolução de funcionalidades no **Cognit Studio** - um agregador de LLMs. Mantenha sempre a arquitetura e padrões estabelecidos, focando em melhorias incrementais e refinamentos.
+
+## Arquitetura Obrigatória
+
+### Stack Tecnológica
+- React 18+ com TypeScript
+- React Router para roteamento  
+- Redux Toolkit para estado global
+- Axios para requisições HTTP
+- Atomic Design para componentes
+
+### Estrutura de Pastas (NÃO ALTERE)
+```
+src/
+├── api/                # Camada de API
+├── components/
+│   ├── atoms/         # Elementos básicos
+│   ├── molecules/     # Combinações simples
+│   ├── organisms/     # Componentes complexos
+│   └── templates/     # Layouts base
+├── pages/             # Páginas da aplicação
+├── hooks/             # Custom hooks
+├── redux/             # Gerenciamento de estado
+├── shared/            # Configurações e tipos globais
+```
+
+## Diretrizes de Desenvolvimento
+
+### 1. Modificações de Componentes
+- SEMPRE mantenha a localização no Atomic Design
+- Preserve interfaces TypeScript existentes
+- Não quebre componentes maiores em menores sem justificativa
+- Mantenha compatibilidade com props existentes
+
+### 2. Gerenciamento de Estado
+- Use Redux para estados globais (auth, chat, conversations)
+- Use useState apenas para estados locais simples
+- NÃO crie novos modules Redux sem necessidade
+- Siga padrões existentes de actions/reducers
+
+### 3. Estilização
+- Use classes Tailwind existentes como base
+- Mantenha consistência visual
+- Respeite design responsivo
+- Siga padrões de acessibilidade
+
+### 4. TypeScript
+- SEMPRE use tipos existentes quando disponíveis
+- NÃO use `any` - crie tipos específicos se necessário
+- Mantenha interfaces consistentes
+- Valide props e retornos de funções
+
+## Padrões de Qualidade
+
+### Commits
+- Mensagens descritivas em português
+- Commits pequenos e focados
+- Teste antes de cada commit
+
+### Performance
+- Use React.memo para componentes que re-renderizam frequentemente
+- Implemente useMemo/useCallback quando apropriado
+- Evite criação de objetos/arrays dentro de JSX
+
+### Testes
+- Sempre execute `npm run lint` e `npm run typecheck`
+- Teste funcionalidades modificadas manualmente
+- Verifique se build passa com `npm run build`
+
+## Funcionalidades Específicas
+
+### Autenticação
+- Mantenha SSO Google funcionando
+- Preserve gerenciamento de JWT
+- Não altere fluxos de login/logout
+
+### Chat Interface
+- Preserve streaming de mensagens
+- Mantenha upload de arquivos funcionando
+- Não altere seleção de providers/modelos
+
+### Conversas
+- Mantenha infinite scroll otimizado
+- Preserve funcionalidade de busca
+- Não altere sistema de favoritos
+
+## Comandos Essenciais
+```bash
+npm run dev          # Desenvolvimento
+npm run lint         # Verificar código
+npm run typecheck    # Verificar tipos
+npm run build        # Build de produção
+```
+
+## Restrições Importantes
+
+### NÃO FAÇA:
+- Grandes refatorações de arquitetura
+- Mudanças na estrutura de pastas
+- Alterações em configurações Redux
+- Quebra de interfaces existentes
+- Mudanças na configuração de build
+
+### SEMPRE FAÇA:
+- Teste suas mudanças localmente
+- Mantenha código TypeScript válido
+- Siga padrões de nomenclatura existentes
+- Preserve funcionalidades existentes
+- Documente mudanças complexas
+
+## Fluxo de Trabalho Recomendado
+
+1. **Análise**: Entenda o código existente antes de modificar
+2. **Planejamento**: Identifique impacto das mudanças
+3. **Implementação**: Faça mudanças incrementais
+4. **Teste**: Verifique funcionalidade completa
+5. **Validação**: Execute lint, typecheck e build
+
+## Tipos e Interfaces Principais
+
+### User
+```typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+}
+```
+
+### Message
+```typescript
+interface Message {
+  id: string;
+  content: string;
+  sender: 'user' | 'ai';
+  timestamp: Date;
+  attachments?: File[];
+  feedback?: 'like' | 'dislike';
+}
+```
+
+### Conversation
+```typescript
+interface Conversation {
+  id: string;
+  title: string;
+  messages: Message[];
+  isFavorite: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+```
+
+## Configuração de Ambiente
+- Use `src/shared/config.ts` para variáveis de ambiente
+- NÃO acesse process.env diretamente em componentes
+- Mantenha configurações centralizadas
+
+## Suporte
+- Consulte CLAUDE.md para refatorações maiores
+- Consulte .bolt.md para novos protótipos
+- Mantenha consistência com padrões existentes
+
+## Nota Final
+Seu foco deve ser em melhorar a experiência do usuário através de ajustes pontuais e refinamentos, sempre preservando a arquitetura e funcionalidades existentes. Qualquer mudança maior deve ser discutida antes da implementação.

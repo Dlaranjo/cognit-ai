@@ -8,6 +8,8 @@ import TesteMolecules from './pages/TesteMolecules';
 import TesteOrganisms from './pages/TesteOrganisms';
 import RotaProtegida from './components/organisms/RotaProtegida/RotaProtegida';
 import { useAutenticacao } from './hooks/useAutenticacao';
+import { StagewiseToolbar } from '@stagewise/toolbar-react';
+import ReactPlugin from '@stagewise-plugins/react';
 
 // Componente auxiliar para decidir rota inicial
 const RedirecionarRaiz: React.FC = () => {
@@ -34,6 +36,11 @@ const App: React.FC = () => (
       {/* Redirect geral */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+    <StagewiseToolbar 
+      config={{
+        plugins: [ReactPlugin],
+      }}
+    />
   </BrowserRouter>
 );
 
