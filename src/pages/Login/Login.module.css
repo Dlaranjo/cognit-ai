@@ -37,10 +37,10 @@
 }
 
 .loginCard {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 24px;
   padding: 3rem;
   width: 100%;
@@ -48,9 +48,9 @@
   position: relative;
   z-index: 1;
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.06),
-    0 1px 2px rgba(0, 0, 0, 0.02),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
 
 .brandContainer {
@@ -92,7 +92,7 @@
 .brandName {
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--color-neutral-900) 0%, var(--color-neutral-700) 100%);
+  background: linear-gradient(135deg, var(--color-neutral-900) 0%, var(--color-neutral-800) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -101,7 +101,7 @@
 }
 
 .brandTagline {
-  color: var(--theme-text-muted);
+  color: var(--color-neutral-600);
   font-size: 0.95rem;
   font-weight: 400;
   letter-spacing: 0.01em;
@@ -114,14 +114,14 @@
 .welcomeTitle {
   font-size: 1.75rem;
   font-weight: 600;
-  color: var(--theme-text);
+  color: var(--color-neutral-900);
   margin-bottom: 0.75rem;
   letter-spacing: -0.01em;
   text-align: center;
 }
 
 .welcomeSubtitle {
-  color: var(--theme-text-muted);
+  color: var(--color-neutral-700);
   font-size: 1rem;
   line-height: 1.5;
   text-align: center;
@@ -136,7 +136,7 @@
   justify-content: center;
   gap: 0.75rem;
   padding: 1rem 1.5rem;
-  background: var(--color-neutral-900);
+  background: #1a1a1a;
   color: white;
   border: none;
   border-radius: 12px;
@@ -147,8 +147,8 @@
   position: relative;
   overflow: hidden;
   box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    0 1px 3px rgba(0, 0, 0, 0.1);
+    0 4px 12px rgba(0, 0, 0, 0.25),
+    0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .loginButton::before {
@@ -166,9 +166,9 @@
 .loginButton:hover {
   transform: translateY(-1px);
   box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.2),
-    0 2px 6px rgba(0, 0, 0, 0.1);
-  background: var(--color-neutral-800);
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+  background: #0f0f0f;
 }
 
 .loginButton:hover::before {
@@ -178,13 +178,13 @@
 .loginButton:active {
   transform: translateY(0);
   box-shadow: 
-    0 2px 8px rgba(0, 0, 0, 0.2),
-    0 1px 3px rgba(0, 0, 0, 0.1);
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .loginButton:disabled {
-  background: var(--color-neutral-300);
-  color: var(--color-neutral-500);
+  background: var(--color-neutral-400);
+  color: var(--color-neutral-600);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -223,7 +223,7 @@
 
 .features {
   padding-top: 2rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
 }
 
 .featuresGrid {
@@ -237,14 +237,14 @@
   align-items: center;
   gap: 0.75rem;
   font-size: 0.875rem;
-  color: var(--theme-text-muted);
+  color: var(--color-neutral-700);
   font-weight: 400;
 }
 
 .featureIcon {
   width: 32px;
   height: 32px;
-  background: var(--color-neutral-100);
+  background: var(--color-neutral-200);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -257,7 +257,7 @@
   content: '';
   width: 16px;
   height: 16px;
-  background: var(--color-neutral-600);
+  background: var(--color-neutral-700);
 }
 
 .featureIcon:nth-child(1)::after {
@@ -289,7 +289,7 @@
   margin-top: 2rem;
   text-align: center;
   font-size: 0.8rem;
-  color: var(--theme-text-subtle);
+  color: var(--color-neutral-600);
   line-height: 1.5;
 }
 
@@ -378,31 +378,31 @@
 
 /* Tema escuro */
 [data-theme="dark"] .loginCard {
-  background: rgba(26, 32, 44, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(26, 32, 44, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 1px 2px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="dark"] .brandName {
-  background: linear-gradient(135deg, var(--color-neutral-100) 0%, var(--color-neutral-300) 100%);
+  background: linear-gradient(135deg, var(--color-neutral-50) 0%, var(--color-neutral-200) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 [data-theme="dark"] .featureIcon {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 [data-theme="dark"] .featureIcon::after {
-  background: var(--color-neutral-300);
+  background: var(--color-neutral-200);
 }
 
 [data-theme="dark"] .features {
-  border-top-color: rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.15);
 }
 
 /* Alto contraste */
