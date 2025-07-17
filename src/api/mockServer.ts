@@ -302,6 +302,24 @@ export function createMockServer() {
 
       console.log('🎭 Mirage registered login route');
 
+      // Google OAuth endpoint
+      this.post('/auth/google', async (schema, request) => {
+        console.log('🎯 Mirage intercepted Google auth request:', request.requestBody);
+        await delay(500);
+        const attrs = JSON.parse(request.requestBody);
+        
+        // For demo purposes, any Google token works
+        if (attrs.token) {
+          return {
+            user: mockUsers[0], // Default to Ricardo
+            token: 'mock-jwt-token-google',
+            refreshToken: 'mock-refresh-token-google',
+            expiresIn: 3600,
+          };
+        }
+        
+        return new Response(400, {}, { message: 'Invalid Google token' });
+      });
       this.post('/auth/logout', async () => {
         await delay(300);
         return new Response(200, {}, { message: 'Logout realizado com sucesso' });

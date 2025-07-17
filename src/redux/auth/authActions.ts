@@ -28,11 +28,14 @@ export const googleAuth = createAsyncThunk<
   'auth/googleAuth',
   async (googleToken, { rejectWithValue }) => {
     try {
+      console.log('🔐 Redux googleAuth action called with token:', googleToken?.substring(0, 20) + '...');
       const response = await authApi.googleAuth(googleToken);
+      console.log('✅ Google auth API response received:', response);
       localStorage.setItem('token', response.token);
       localStorage.setItem('refreshToken', response.refreshToken);
       return response;
     } catch (error: unknown) {
+      console.error('❌ Google auth action failed:', error);
       const errorMessage = error instanceof Error ? error.message : 'Google auth failed';
       return rejectWithValue(errorMessage);
     }

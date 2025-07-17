@@ -15,94 +15,78 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
     signInWithGoogle, 
     renderGoogleButton, 
     loadGoogleScript,
-    isGoogleReady
+    isGoogleReady,
+    isInitialized
   } = useGoogleAuth();
 
   useEffect(() => {
     const setupGoogle = async () => {
       try {
+        console.log('🔧 Setting up Google Auth...');
         await loadGoogleScript();
-        initializeGoogleAuth();
+        console.log('✅ Google script loaded');
+        // initializeGoogleAuth is now called automatically in useGoogleAuth
       } catch (error) {
-        console.error('Failed to setup Google Auth:', error);
+        console.error('❌ Failed to setup Google Auth:', error);
       }
     };
 
     setupGoogle();
   }, [loadGoogleScript, initializeGoogleAuth]);
 
-  // Initialize Google OAuth in hidden container (for OAuth functionality only)
+  // Render Google button when ready
   useEffect(() => {
-    if (isGoogleReady && googleButtonRef.current) {
+    if (isGoogleReady && isInitialized && googleButtonRef.current) {
+      console.log('🎨 Rendering Google button in hidden container...');
       renderGoogleButton(googleButtonRef.current);
     }
-  }, [isGoogleReady, renderGoogleButton]);
+  }, [isGoogleReady, isInitialized, renderGoogleButton]);
 
   const handleGoogleLogin = async () => {
+    console.log('🚀 handleGoogleLogin called');
     setIsLoading(true);
+    
     try {
-      if (isGoogleReady) {
-        console.log('Attempting Google OAuth...');
+      if (isGoogleReady && isInitialized) {
+        console.log('🔐 Attempting Google OAuth...');
 
-        // Try Google OAuth
-        signInWithGoogle();
-
-        // Wait for Google OAuth to complete or timeout
-        const oauthSuccess = await new Promise(resolve => {
-          let resolved = false;
-
-          // Timeout after 3 seconds
-          const timeout = setTimeout(() => {
-            if (!resolved) {
-              resolved = true;
-              console.log('Google OAuth timeout, using demo fallback');
-              resolve(false);
-            }
-          }, 3000);
-
-          // Listen for successful OAuth completion
-          const handleSuccess = () => {
-            if (!resolved) {
-              resolved = true;
-              clearTimeout(timeout);
-              console.log('Google OAuth successful');
-              resolve(true);
-            }
-          };
-
-          // Listen for various success indicators
-          window.addEventListener('message', handleSuccess, { once: true });
-
-          // Also check for URL changes that might indicate success
-          const originalUrl = window.location.href;
-          const checkUrlChange = setInterval(() => {
-            if (window.location.href !== originalUrl) {
-              clearInterval(checkUrlChange);
-              handleSuccess();
-            }
-          }, 100);
-
-          // Clean up interval after timeout
-          setTimeout(() => clearInterval(checkUrlChange), 3000);
-        });
-
-        // If OAuth didn't succeed, use fallback
-        if (!oauthSuccess) {
-          await onLogin('user@cognit.com', 'sso-token');
+        try {
+          // Try Google OAuth with timeout
+          await Promise.race([
+            signInWithGoogle(),
+            new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Google OAuth timeout')), 5000)
+            )
+          ]);
+          
+          console.log('✅ Google OAuth completed successfully');
+          
+          // Wait a bit for the callback to process
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Check if we're still on the login page (meaning OAuth didn't work)
+          if (window.location.pathname.includes('/auth')) {
+            console.log('⚠️ Still on auth page, using demo fallback');
+            throw new Error('OAuth did not redirect');
+          }
+          
+        } catch (oauthError) {
+          console.log('⚠️ Google OAuth failed, using demo fallback:', oauthError);
+          // Fallback to demo login
+          await onLogin('ricardo@cognit.com', 'demo-sso-token');
         }
+
       } else {
-        // Fallback for demo purposes when Google OAuth is not available
-        console.log('Google OAuth not ready, using demo fallback');
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        await onLogin('user@cognit.com', 'sso-token');
+        console.log('⚠️ Google OAuth not ready, using demo fallback');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        await onLogin('ricardo@cognit.com', 'demo-sso-token');
       }
     } catch (error) {
-      console.error('Erro no login SSO:', error);
-      // Always fallback to demo on error
+      console.error('❌ Erro no login SSO:', error);
       try {
-        await onLogin('user@cognit.com', 'sso-token');
+        await onLogin('ricardo@cognit.com', 'demo-sso-token');
       } catch (fallbackError) {
-        console.error('Fallback login also failed:', fallbackError);
+        console.error('❌ Fallback login also failed:', fallbackError);
       }
     } finally {
       setIsLoading(false);
