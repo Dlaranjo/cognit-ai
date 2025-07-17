@@ -266,9 +266,8 @@ export function createMockServer() {
 
   return createServer({
     routes() {
-      // Configure for test/development environment
-      this.urlPrefix = 'http://localhost:3001';
-      this.namespace = '';  // No namespace to match direct API calls
+      // Configure for test/development environment - no namespace to intercept all calls
+      this.timing = 400; // Add some realistic delay
 
       console.log('🎭 Mirage server configuring routes...');
 
