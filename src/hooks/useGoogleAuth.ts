@@ -2,19 +2,47 @@ import { useCallback, useState, useEffect } from 'react';
 import { useAuth } from './useAuth';
 import { config } from '../shared/config';
 
+// Google OAuth types
+interface GoogleAuthConfig {
+  client_id: string;
+  callback: (response: GoogleCredentialResponse) => void;
+}
+
+interface GoogleCredentialResponse {
+  credential: string;
+  select_by?: string;
+}
+
+interface GooglePromptNotification {
+  isNotDisplayed: () => boolean;
+  isSkippedMoment: () => boolean;
+  getNotDisplayedReason: () => string;
+  getSkippedReason: () => string;
+}
+
+interface GoogleButtonConfig {
+  theme?: 'outline' | 'filled_blue' | 'filled_black';
+  size?: 'large' | 'medium' | 'small';
+  text?: 'signin_with' | 'signup_with' | 'continue_with' | 'signin';
+  shape?: 'rectangular' | 'pill' | 'circle' | 'square';
+  logo_alignment?: 'left' | 'center';
+  width?: string;
+  locale?: string;
+}
+
 declare global {
   interface Window {
     google?: {
       accounts: {
         id: {
-          initialize: (config: any) => void;
+          initialize: (config: GoogleAuthConfig) => void;
           prompt: () => void;
-          renderButton: (element: HTMLElement, config: any) => void;
+          renderButton: (element: HTMLElement, config: GoogleButtonConfig) => void;
           disableAutoSelect: () => void;
         };
       };
     };
-    gapi?: any;
+    gapi?: unknown;
   }
 }
 
@@ -28,10 +56,29 @@ export const useGoogleAuth = () => {
     const checkGoogleReady = () => {
       const ready = !!window.google?.accounts?.id && !!config.GOOGLE_CLIENT_ID;
       setIsGoogleReady(ready);
-      
+
       if (ready && !isInitialized) {
-        initializeGoogleAuth();
-        setIsInitialized(true);
+        // Initialize Google Auth directly here to avoid dependency issues
+        if (window.google?.accounts?.id && config.GOOGLE_CLIENT_ID) {
+          try {
+            console.log('🔧 Initializing Google OAuth with client ID:', config.GOOGLE_CLIENT_ID);
+
+            window.google.accounts.id.initialize({
+              client_id: config.GOOGLE_CLIENT_ID,
+              callback: handleGoogleCallback,
+              auto_select: false,
+              cancel_on_tap_outside: false,
+              context: 'signin',
+              ux_mode: 'popup',
+              use_fedcm_for_prompt: false,
+            });
+
+            console.log('✅ Google OAuth initialized successfully');
+            setIsInitialized(true);
+          } catch (error) {
+            console.error('❌ Failed to initialize Google OAuth:', error);
+          }
+        }
       }
     };
 
@@ -45,9 +92,9 @@ export const useGoogleAuth = () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, [isInitialized]);
+  }, [isInitialized, handleGoogleCallback]);
 
-  const handleGoogleCallback = useCallback(async (response: any) => {
+  const handleGoogleCallback = useCallback(async (response: GoogleCredentialResponse) => {
     console.log('🔐 Google callback received:', response);
     
     try {
@@ -104,7 +151,7 @@ export const useGoogleAuth = () => {
         window.google!.accounts.id.disableAutoSelect();
         
         // Show the One Tap prompt
-        window.google!.accounts.id.prompt((notification: any) => {
+        window.google!.accounts.id.prompt((notification: GooglePromptNotification) => {
           console.log('📝 Google prompt notification:', notification);
           
           if (notification.isNotDisplayed()) {

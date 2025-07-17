@@ -87,8 +87,9 @@ export const createProject = createAsyncThunk<
     try {
       const project = await workspaceApi.createProject(workspaceId, projectData);
       return project;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to create project');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create project';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -104,8 +105,9 @@ export const fetchDocuments = createAsyncThunk<
     try {
       const documents = await workspaceApi.getDocuments(projectId);
       return documents;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch documents');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch documents';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -120,8 +122,9 @@ export const uploadDocument = createAsyncThunk<
     try {
       const document = await workspaceApi.uploadDocument(projectId, file);
       return document;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to upload document');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to upload document';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -137,8 +140,9 @@ export const fetchWorkspaceMembers = createAsyncThunk<
     try {
       const members = await workspaceApi.getWorkspaceMembers(workspaceId);
       return members;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch members');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch members';
+      return rejectWithValue(errorMessage);
     }
   }
 );

@@ -104,7 +104,7 @@ describe('useStreaming', () => {
       },
     };
 
-    vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+    vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
 
     const { result } = renderHook(() => useStreaming(), { wrapper: createWrapper });
     
@@ -151,7 +151,7 @@ describe('useStreaming', () => {
       status: 500,
     };
 
-    vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+    vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
 
     const { result } = renderHook(() => useStreaming(), { wrapper: createWrapper });
     
@@ -237,7 +237,7 @@ describe('useStreaming', () => {
       signal: {},
     };
     
-    (globalThis as any).AbortController = vi.fn(() => mockAbortController);
+    (globalThis as typeof globalThis & { AbortController: unknown }).AbortController = vi.fn(() => mockAbortController);
 
     const { result } = renderHook(() => useStreaming(), { wrapper: createWrapper });
     
@@ -282,7 +282,7 @@ describe('useStreaming', () => {
       },
     };
 
-    vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+    vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
 
     const { result } = renderHook(() => useStreaming(), { wrapper: createWrapper });
     
@@ -326,7 +326,7 @@ describe('useStreaming', () => {
       },
     };
 
-    vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+    vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
 
     const { result } = renderHook(() => useStreaming(), { wrapper: createWrapper });
     
@@ -366,7 +366,7 @@ describe('useStreaming', () => {
       },
     };
 
-    vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+    vi.mocked(fetch).mockResolvedValue(mockResponse as Response);
 
     const { result } = renderHook(() => useStreaming(), { wrapper: createWrapper });
     

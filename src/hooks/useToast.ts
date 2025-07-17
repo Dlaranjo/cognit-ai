@@ -12,6 +12,7 @@ import {
   selectLatestNotification,
 } from '../redux/ui/uiSelectors';
 import type { NotificationPayload } from '../redux/ui/uiTypes';
+import type { RootState } from '../types';
 
 export const useToast = () => {
   const dispatch = useAppDispatch();
@@ -74,7 +75,7 @@ export const useToast = () => {
   // Helper functions - this returns a selector function, not a hook call
   const getNotificationsByType = useCallback((type: 'success' | 'error' | 'warning' | 'info') => {
     // This returns a function that can be used with useAppSelector later
-    return (state: any) => selectNotificationsByType(state, type);
+    return (state: RootState) => selectNotificationsByType(state, type);
   }, []);
 
   // Auto-dismiss functionality

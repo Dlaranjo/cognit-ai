@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Search } from 'lucide-react';
-import { Workspace, User } from '../../types';
+import { Workspace, User, WorkspaceMember } from '../../types';
 import { WorkspaceCard } from './WorkspaceCard';
 import { CreateWorkspaceModal } from './CreateWorkspaceModal';
 import { MemberManagement } from './MemberManagement';
@@ -12,7 +12,7 @@ interface WorkspaceListProps {
   getUserPermission: (workspaceId: string) => 'OWNER' | 'EDITOR' | 'VIEWER' | null;
   onWorkspaceSelect: (workspace: Workspace) => void;
   onCreateWorkspace: (name: string, description?: string) => Promise<Workspace>;
-  onUpdateWorkspaceMembers: (workspaceId: string, members: any[]) => Promise<void>;
+  onUpdateWorkspaceMembers: (workspaceId: string, members: WorkspaceMember[]) => Promise<void>;
 }
 
 export const WorkspaceList: React.FC<WorkspaceListProps> = ({

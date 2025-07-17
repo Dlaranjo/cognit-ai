@@ -32,7 +32,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLogin }) => {
     };
 
     setupGoogle();
-  }, [loadGoogleScript, initializeGoogleAuth]);
+  }, [loadGoogleScript]);
 
   // Render Google button when ready
   useEffect(() => {

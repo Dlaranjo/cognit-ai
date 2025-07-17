@@ -11,6 +11,7 @@ import {
   selectModalData,
   selectOpenModals,
 } from '../redux/ui/uiSelectors';
+import type { RootState } from '../types';
 
 export const useModal = (modalId?: string) => {
   const dispatch = useAppDispatch();
@@ -62,12 +63,12 @@ export const useModal = (modalId?: string) => {
   // Helper functions - these return selector functions, not hook calls
   const isModalOpen = useCallback((id: string) => {
     // This returns a function that can be used with useAppSelector later
-    return (state: any) => selectIsModalOpen(state, id);
+    return (state: RootState) => selectIsModalOpen(state, id);
   }, []);
 
   const getModalData = useCallback((id: string) => {
     // This returns a function that can be used with useAppSelector later
-    return (state: any) => selectModalData(state, id);
+    return (state: RootState) => selectModalData(state, id);
   }, []);
 
   // Computed values

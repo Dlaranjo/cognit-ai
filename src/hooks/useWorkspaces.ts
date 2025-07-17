@@ -32,7 +32,8 @@ import {
   selectCanEditWorkspace,
   selectCanManageWorkspace,
 } from '../redux/workspaces/workspacesSelectors';
-import type { Workspace, Project } from '../api/workspaceApi';
+import type { Workspace, Project, WorkspaceMember } from '../api/workspaceApi';
+import type { RootState } from '../types';
 
 export const useWorkspaces = (userId?: string) => {
   const dispatch = useAppDispatch();
@@ -83,7 +84,7 @@ export const useWorkspaces = (userId?: string) => {
     return dispatch(fetchWorkspaceMembers(workspaceId));
   }, [dispatch]);
 
-  const updateWorkspaceMembers = useCallback(async (workspaceId: string, members: any[]) => {
+  const updateWorkspaceMembers = useCallback(async (workspaceId: string, members: WorkspaceMember[]) => {
     // TODO: Implement updateWorkspaceMembers action
     console.log('updateWorkspaceMembers called with:', workspaceId, members);
     return Promise.resolve();
@@ -103,32 +104,32 @@ export const useWorkspaces = (userId?: string) => {
 
   // Selector functions with parameters - these return selector functions, not hook calls
   const getWorkspaceById = useCallback((workspaceId: string) => {
-    return (state: any) => selectWorkspaceById(state, workspaceId);
+    return (state: RootState) => selectWorkspaceById(state, workspaceId);
   }, []);
 
   const getProjectById = useCallback((projectId: string) => {
-    return (state: any) => selectProjectById(state, projectId);
+    return (state: RootState) => selectProjectById(state, projectId);
   }, []);
 
   const getProjectsByWorkspace = useCallback(() => {
-    return (state: any) => selectProjectsByWorkspace(state);
+    return (state: RootState) => selectProjectsByWorkspace(state);
   }, []);
 
   const getDocumentsByProject = useCallback((projectId: string) => {
-    return (state: any) => selectDocumentsByProject(state, projectId);
+    return (state: RootState) => selectDocumentsByProject(state, projectId);
   }, []);
 
   const getUserPermission = useCallback(() => {
     if (!userId) return () => 'viewer';
-    return (state: any) => selectWorkspacePermissions(state, userId);
+    return (state: RootState) => selectWorkspacePermissions(state, userId);
   }, [userId]);
 
   const canEdit = useCallback(() => {
-    return (state: any) => selectCanEditWorkspace(state);
+    return (state: RootState) => selectCanEditWorkspace(state);
   }, []);
 
   const canManage = useCallback(() => {
-    return (state: any) => selectCanManageWorkspace(state);
+    return (state: RootState) => selectCanManageWorkspace(state);
   }, []);
 
   return {
