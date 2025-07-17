@@ -18,8 +18,9 @@ export const fetchWorkspaces = createAsyncThunk<
     try {
       const workspaces = await workspaceApi.getWorkspaces();
       return workspaces;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch workspaces');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch workspaces';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -34,8 +35,9 @@ export const createWorkspace = createAsyncThunk<
     try {
       const workspace = await workspaceApi.createWorkspace(workspaceData);
       return workspace;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to create workspace');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to create workspace';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -50,8 +52,9 @@ export const deleteWorkspace = createAsyncThunk<
     try {
       await workspaceApi.deleteWorkspace(workspaceId);
       return workspaceId;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to delete workspace');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete workspace';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -67,8 +70,9 @@ export const fetchProjects = createAsyncThunk<
     try {
       const projects = await workspaceApi.getProjects(workspaceId);
       return projects;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch projects');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch projects';
+      return rejectWithValue(errorMessage);
     }
   }
 );

@@ -11,8 +11,9 @@ export const fetchConversations = createAsyncThunk<
     try {
       const conversations = await chatApi.getConversations();
       return conversations;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch conversations');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch conversations';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -27,8 +28,9 @@ export const fetchConversation = createAsyncThunk<
     try {
       const conversation = await chatApi.getConversation(id);
       return conversation;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to fetch conversation');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch conversation';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -43,8 +45,9 @@ export const deleteConversation = createAsyncThunk<
     try {
       await chatApi.deleteConversation(id);
       return id;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to delete conversation');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to delete conversation';
+      return rejectWithValue(errorMessage);
     }
   }
 );

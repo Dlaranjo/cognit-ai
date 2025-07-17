@@ -11,8 +11,9 @@ export const sendMessage = createAsyncThunk<
     try {
       const response = await chatApi.sendMessage(request);
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to send message');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to send message';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -27,8 +28,9 @@ export const uploadFile = createAsyncThunk<
     try {
       const response = await chatApi.uploadFile(file);
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Failed to upload file');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to upload file';
+      return rejectWithValue(errorMessage);
     }
   }
 );

@@ -2,7 +2,7 @@ export interface UIState {
   modals: {
     [key: string]: {
       isOpen: boolean;
-      data?: any;
+      data?: unknown;
     };
   };
   notifications: Notification[];
@@ -24,7 +24,7 @@ export interface Notification {
 
 export interface ModalPayload {
   modalId: string;
-  data?: any;
+  data?: unknown;
 }
 
 export interface NotificationPayload {
