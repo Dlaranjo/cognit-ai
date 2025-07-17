@@ -22,19 +22,17 @@ const colorClasses = {
   current: 'text-current',
 };
 
-export const Spinner: React.FC<SpinnerProps> = ({
-  size = 'md',
-  color = 'current',
-  className = '',
-}) => {
-  const classes = [
-    'animate-spin',
-    sizeClasses[size],
-    colorClasses[color],
-    className,
-  ].join(' ');
+export const Spinner = React.memo<SpinnerProps>(
+  ({ size = 'md', color = 'current', className = '' }) => {
+    const classes = [
+      'animate-spin',
+      sizeClasses[size],
+      colorClasses[color],
+      className,
+    ].join(' ');
 
-  return <Loader2 className={classes} />;
-};
+    return <Loader2 className={classes} />;
+  }
+);
 
 export default Spinner;

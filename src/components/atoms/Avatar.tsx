@@ -26,75 +26,57 @@ const iconSizeClasses = {
   xl: 'w-8 h-8',
 };
 
-export const Avatar: React.FC<AvatarProps> = ({
-  src,
-  alt,
-  name,
-  size = 'md',
-  className = '',
-  fallbackIcon = true,
-}) => {
-  const [imageError, setImageError] = React.useState(false);
+export const Avatar = React.memo<AvatarProps>(
+  ({ src, alt, name, size = 'md', className = '', fallbackIcon = true }) => {
+    const [imageError, setImageError] = React.useState(false);
 
-  const getInitials = (name: string): string => {
-    return name
-      .split(' ')
-      .map((word) => word.charAt(0))
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  };
+    const getInitials = (name: string): string => {
+      return name
+        .split(' ')
+        .map((word) => word.charAt(0))
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    };
 
-  const baseClasses = 'inline-flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 font-medium overflow-hidden';
-  
-  const classes = [
-    baseClasses,
-    sizeClasses[size],
-    className,
-  ].join(' ');
+    const baseClasses =
+      'inline-flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 font-medium overflow-hidden';
 
-  const handleImageError = () => {
-    setImageError(true);
-  };
+    const classes = [baseClasses, sizeClasses[size], className].join(' ');
 
-  const renderFallback = () => {
-    if (name && !fallbackIcon) {
+    const handleImageError = () => {
+      setImageError(true);
+    };
+
+    const renderFallback = () => {
+      if (name && !fallbackIcon) {
+        return <span className="font-medium">{getInitials(name)}</span>;
+      }
+
+      if (fallbackIcon) {
+        return <User className={iconSizeClasses[size]} />;
+      }
+
       return (
-        <span className="font-medium">
-          {getInitials(name)}
-        </span>
+        <span className="font-medium">{name ? getInitials(name) : '?'}</span>
+      );
+    };
+
+    if (src && !imageError) {
+      return (
+        <div className={classes}>
+          <img
+            src={src}
+            alt={alt || name || 'Avatar'}
+            className="w-full h-full object-cover"
+            onError={handleImageError}
+          />
+        </div>
       );
     }
 
-    if (fallbackIcon) {
-      return <User className={iconSizeClasses[size]} />;
-    }
-
-    return (
-      <span className="font-medium">
-        {name ? getInitials(name) : '?'}
-      </span>
-    );
-  };
-
-  if (src && !imageError) {
-    return (
-      <div className={classes}>
-        <img
-          src={src}
-          alt={alt || name || 'Avatar'}
-          className="w-full h-full object-cover"
-          onError={handleImageError}
-        />
-      </div>
-    );
+    return <div className={classes}>{renderFallback()}</div>;
   }
-
-  return (
-    <div className={classes}>
-      {renderFallback()}
-    </div>
-  );
-};
+);
 
 export default Avatar;

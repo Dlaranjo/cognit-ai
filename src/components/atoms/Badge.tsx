@@ -1,7 +1,13 @@
 import React from 'react';
 
 export interface BadgeProps {
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'neutral';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'neutral';
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
   className?: string;
@@ -22,26 +28,20 @@ const sizeClasses = {
   lg: 'px-3 py-1.5 text-base',
 };
 
-export const Badge: React.FC<BadgeProps> = ({
-  variant = 'neutral',
-  size = 'md',
-  children,
-  className = '',
-}) => {
-  const baseClasses = 'inline-flex items-center font-medium rounded-md border';
-  
-  const classes = [
-    baseClasses,
-    variantClasses[variant],
-    sizeClasses[size],
-    className,
-  ].join(' ');
+export const Badge = React.memo<BadgeProps>(
+  ({ variant = 'neutral', size = 'md', children, className = '' }) => {
+    const baseClasses =
+      'inline-flex items-center font-medium rounded-md border';
 
-  return (
-    <span className={classes}>
-      {children}
-    </span>
-  );
-};
+    const classes = [
+      baseClasses,
+      variantClasses[variant],
+      sizeClasses[size],
+      className,
+    ].join(' ');
+
+    return <span className={classes}>{children}</span>;
+  }
+);
 
 export default Badge;

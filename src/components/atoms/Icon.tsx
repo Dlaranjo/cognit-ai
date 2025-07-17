@@ -4,7 +4,14 @@ import { LucideIcon } from 'lucide-react';
 export interface IconProps {
   icon: LucideIcon;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'neutral' | 'current';
+  color?:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'neutral'
+    | 'current';
   className?: string;
 }
 
@@ -26,19 +33,14 @@ const colorClasses = {
   current: 'text-current',
 };
 
-export const Icon: React.FC<IconProps> = ({
-  icon: IconComponent,
-  size = 'md',
-  color = 'current',
-  className = '',
-}) => {
-  const classes = [
-    sizeClasses[size],
-    colorClasses[color],
-    className,
-  ].join(' ');
+export const Icon = React.memo<IconProps>(
+  ({ icon: IconComponent, size = 'md', color = 'current', className = '' }) => {
+    const classes = [sizeClasses[size], colorClasses[color], className].join(
+      ' '
+    );
 
-  return <IconComponent className={classes} />;
-};
+    return <IconComponent className={classes} />;
+  }
+);
 
 export default Icon;
