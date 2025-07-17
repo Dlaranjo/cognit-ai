@@ -11,4 +11,4 @@ export interface ChatState {
   error: string | null;
 }
 
-export interface SendMessagePayload extends SendMessageRequest {}
+export type SendMessagePayload = SendMessageRequest;

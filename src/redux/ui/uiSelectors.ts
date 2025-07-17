@@ -49,7 +49,7 @@ export const selectModalData = createSelector(
 export const selectOpenModals = createSelector(
   [selectModals],
   (modals) => Object.entries(modals)
-    .filter(([_, modal]) => modal.isOpen)
+    .filter(([, modal]) => modal.isOpen)
     .map(([id, modal]) => ({ id, ...modal }))
 );
 

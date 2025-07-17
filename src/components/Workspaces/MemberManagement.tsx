@@ -109,13 +109,13 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
     }
   };
 
-  const canChangeRole = (_targetMember: Member) => {
+  const canChangeRole = () => {
     // Admins can change any role
     if (isAdmin) return true;
-    
+
     // Owners can change any role
     if (isOwner) return true;
-    
+
     // Editors and Viewers cannot change roles
     return false;
   };

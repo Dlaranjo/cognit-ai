@@ -43,6 +43,16 @@ export const useGoogleAuth = () => {
     };
   }, []);
 
+  const handleGoogleCallback = useCallback(async (response: any) => {
+    try {
+      if (response.credential) {
+        await loginWithGoogle(response.credential);
+      }
+    } catch (error) {
+      console.error('Google auth failed:', error);
+    }
+  }, [loginWithGoogle]);
+
   const initializeGoogleAuth = useCallback(() => {
     if (!window.google || !config.GOOGLE_CLIENT_ID) {
       console.warn('Google OAuth not configured or Google SDK not loaded');
@@ -53,17 +63,7 @@ export const useGoogleAuth = () => {
       client_id: config.GOOGLE_CLIENT_ID,
       callback: handleGoogleCallback,
     });
-  }, []);
-
-  const handleGoogleCallback = useCallback(async (response: any) => {
-    try {
-      if (response.credential) {
-        await loginWithGoogle(response.credential);
-      }
-    } catch (error) {
-      console.error('Google auth failed:', error);
-    }
-  }, [loginWithGoogle]);
+  }, [handleGoogleCallback]);
 
   const signInWithGoogle = useCallback(() => {
     if (!window.google) {

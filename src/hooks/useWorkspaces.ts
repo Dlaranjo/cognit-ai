@@ -32,7 +32,7 @@ import {
   selectCanEditWorkspace,
   selectCanManageWorkspace,
 } from '../redux/workspaces/workspacesSelectors';
-import type { Workspace, Project, Document } from '../api/workspaceApi';
+import type { Workspace, Project } from '../api/workspaceApi';
 
 export const useWorkspaces = (userId?: string) => {
   const dispatch = useAppDispatch();
@@ -110,7 +110,7 @@ export const useWorkspaces = (userId?: string) => {
     return (state: any) => selectProjectById(state, projectId);
   }, []);
 
-  const getProjectsByWorkspace = useCallback((workspaceId: string) => {
+  const getProjectsByWorkspace = useCallback(() => {
     return (state: any) => selectProjectsByWorkspace(state);
   }, []);
 
@@ -118,7 +118,7 @@ export const useWorkspaces = (userId?: string) => {
     return (state: any) => selectDocumentsByProject(state, projectId);
   }, []);
 
-  const getUserPermission = useCallback((workspaceId: string) => {
+  const getUserPermission = useCallback(() => {
     if (!userId) return () => 'viewer';
     return (state: any) => selectWorkspacePermissions(state, userId);
   }, [userId]);
