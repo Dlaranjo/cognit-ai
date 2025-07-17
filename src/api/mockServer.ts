@@ -1,5 +1,4 @@
 import { createServer, Response } from 'miragejs';
-import { config } from '../shared/config';
 
 // Mock data
 const mockUsers = [
@@ -267,8 +266,8 @@ export function createMockServer() {
 
   return createServer({
     routes() {
-      // Configure for development environment
-      this.urlPrefix = '';
+      // Configure for test/development environment
+      this.urlPrefix = 'http://localhost:3001';
       this.namespace = '';  // No namespace to match direct API calls
 
       console.log('🎭 Mirage server configuring routes...');

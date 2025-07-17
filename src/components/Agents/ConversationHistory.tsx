@@ -1,12 +1,12 @@
 import React from 'react';
-import { Bot, User, Download, Eye, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { Bot, User } from 'lucide-react';
 import { ActionResults } from './ActionResults';
 
 interface Agent {
   id: string;
   name: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
   color: string;
   capabilities: string[];
   examples: string[];
@@ -28,7 +28,7 @@ interface Message {
   content: string;
   timestamp: string;
   agentId?: string;
-  attachments?: any[];
+  attachments?: File[];
   actions?: ActionResult[];
 }
 

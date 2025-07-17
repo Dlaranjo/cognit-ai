@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Filter, FileText, Calendar, User, Database } from 'lucide-react';
+import { Search, FileText, Calendar, User, Database } from 'lucide-react';
 import { WorkspaceFilter } from './WorkspaceFilter';
 import { useWorkspaces } from '../../hooks/useWorkspaces';
 import { useAuth } from '../../hooks/useAuth';

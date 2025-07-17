@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
-import { Bot, Sparkles, FileText, Presentation, Code, BarChart3, PenTool, MessageSquare, Send, Loader2, Download, Eye } from 'lucide-react';
+import { Bot, Sparkles, FileText, Presentation, Code, BarChart3, PenTool, Send, Loader2 } from 'lucide-react';
 import { AgentSelector } from './AgentSelector';
 import { ConversationHistory } from './ConversationHistory';
-import { ActionResults } from './ActionResults';
 
 interface Agent {
   id: string;
   name: string;
   description: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
   color: string;
   capabilities: string[];
   examples: string[];
@@ -20,7 +19,7 @@ interface Message {
   content: string;
   timestamp: string;
   agentId?: string;
-  attachments?: any[];
+  attachments?: File[];
   actions?: ActionResult[];
 }
 

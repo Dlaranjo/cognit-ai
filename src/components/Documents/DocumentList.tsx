@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Plus, Upload, FileText, Download, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Plus, Upload, FileText, Download, Clock, CheckCircle } from 'lucide-react';
 import { Project, Document } from '../../types';
 
 interface DocumentListProps {

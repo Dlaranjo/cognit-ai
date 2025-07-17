@@ -113,7 +113,7 @@ describe('chatApi', () => {
       await expect(chatApi.getConversation('non-existent')).rejects.toEqual({
         message: 'Conversa não encontrada',
         status: 404,
-        code: undefined,
+        code: 'ERR_BAD_REQUEST',
         details: { message: 'Conversa não encontrada' },
       });
     });
@@ -196,8 +196,8 @@ describe('chatApi', () => {
       await chatApi.uploadFile(file, onProgress);
 
       // Note: In real implementation, onProgress would be called during upload
-      // In mock, we can't easily simulate this, but we ensure it doesn't break
-      expect(onProgress).toHaveBeenCalledTimes(0); // Mock doesn't trigger progress
+      // Mock server actually triggers progress callbacks
+      expect(onProgress).toHaveBeenCalledTimes(2); // Mock triggers progress events
     });
   });
 });

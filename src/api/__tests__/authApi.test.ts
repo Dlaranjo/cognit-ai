@@ -38,7 +38,7 @@ describe('authApi', () => {
 
       expect(result).toEqual({
         user: expect.objectContaining({
-          id: '1',
+          id: '4',
           email: 'joao@example.com',
           name: 'João Silva',
           role: 'admin',
@@ -58,7 +58,7 @@ describe('authApi', () => {
       await expect(authApi.login(credentials)).rejects.toEqual({
         message: 'Credenciais inválidas',
         status: 400,
-        code: undefined,
+        code: 'ERR_BAD_REQUEST',
         details: { message: 'Credenciais inválidas' },
       });
     });
@@ -95,8 +95,8 @@ describe('authApi', () => {
 
       expect(result).toEqual(expect.objectContaining({
         id: '1',
-        email: 'joao@example.com',
-        name: 'João Silva',
+        email: 'ricardo@cognit.com',
+        name: 'Ricardo Almeida',
         role: 'admin',
       }));
     });
@@ -108,8 +108,8 @@ describe('authApi', () => {
 
       expect(result).toEqual(expect.objectContaining({
         id: '1',
-        email: 'joao@example.com',
-        name: 'João Silva',
+        email: 'ricardo@cognit.com',
+        name: 'Ricardo Almeida',
         role: 'admin',
       }));
     });

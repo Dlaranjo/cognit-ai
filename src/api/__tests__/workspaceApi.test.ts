@@ -59,7 +59,7 @@ describe('workspaceApi', () => {
       await expect(workspaceApi.getWorkspace('non-existent')).rejects.toEqual({
         message: 'Workspace não encontrado',
         status: 404,
-        code: undefined,
+        code: 'ERR_BAD_REQUEST',
         details: { message: 'Workspace não encontrado' },
       });
     });

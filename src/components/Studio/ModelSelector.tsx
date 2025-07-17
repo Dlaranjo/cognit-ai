@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, Zap, Clock, DollarSign, Cpu, Check } from 'lucide-react';
+import { ChevronDown, Zap, DollarSign, Cpu, Check } from 'lucide-react';
 
 interface LLMModel {
   id: string;

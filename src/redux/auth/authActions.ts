@@ -13,8 +13,9 @@ export const loginUser = createAsyncThunk<
       localStorage.setItem('token', response.token);
       localStorage.setItem('refreshToken', response.refreshToken);
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Login failed');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Login failed';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -31,8 +32,9 @@ export const googleAuth = createAsyncThunk<
       localStorage.setItem('token', response.token);
       localStorage.setItem('refreshToken', response.refreshToken);
       return response;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Google auth failed');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Google auth failed';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -54,16 +56,17 @@ export const refreshToken = createAsyncThunk<
       localStorage.setItem('token', response.token);
       localStorage.setItem('refreshToken', response.refreshToken);
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
-      return rejectWithValue(error.response?.data?.message || 'Token refresh failed');
+      const errorMessage = error instanceof Error ? error.message : 'Token refresh failed';
+      return rejectWithValue(errorMessage);
     }
   }
 );
 
 export const validateToken = createAsyncThunk<
-  any,
+  { user: unknown; token: string },
   void,
   { rejectValue: string }
 >(
@@ -77,10 +80,11 @@ export const validateToken = createAsyncThunk<
       
       const user = await authApi.validateToken();
       return { user, token };
-    } catch (error: any) {
+    } catch (error: unknown) {
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');
-      return rejectWithValue(error.response?.data?.message || 'Token validation failed');
+      const errorMessage = error instanceof Error ? error.message : 'Token validation failed';
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -94,7 +98,7 @@ export const logoutUser = createAsyncThunk<
   async (_, { rejectWithValue }) => {
     try {
       await authApi.logout();
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Continue with logout even if API call fails
       console.warn('Logout API call failed:', error);
     } finally {

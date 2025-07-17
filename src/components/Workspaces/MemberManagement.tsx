@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Plus, X, Crown, Edit, Eye, Mail, Trash2, Check } from 'lucide-react';
+import { Plus, X, Crown, Edit, Eye, Trash2, Check } from 'lucide-react';
 import { Workspace, User } from '../../types';
 
 interface Member {
@@ -60,8 +60,6 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
   // Permission checks based on new rules
   const isAdmin = currentUser.role === 'ADMIN';
   const isOwner = currentUserPermission === 'OWNER';
-  const isEditor = currentUserPermission === 'EDITOR';
-  const isViewer = currentUserPermission === 'VIEWER';
 
   // Only Owners and Admins can manage members
   const canManageMembers = isAdmin || isOwner;
@@ -111,7 +109,7 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
     }
   };
 
-  const canChangeRole = (targetMember: Member) => {
+  const canChangeRole = (_targetMember: Member) => {
     // Admins can change any role
     if (isAdmin) return true;
     
@@ -336,7 +334,7 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                     </div>
                     <select
                       value={selectedRole}
-                      onChange={(e) => setSelectedRole(e.target.value as any)}
+                      onChange={(e) => setSelectedRole(e.target.value as 'OWNER' | 'EDITOR' | 'VIEWER')}
                       className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                     >
                       {availableRoles.map(role => (
@@ -401,7 +399,7 @@ export const MemberManagement: React.FC<MemberManagementProps> = ({
                     {canChangeRole(member) ? (
                       <select
                         value={member.role}
-                        onChange={(e) => handleRoleChange(member.id, e.target.value as any)}
+                        onChange={(e) => handleRoleChange(member.id, e.target.value as 'OWNER' | 'EDITOR' | 'VIEWER')}
                         className={`px-3 py-1 text-sm border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent ${getRoleColor(member.role)}`}
                       >
                         {availableRoles.map(role => (

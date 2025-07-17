@@ -20,9 +20,8 @@ global.fetch = vi.fn();
 describe('useStreaming', () => {
   let store: ReturnType<typeof configureStore>;
   
-  const createWrapper = ({ children }: { children: ReactNode }) => (
-    <Provider store={store}>{children}</Provider>
-  );
+  const createWrapper = ({ children }: { children: ReactNode }) =>
+    React.createElement(Provider, { store }, children);
 
   beforeEach(() => {
     store = configureStore({
@@ -31,7 +30,21 @@ describe('useStreaming', () => {
       },
       preloadedState: {
         chat: {
-          currentConversation: { id: 'test-conversation' },
+          currentConversation: {
+            id: 'test-conversation',
+            title: 'Test Conversation',
+            messages: [],
+            provider: 'openai',
+            model: 'gpt-4-turbo',
+            createdAt: '2024-01-20T10:00:00Z',
+            updatedAt: '2024-01-20T10:00:00Z',
+            isFavorite: false,
+            tags: [],
+            totalTokens: 0,
+            totalCost: 0,
+            lastMessageAt: '2024-01-20T10:00:00Z',
+            messageCount: 0,
+          },
           messages: [],
           isTyping: false,
           selectedProvider: 'openai',
@@ -224,7 +237,7 @@ describe('useStreaming', () => {
       signal: {},
     };
     
-    global.AbortController = vi.fn(() => mockAbortController) as any;
+    (globalThis as any).AbortController = vi.fn(() => mockAbortController);
 
     const { result } = renderHook(() => useStreaming(), { wrapper: createWrapper });
     
