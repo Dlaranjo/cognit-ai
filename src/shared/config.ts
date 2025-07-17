@@ -18,7 +18,7 @@ console.log('🔧 API_BASE_URL configured as:', apiBaseUrl, 'DEV mode:', import.
 
 export const config: Config = {
   API_BASE_URL: apiBaseUrl,
-  GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID || '',
+  GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID || '1034043274094-vj8odt69hbpevp3uv9nl65ctf24r8km0.apps.googleusercontent.com',
   MAX_FILE_SIZE: parseInt(import.meta.env.VITE_MAX_FILE_SIZE || '10485760'), // 10MB
   SUPPORTED_FILE_TYPES: ['pdf', 'doc', 'docx', 'txt', 'md'],
   LLM_PROVIDERS: [
