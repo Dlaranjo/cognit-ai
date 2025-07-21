@@ -1,61 +1,102 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { workspaceApi, workspaceUtils } from '../workspaceApi';
-import { createMockServer } from '../mockServer';
-import type { Server } from 'miragejs';
+import { apiClient } from '../axiosConfig';
 import type { WorkspaceMember } from '../workspaceApi';
 
+// Mock the apiClient
+vi.mock('../axiosConfig', () => ({
+  apiClient: {
+    get: vi.fn(),
+    post: vi.fn(),
+    put: vi.fn(),
+    delete: vi.fn(),
+  },
+  uploadFile: vi.fn(),
+}));
+
+const mockedApiClient = apiClient as {
+  get: ReturnType<typeof vi.fn>;
+  post: ReturnType<typeof vi.fn>;
+  put: ReturnType<typeof vi.fn>;
+  delete: ReturnType<typeof vi.fn>;
+};
+
 describe('workspaceApi', () => {
-  let server: Server;
-
   beforeEach(() => {
-    server = createMockServer() as Server;
     vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    server.shutdown();
   });
 
   describe('getWorkspaces', () => {
     it('should get workspaces list', async () => {
+      const mockResponse = {
+        data: [
+          {
+            id: 'ws-123',
+            name: 'Test Workspace',
+            ownerId: 'user-123',
+            settings: {
+              isPublic: false,
+              allowInvites: true,
+              defaultRole: 'viewer',
+            },
+            stats: {
+              totalDocuments: 10,
+              totalMembers: 5,
+              storageUsed: 1024,
+            },
+            createdAt: '2023-01-01T00:00:00Z',
+            isArchived: false,
+          },
+        ],
+      };
+
+      mockedApiClient.get.mockResolvedValue(mockResponse);
+
       const result = await workspaceApi.getWorkspaces();
 
-      expect(result).toEqual(expect.arrayContaining([
-        expect.objectContaining({
-          id: expect.any(String),
-          name: expect.any(String),
-          ownerId: expect.any(String),
-          settings: expect.objectContaining({
-            isPublic: expect.any(Boolean),
-            allowInvites: expect.any(Boolean),
-            defaultRole: expect.any(String),
-          }),
-          stats: expect.objectContaining({
-            totalDocuments: expect.any(Number),
-            totalMembers: expect.any(Number),
-            storageUsed: expect.any(Number),
-          }),
-          createdAt: expect.any(String),
-          isArchived: expect.any(Boolean),
-        }),
-      ]));
+      expect(result).toEqual(mockResponse.data);
+      expect(mockedApiClient.get).toHaveBeenCalledWith('/workspaces');
     });
   });
 
   describe('getWorkspace', () => {
     it('should get specific workspace', async () => {
+      const mockResponse = {
+        data: {
+          id: '1',
+          name: 'Test Workspace',
+          ownerId: 'user-123',
+          settings: {
+            isPublic: false,
+            allowInvites: true,
+            defaultRole: 'viewer',
+          },
+          stats: {
+            totalDocuments: 10,
+            totalMembers: 5,
+            storageUsed: 1024,
+          },
+        },
+      };
+
+      mockedApiClient.get.mockResolvedValue(mockResponse);
+
       const result = await workspaceApi.getWorkspace('1');
 
-      expect(result).toEqual(expect.objectContaining({
-        id: '1',
-        name: expect.any(String),
-        ownerId: expect.any(String),
-        settings: expect.any(Object),
-        stats: expect.any(Object),
-      }));
+      expect(result).toEqual(mockResponse.data);
+      expect(mockedApiClient.get).toHaveBeenCalledWith('/workspaces/1');
     });
 
     it('should handle non-existent workspace', async () => {
+      const mockError = {
+        message: 'Workspace não encontrado',
+        status: 404,
+        code: 'ERR_BAD_REQUEST',
+        details: { message: 'Workspace não encontrado' },
+      };
+
+      mockedApiClient.get.mockRejectedValue(mockError);
+
       await expect(workspaceApi.getWorkspace('non-existent')).rejects.toEqual({
         message: 'Workspace não encontrado',
         status: 404,
@@ -67,6 +108,27 @@ describe('workspaceApi', () => {
 
   describe('createWorkspace', () => {
     it('should create workspace successfully', async () => {
+      const mockResponse = {
+        data: {
+          id: 'ws-new-123',
+          name: 'Novo Workspace',
+          description: 'Descrição do workspace',
+          ownerId: '1',
+          memberCount: 1,
+          projectCount: 0,
+          documentCount: 0,
+          settings: {
+            isPublic: false,
+            allowInvites: true,
+            defaultRole: 'viewer',
+          },
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+        },
+      };
+
+      mockedApiClient.post.mockResolvedValue(mockResponse);
+
       const request = {
         name: 'Novo Workspace',
         description: 'Descrição do workspace',
@@ -74,67 +136,104 @@ describe('workspaceApi', () => {
 
       const result = await workspaceApi.createWorkspace(request);
 
-      expect(result).toEqual(expect.objectContaining({
-        id: expect.any(String),
-        name: 'Novo Workspace',
-        description: 'Descrição do workspace',
-        ownerId: '1',
-        memberCount: 1,
-        projectCount: 0,
-        documentCount: 0,
-        settings: expect.objectContaining({
-          isPublic: false,
-          allowInvites: true,
-          defaultRole: 'viewer',
-        }),
-      }));
+      expect(result).toEqual(mockResponse.data);
+      expect(mockedApiClient.post).toHaveBeenCalledWith('/workspaces', request);
     });
 
     it('should create workspace with minimal data', async () => {
+      const mockResponse = {
+        data: {
+          id: 'ws-min-123',
+          name: 'Workspace Mínimo',
+          ownerId: '1',
+          memberCount: 1,
+          projectCount: 0,
+          documentCount: 0,
+          settings: {
+            isPublic: false,
+            allowInvites: true,
+            defaultRole: 'viewer',
+          },
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+        },
+      };
+
+      mockedApiClient.post.mockResolvedValue(mockResponse);
+
       const request = {
         name: 'Workspace Mínimo',
       };
 
       const result = await workspaceApi.createWorkspace(request);
 
-      expect(result).toEqual(expect.objectContaining({
-        name: 'Workspace Mínimo',
-        description: '',
-      }));
+      expect(result).toEqual(mockResponse.data);
+      expect(mockedApiClient.post).toHaveBeenCalledWith('/workspaces', request);
     });
   });
 
   describe('getProjects', () => {
     it('should get projects for workspace', async () => {
+      const mockResponse = {
+        data: {
+          projects: [
+            {
+              id: 'proj-123',
+              name: 'Test Project',
+              workspaceId: '1',
+              status: 'active',
+              documentCount: 5,
+              collaborators: ['user-1', 'user-2'],
+            },
+          ],
+          total: 1,
+          hasMore: false,
+        },
+      };
+
+      mockedApiClient.get.mockResolvedValue(mockResponse);
+
       const result = await workspaceApi.getProjects('1');
 
-      expect(result).toEqual({
-        projects: expect.arrayContaining([
-          expect.objectContaining({
-            id: expect.any(String),
-            name: expect.any(String),
-            workspaceId: '1',
-            status: expect.any(String),
-            documentCount: expect.any(Number),
-            collaborators: expect.any(Array),
-          }),
-        ]),
-        total: expect.any(Number),
-        hasMore: expect.any(Boolean),
-      });
+      expect(result).toEqual(mockResponse.data);
+      expect(mockedApiClient.get).toHaveBeenCalledWith(
+        '/workspaces/1/projects?'
+      );
     });
 
     it('should handle pagination', async () => {
+      const mockResponse = {
+        data: {
+          projects: [
+            {
+              id: 'proj-124',
+              name: 'Another Project',
+              workspaceId: '1',
+              status: 'active',
+              documentCount: 3,
+              collaborators: ['user-1'],
+            },
+          ],
+          total: 10,
+          hasMore: true,
+        },
+      };
+
+      mockedApiClient.get.mockResolvedValue(mockResponse);
+
       const result = await workspaceApi.getProjects('1', undefined, 1, 0);
 
-      expect(result.projects).toHaveLength(1);
+      expect(result).toEqual(mockResponse.data);
+      expect(mockedApiClient.get).toHaveBeenCalledWith(
+        '/workspaces/1/projects?limit=1'
+      );
       expect(result.total).toBeGreaterThanOrEqual(1);
     });
 
     it('should filter by status', async () => {
       const result = await workspaceApi.getProjects('1', 'active');
 
-      result.projects.forEach(project => {
+      result.projects.forEach((project) => {
         expect(project.status).toBe('active');
       });
     });
@@ -196,21 +295,39 @@ describe('workspaceUtils', () => {
     };
 
     it('should grant all permissions to owner', () => {
-      expect(workspaceUtils.hasPermission(ownerMember, 'canCreateProjects')).toBe(true);
-      expect(workspaceUtils.hasPermission(ownerMember, 'canManageSettings')).toBe(true);
-      expect(workspaceUtils.hasPermission(ownerMember, 'canViewAnalytics')).toBe(true);
+      expect(
+        workspaceUtils.hasPermission(ownerMember, 'canCreateProjects')
+      ).toBe(true);
+      expect(
+        workspaceUtils.hasPermission(ownerMember, 'canManageSettings')
+      ).toBe(true);
+      expect(
+        workspaceUtils.hasPermission(ownerMember, 'canViewAnalytics')
+      ).toBe(true);
     });
 
     it('should respect editor permissions', () => {
-      expect(workspaceUtils.hasPermission(editorMember, 'canCreateProjects')).toBe(true);
-      expect(workspaceUtils.hasPermission(editorMember, 'canManageSettings')).toBe(false);
-      expect(workspaceUtils.hasPermission(editorMember, 'canViewAnalytics')).toBe(false);
+      expect(
+        workspaceUtils.hasPermission(editorMember, 'canCreateProjects')
+      ).toBe(true);
+      expect(
+        workspaceUtils.hasPermission(editorMember, 'canManageSettings')
+      ).toBe(false);
+      expect(
+        workspaceUtils.hasPermission(editorMember, 'canViewAnalytics')
+      ).toBe(false);
     });
 
     it('should respect viewer permissions', () => {
-      expect(workspaceUtils.hasPermission(viewerMember, 'canCreateProjects')).toBe(false);
-      expect(workspaceUtils.hasPermission(viewerMember, 'canDeleteDocuments')).toBe(false);
-      expect(workspaceUtils.hasPermission(viewerMember, 'canExportData')).toBe(false);
+      expect(
+        workspaceUtils.hasPermission(viewerMember, 'canCreateProjects')
+      ).toBe(false);
+      expect(
+        workspaceUtils.hasPermission(viewerMember, 'canDeleteDocuments')
+      ).toBe(false);
+      expect(workspaceUtils.hasPermission(viewerMember, 'canExportData')).toBe(
+        false
+      );
     });
   });
 
@@ -246,9 +363,15 @@ describe('workspaceUtils', () => {
 
   describe('validateWorkspaceName', () => {
     it('should validate correct names', () => {
-      expect(workspaceUtils.validateWorkspaceName('Valid Name')).toEqual({ valid: true });
-      expect(workspaceUtils.validateWorkspaceName('Workspace-123')).toEqual({ valid: true });
-      expect(workspaceUtils.validateWorkspaceName('My_Workspace')).toEqual({ valid: true });
+      expect(workspaceUtils.validateWorkspaceName('Valid Name')).toEqual({
+        valid: true,
+      });
+      expect(workspaceUtils.validateWorkspaceName('Workspace-123')).toEqual({
+        valid: true,
+      });
+      expect(workspaceUtils.validateWorkspaceName('My_Workspace')).toEqual({
+        valid: true,
+      });
     });
 
     it('should reject empty or whitespace names', () => {
@@ -311,7 +434,10 @@ describe('workspaceUtils', () => {
   describe('filterByRole', () => {
     const members: WorkspaceMember[] = [
       {
-        id: '1', userId: '1', workspaceId: '1', role: 'owner',
+        id: '1',
+        userId: '1',
+        workspaceId: '1',
+        role: 'owner',
         permissions: {
           canCreateProjects: true,
           canInviteMembers: true,
@@ -319,14 +445,20 @@ describe('workspaceUtils', () => {
           canDeleteDocuments: true,
           canViewAnalytics: true,
           canExportData: true,
-        }, 
-        joinedAt: '', 
+        },
+        joinedAt: '',
         user: {
-          id: '1', name: 'Owner', email: 'owner@test.com', isActive: true,
+          id: '1',
+          name: 'Owner',
+          email: 'owner@test.com',
+          isActive: true,
         },
       },
       {
-        id: '2', userId: '2', workspaceId: '1', role: 'editor',
+        id: '2',
+        userId: '2',
+        workspaceId: '1',
+        role: 'editor',
         permissions: {
           canCreateProjects: true,
           canInviteMembers: false,
@@ -334,14 +466,20 @@ describe('workspaceUtils', () => {
           canDeleteDocuments: true,
           canViewAnalytics: false,
           canExportData: false,
-        }, 
-        joinedAt: '', 
+        },
+        joinedAt: '',
         user: {
-          id: '2', name: 'Editor', email: 'editor@test.com', isActive: true,
+          id: '2',
+          name: 'Editor',
+          email: 'editor@test.com',
+          isActive: true,
         },
       },
       {
-        id: '3', userId: '3', workspaceId: '1', role: 'viewer',
+        id: '3',
+        userId: '3',
+        workspaceId: '1',
+        role: 'viewer',
         permissions: {
           canCreateProjects: false,
           canInviteMembers: false,
@@ -349,14 +487,20 @@ describe('workspaceUtils', () => {
           canDeleteDocuments: false,
           canViewAnalytics: false,
           canExportData: false,
-        }, 
-        joinedAt: '', 
+        },
+        joinedAt: '',
         user: {
-          id: '3', name: 'Viewer', email: 'viewer@test.com', isActive: true,
+          id: '3',
+          name: 'Viewer',
+          email: 'viewer@test.com',
+          isActive: true,
         },
       },
       {
-        id: '4', userId: '4', workspaceId: '1', role: 'editor',
+        id: '4',
+        userId: '4',
+        workspaceId: '1',
+        role: 'editor',
         permissions: {
           canCreateProjects: true,
           canInviteMembers: false,
@@ -364,10 +508,13 @@ describe('workspaceUtils', () => {
           canDeleteDocuments: true,
           canViewAnalytics: false,
           canExportData: false,
-        }, 
-        joinedAt: '', 
+        },
+        joinedAt: '',
         user: {
-          id: '4', name: 'Editor2', email: 'editor2@test.com', isActive: true,
+          id: '4',
+          name: 'Editor2',
+          email: 'editor2@test.com',
+          isActive: true,
         },
       },
     ];
@@ -379,7 +526,7 @@ describe('workspaceUtils', () => {
 
       const editors = workspaceUtils.filterByRole(members, 'editor');
       expect(editors).toHaveLength(2);
-      editors.forEach(member => expect(member.role).toBe('editor'));
+      editors.forEach((member) => expect(member.role).toBe('editor'));
 
       const viewers = workspaceUtils.filterByRole(members, 'viewer');
       expect(viewers).toHaveLength(1);
@@ -389,21 +536,38 @@ describe('workspaceUtils', () => {
 
   describe('document type utilities', () => {
     const imageDoc = {
-      id: '1', name: 'image.jpg', mimeType: 'image/jpeg',
-      originalName: '', type: '', size: 0, url: '', projectId: '',
-      uploadedBy: '', status: 'ready' as const, version: 1, versions: [],
-      tags: [], metadata: { keywords: [] }, createdAt: '', updatedAt: '',
+      id: '1',
+      name: 'image.jpg',
+      mimeType: 'image/jpeg',
+      originalName: '',
+      type: '',
+      size: 0,
+      url: '',
+      projectId: '',
+      uploadedBy: '',
+      status: 'ready' as const,
+      version: 1,
+      versions: [],
+      tags: [],
+      metadata: { keywords: [] },
+      createdAt: '',
+      updatedAt: '',
       accessCount: 0,
     };
 
     const pdfDoc = {
       ...imageDoc,
-      id: '2', name: 'document.pdf', mimeType: 'application/pdf',
+      id: '2',
+      name: 'document.pdf',
+      mimeType: 'application/pdf',
     };
 
     const wordDoc = {
       ...imageDoc,
-      id: '3', name: 'document.docx', mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      id: '3',
+      name: 'document.docx',
+      mimeType:
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     };
 
     it('should identify image documents', () => {

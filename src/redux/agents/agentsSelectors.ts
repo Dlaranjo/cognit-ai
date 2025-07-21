@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
+import type { RootState } from '../../types';
 // Types are imported where needed in function signatures
 
 // Base selectors
@@ -7,99 +7,113 @@ export const selectAgentsState = (state: RootState) => state.agents;
 
 export const selectAgents = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.agents
+  (agentsState) => agentsState?.agents || []
 );
 
 export const selectSelectedAgent = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.selectedAgent
+  (agentsState) => agentsState?.selectedAgent || null
 );
 
 export const selectCurrentConversation = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.currentConversation
+  (agentsState) => agentsState?.currentConversation || null
 );
 
 export const selectConversations = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.conversations
+  (agentsState) => agentsState?.conversations || []
 );
 
 export const selectTasks = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.tasks
+  (agentsState) => agentsState?.tasks || []
 );
 
 export const selectActiveActions = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.activeActions
+  (agentsState) => agentsState?.activeActions || []
 );
 
 export const selectIsLoading = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.isLoading
+  (agentsState) => agentsState?.isLoading || false
 );
 
 export const selectIsProcessing = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.isProcessing
+  (agentsState) => agentsState?.isProcessing || false
 );
 
 export const selectError = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.error
+  (agentsState) => agentsState?.error || null
 );
 
 export const selectFilters = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.filters
+  (agentsState) =>
+    agentsState?.filters || { category: null, status: null, workspaceId: null }
 );
 
 export const selectUsage = createSelector(
   [selectAgentsState],
-  (agentsState) => agentsState.usage
+  (agentsState) =>
+    agentsState?.usage || {
+      totalTasks: 0,
+      completedTasks: 0,
+      failedTasks: 0,
+      totalFileSize: 0,
+    }
 );
 
 // Computed selectors
 export const selectAgentsByCategory = createSelector(
   [selectAgents, selectFilters],
   (agents, filters) => {
+    if (!agents) return [];
     if (!filters.category) return agents;
     return agents.filter((agent) => agent.category === filters.category);
   }
 );
 
-export const selectActiveAgents = createSelector([selectAgents], (agents) =>
-  agents.filter((agent) => agent.isActive)
+export const selectActiveAgents = createSelector(
+  [selectAgents],
+  (agents) => agents?.filter((agent) => agent.isActive) || []
 );
 
 export const selectAgentById = createSelector(
   [selectAgents, (_: RootState, agentId: string) => agentId],
-  (agents, agentId) => agents.find((agent) => agent.id === agentId) || null
+  (agents, agentId) => agents?.find((agent) => agent.id === agentId) || null
 );
 
 export const selectTasksByStatus = createSelector(
   [selectTasks, (_: RootState, status: string) => status],
-  (tasks, status) => tasks.filter((task) => task.status === status)
+  (tasks, status) => tasks?.filter((task) => task.status === status) || []
 );
 
-export const selectPendingTasks = createSelector([selectTasks], (tasks) =>
-  tasks.filter((task) => task.status === 'pending')
+export const selectPendingTasks = createSelector(
+  [selectTasks],
+  (tasks) => tasks?.filter((task) => task.status === 'pending') || []
 );
 
-export const selectProcessingTasks = createSelector([selectTasks], (tasks) =>
-  tasks.filter((task) => task.status === 'processing')
+export const selectProcessingTasks = createSelector(
+  [selectTasks],
+  (tasks) => tasks?.filter((task) => task.status === 'processing') || []
 );
 
-export const selectCompletedTasks = createSelector([selectTasks], (tasks) =>
-  tasks.filter((task) => task.status === 'completed')
+export const selectCompletedTasks = createSelector(
+  [selectTasks],
+  (tasks) => tasks?.filter((task) => task.status === 'completed') || []
 );
 
-export const selectFailedTasks = createSelector([selectTasks], (tasks) =>
-  tasks.filter((task) => task.status === 'failed')
+export const selectFailedTasks = createSelector(
+  [selectTasks],
+  (tasks) => tasks?.filter((task) => task.status === 'failed') || []
 );
 
 export const selectRecentTasks = createSelector([selectTasks], (tasks) => {
+  if (!tasks) return [];
   return [...tasks]
     .sort(
       (a, b) =>
@@ -110,23 +124,25 @@ export const selectRecentTasks = createSelector([selectTasks], (tasks) => {
 
 export const selectTasksByAgent = createSelector(
   [selectTasks, (_: RootState, agentId: string) => agentId],
-  (tasks, agentId) => tasks.filter((task) => task.agentId === agentId)
+  (tasks, agentId) => tasks?.filter((task) => task.agentId === agentId) || []
 );
 
 export const selectConversationsByAgent = createSelector(
   [selectConversations, (_: RootState, agentId: string) => agentId],
   (conversations, agentId) =>
-    conversations.filter((conv) => conv.agentId === agentId)
+    conversations?.filter((conv) => conv.agentId === agentId) || []
 );
 
 export const selectActiveConversations = createSelector(
   [selectConversations],
-  (conversations) => conversations.filter((conv) => conv.status === 'active')
+  (conversations) =>
+    conversations?.filter((conv) => conv.status === 'active') || []
 );
 
 export const selectRecentConversations = createSelector(
   [selectConversations],
   (conversations) => {
+    if (!conversations) return [];
     return [...conversations]
       .sort(
         (a, b) =>
@@ -138,17 +154,17 @@ export const selectRecentConversations = createSelector(
 
 export const selectProcessingActions = createSelector(
   [selectActiveActions],
-  (actions) => actions.filter((action) => action.status === 'processing')
+  (actions) => actions?.filter((action) => action.status === 'processing') || []
 );
 
 export const selectCompletedActions = createSelector(
   [selectActiveActions],
-  (actions) => actions.filter((action) => action.status === 'completed')
+  (actions) => actions?.filter((action) => action.status === 'completed') || []
 );
 
 export const selectFailedActions = createSelector(
   [selectActiveActions],
-  (actions) => actions.filter((action) => action.status === 'failed')
+  (actions) => actions?.filter((action) => action.status === 'failed') || []
 );
 
 // Statistics selectors
@@ -165,6 +181,7 @@ export const selectTaskFailureRate = createSelector([selectUsage], (usage) => {
 export const selectAgentUsageStats = createSelector(
   [selectAgents, selectTasks],
   (agents, tasks) => {
+    if (!agents || !tasks) return [];
     return agents.map((agent) => {
       const agentTasks = tasks.filter((task) => task.agentId === agent.id);
       const completedTasks = agentTasks.filter(
@@ -199,6 +216,7 @@ export const selectHasActiveWorkflows = createSelector(
 export const selectFilteredTasks = createSelector(
   [selectTasks, selectFilters],
   (tasks, filters) => {
+    if (!tasks) return [];
     let filteredTasks = tasks;
 
     if (filters.status) {
@@ -220,6 +238,7 @@ export const selectFilteredTasks = createSelector(
 export const selectFilteredConversations = createSelector(
   [selectConversations, selectFilters],
   (conversations, filters) => {
+    if (!conversations) return [];
     let filteredConversations = conversations;
 
     if (filters.status) {

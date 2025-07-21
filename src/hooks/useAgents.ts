@@ -224,10 +224,10 @@ export const useAgents = () => {
 
   // Initialize agents on mount
   useEffect(() => {
-    if (agents.length === 0) {
+    if (agents && agents.length === 0) {
       loadAgents();
     }
-  }, [agents.length, loadAgents]);
+  }, [agents, loadAgents]);
 
   return {
     // State

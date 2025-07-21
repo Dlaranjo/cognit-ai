@@ -783,15 +783,15 @@ export function createMockServer() {
       // AI Agents endpoints
       this.get('/agents', async () => {
         await delay(300);
-        return mockAgents;
+        return { data: mockAgents };
       });
 
       this.get('/agents/:id', async (schema, request) => {
         await delay(300);
         const agent = mockAgents.find((a) => a.id === request.params.id);
-        return (
-          agent || new Response(404, {}, { message: 'Agent não encontrado' })
-        );
+        return agent
+          ? { data: agent }
+          : new Response(404, {}, { message: 'Agent não encontrado' });
       });
 
       this.post('/agents/conversations', async (schema, request) => {
@@ -811,8 +811,21 @@ export function createMockServer() {
           updatedAt: new Date().toISOString(),
         };
 
-        return newConversation;
+        return { data: newConversation };
       });
+
+      this.get(
+        '/agents/conversations/:conversationId',
+        async (schema, request) => {
+          await delay(300);
+          const conversation = mockAgentConversations.find(
+            (c) => c.id === request.params.conversationId
+          );
+          return conversation
+            ? { data: conversation }
+            : new Response(404, {}, { message: 'Conversa não encontrada' });
+        }
+      );
 
       this.post('/agents/conversations/:conversationId/messages', async () => {
         await delay(800);
@@ -840,8 +853,10 @@ export function createMockServer() {
         };
 
         return {
-          message: agentMessage,
-          actions: agentMessage.actions,
+          data: {
+            message: agentMessage,
+            actions: agentMessage.actions,
+          },
         };
       });
 
@@ -869,7 +884,7 @@ export function createMockServer() {
           updatedAt: new Date().toISOString(),
         };
 
-        return newTask;
+        return { data: newTask };
       });
 
       this.get('/agents/tasks/:taskId', async (schema, request) => {
@@ -919,7 +934,7 @@ export function createMockServer() {
           completedAt: new Date().toISOString(),
         };
 
-        return mockTask;
+        return { data: mockTask };
       });
 
       this.get('/agents/tasks', async (schema, request) => {
@@ -954,52 +969,54 @@ export function createMockServer() {
         const limit = parseInt(queryParams.limit) || 10;
         const offset = parseInt(queryParams.offset) || 0;
 
-        return mockAgentConversations.slice(offset, offset + limit);
+        return { data: mockAgentConversations.slice(offset, offset + limit) };
       });
 
       this.get('/agents/usage/:workspaceId', async () => {
         await delay(300);
 
         return {
-          totalTasks: 45,
-          completedTasks: 38,
-          failedTasks: 2,
-          totalFileSize: 52428800, // 50MB
-          agentUsage: [
-            {
-              agentId: 'presentation-expert',
-              agentName: 'Presentation Expert',
-              totalRequests: 15,
-              successRate: 93.3,
-              avgResponseTime: 45000,
+          data: {
+            totalTasks: 45,
+            completedTasks: 38,
+            failedTasks: 2,
+            totalFileSize: 52428800, // 50MB
+            agentUsage: [
+              {
+                agentId: 'presentation-expert',
+                agentName: 'Presentation Expert',
+                totalRequests: 15,
+                successRate: 93.3,
+                avgResponseTime: 45000,
+              },
+              {
+                agentId: 'document-analyst',
+                agentName: 'Document Analyst',
+                totalRequests: 12,
+                successRate: 100,
+                avgResponseTime: 32000,
+              },
+              {
+                agentId: 'data-scientist',
+                agentName: 'Data Scientist',
+                totalRequests: 8,
+                successRate: 87.5,
+                avgResponseTime: 67000,
+              },
+            ],
+            timeRange: {
+              start: new Date(
+                Date.now() - 30 * 24 * 60 * 60 * 1000
+              ).toISOString(),
+              end: new Date().toISOString(),
             },
-            {
-              agentId: 'document-analyst',
-              agentName: 'Document Analyst',
-              totalRequests: 12,
-              successRate: 100,
-              avgResponseTime: 32000,
-            },
-            {
-              agentId: 'data-scientist',
-              agentName: 'Data Scientist',
-              totalRequests: 8,
-              successRate: 87.5,
-              avgResponseTime: 67000,
-            },
-          ],
-          timeRange: {
-            start: new Date(
-              Date.now() - 30 * 24 * 60 * 60 * 1000
-            ).toISOString(),
-            end: new Date().toISOString(),
           },
         };
       });
 
       this.post('/agents/feedback', async () => {
         await delay(200);
-        return { success: true };
+        return { data: { success: true } };
       });
 
       // Fallback for unmatched requests - temporarily disabled for debugging

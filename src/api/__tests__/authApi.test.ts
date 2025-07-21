@@ -54,10 +54,10 @@ describe('authApi', () => {
 
     it('should reject with invalid credentials', async () => {
       const mockError = {
-        response: {
-          status: 400,
-          data: { message: 'Credenciais inválidas' },
-        },
+        message: 'Credenciais inválidas',
+        status: 400,
+        code: 'ERR_BAD_REQUEST',
+        details: { message: 'Credenciais inválidas' },
       };
 
       mockedApiClient.post.mockRejectedValue(mockError);
@@ -98,10 +98,9 @@ describe('authApi', () => {
         },
       };
 
-      localStorage.setItem('refreshToken', 'old-refresh-token');
       mockedApiClient.post.mockResolvedValue(mockResponse);
 
-      const result = await authApi.refreshToken();
+      const result = await authApi.refreshToken('old-refresh-token');
 
       expect(result).toEqual(mockResponse.data);
       expect(mockedApiClient.post).toHaveBeenCalledWith('/auth/refresh', {
@@ -216,34 +215,61 @@ describe('authUtils', () => {
 
   describe('saveTokens and clearTokens', () => {
     it('should save tokens to localStorage', () => {
-      authUtils.saveTokens('access-token', 'refresh-token');
+      const authResponse = {
+        token: 'access-token',
+        refreshToken: 'refresh-token',
+        user: {
+          id: '1',
+          name: 'Test User',
+          email: 'test@example.com',
+          role: 'user' as const,
+          isEmailVerified: true,
+          createdAt: '2023-01-01',
+          updatedAt: '2023-01-01',
+        },
+        expiresIn: 3600,
+      };
 
-      expect(localStorage.getItem('authToken')).toBe('access-token');
-      expect(localStorage.getItem('refreshToken')).toBe('refresh-token');
+      authUtils.saveTokens(authResponse);
+
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        'authToken',
+        'access-token'
+      );
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        'refreshToken',
+        'refresh-token'
+      );
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        'currentUser',
+        JSON.stringify(authResponse.user)
+      );
     });
 
     it('should clear tokens from localStorage', () => {
-      localStorage.setItem('authToken', 'some-token');
-      localStorage.setItem('refreshToken', 'some-refresh');
-      localStorage.setItem('currentUser', 'some-user');
-
       authUtils.clearTokens();
 
-      expect(localStorage.getItem('authToken')).toBeNull();
-      expect(localStorage.getItem('refreshToken')).toBeNull();
-      expect(localStorage.getItem('currentUser')).toBeNull();
+      expect(localStorage.removeItem).toHaveBeenCalledWith('authToken');
+      expect(localStorage.removeItem).toHaveBeenCalledWith('refreshToken');
+      expect(localStorage.removeItem).toHaveBeenCalledWith('currentUser');
     });
   });
 
   describe('getCurrentUser', () => {
     it('should get user from localStorage', () => {
       const user = { id: '1', name: 'Test' };
-      localStorage.setItem('currentUser', JSON.stringify(user));
+      const userStr = JSON.stringify(user);
+
+      // Mock localStorage.getItem to return the user string
+      vi.mocked(localStorage.getItem).mockReturnValue(userStr);
 
       expect(authUtils.getCurrentUser()).toEqual(user);
     });
 
     it('should return null if no user in localStorage', () => {
+      // Mock localStorage.getItem to return null
+      vi.mocked(localStorage.getItem).mockReturnValue(null);
+
       expect(authUtils.getCurrentUser()).toBeNull();
     });
 

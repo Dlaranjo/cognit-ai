@@ -35,8 +35,8 @@ const handleAuthFailure = (): void => {
   localStorage.removeItem('refreshToken');
 
   // Evita loop de redirecionamento
-  if (!window.location.pathname.includes('/login')) {
-    window.location.href = '/login';
+  if (!window.location.pathname.includes('/auth')) {
+    window.location.href = '/auth';
   }
 };
 
