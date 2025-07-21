@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Search, Database, Bot, Sparkles, Zap, ChevronRight } from 'lucide-react';
+import { Search, Database, Bot, Sparkles, Zap } from 'lucide-react';
 import { User } from '../../types';
 
 interface SidebarProps {

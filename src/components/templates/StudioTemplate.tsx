@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, Paperclip, X, MessageSquare, Settings, Zap, ChevronDown, Plus, History, Search } from 'lucide-react';
+import { Send, Bot, Paperclip, X, Settings, ChevronDown, Plus, History } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
 import { ConversationList } from '../organisms/ConversationList';
 import { useChat } from '../../hooks/useChat';

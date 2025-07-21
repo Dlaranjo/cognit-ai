@@ -12,7 +12,7 @@ describe('Button', () => {
 
     const button = screen.getByRole('button', { name: 'Test Button' });
     expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('bg-primary', 'text-white'); // primary variant
+    expect(button).toHaveClass('bg-orange-600', 'text-white'); // primary variant
     expect(button).toHaveClass('px-4', 'py-2'); // md size
   });
 
@@ -22,7 +22,7 @@ describe('Button', () => {
         Primary
       </Button>
     );
-    expect(screen.getByRole('button')).toHaveClass('bg-primary', 'text-white');
+    expect(screen.getByRole('button')).toHaveClass('bg-orange-600', 'text-white');
 
     rerender(
       <Button variant="secondary" size="md">
@@ -30,7 +30,7 @@ describe('Button', () => {
       </Button>
     );
     expect(screen.getByRole('button')).toHaveClass(
-      'bg-secondary',
+      'bg-gray-600',
       'text-white'
     );
 
@@ -41,8 +41,8 @@ describe('Button', () => {
     );
     expect(screen.getByRole('button')).toHaveClass(
       'border',
-      'border-neutral-300',
-      'text-neutral-700'
+      'border-gray-300',
+      'text-gray-700'
     );
 
     rerender(
@@ -50,7 +50,7 @@ describe('Button', () => {
         Ghost
       </Button>
     );
-    expect(screen.getByRole('button')).toHaveClass('text-neutral-700');
+    expect(screen.getByRole('button')).toHaveClass('text-gray-700');
   });
 
   it('should render all sizes correctly', () => {
