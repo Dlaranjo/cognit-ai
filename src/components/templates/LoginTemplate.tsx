@@ -77,64 +77,6 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
       <div className="absolute bottom-1/3 left-16 w-1.5 h-1.5 bg-red-400/50 rounded-full animate-bounce delay-900"></div>
 
       <div className="w-full max-w-lg relative z-10">
-        {/* Logo */}
-        <div className="text-center mb-12">
-          <div className="space-y-6">
-            {/* Main Logo */}
-            <div className="flex items-center justify-center space-x-3 mb-6">
-              <h1 className="text-6xl font-bold text-orange-500 tracking-tight">
-                Cognit
-              </h1>
-              <div className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-xl font-bold text-2xl shadow-lg">
-                AI
-              </div>
-            </div>
-            
-            {/* Subtitle */}
-            <div className="space-y-3">
-              <p className="text-gray-700 text-xl font-semibold">
-                Knowledge Base Platform
-              </p>
-              <p className="text-gray-500 text-base max-w-md mx-auto leading-relaxed">
-                Plataforma inteligente para gestão de conhecimento com IA avançada
-              </p>
-            </div>
-            
-            {/* Features badges */}
-            <div className="flex items-center justify-center space-x-3 mt-6">
-              <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200/50 shadow-sm">
-                <Sparkles className="w-4 h-4 text-orange-500" />
-                <span className="text-sm font-medium text-orange-700">Powered by AI</span>
-              </div>
-              <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-full border border-blue-200/50 shadow-sm">
-                <Shield className="w-4 h-4 text-blue-500" />
-                <span className="text-sm font-medium text-blue-700">Secure</span>
-              </div>
-              <div className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-green-100 to-emerald-100 rounded-full border border-green-200/50 shadow-sm">
-                <Zap className="w-4 h-4 text-green-500" />
-                <span className="text-sm font-medium text-green-700">Fast</span>
-              </div>
-            </div>
-            
-            {/* Decorative line */}
-            <div className="flex items-center justify-center mt-8">
-              <div className="h-px bg-gradient-to-r from-transparent via-orange-300 to-transparent w-32"></div>
-              <div className="mx-4 w-2 h-2 bg-orange-400 rounded-full"></div>
-              <div className="h-px bg-gradient-to-r from-transparent via-orange-300 to-transparent w-32"></div>
-            </div>
-          </div>
-        </div>
-              Knowledge Base Platform
-            </p>
-            <div className="flex items-center justify-center space-x-2 mt-3">
-              <div className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200/50">
-                <Sparkles className="w-4 h-4 text-orange-500" />
-                <span className="text-sm font-medium text-orange-700">Powered by AI</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Login Card */}
         <div className="bg-white/85 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/10 border border-white/30 p-8 mb-8 hover:shadow-3xl transition-all duration-500">
           <div className="text-center mb-8">
