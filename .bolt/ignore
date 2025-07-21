@@ -1,0 +1,79 @@
+# Dependencies and build artifacts
+node_modules/
+dist/
+build/
+.next/
+.nuxt/
+.vercel/
+.netlify/
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Environment and config files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+vite.config.ts
+vitest.config.ts
+tailwind.config.js
+postcss.config.js
+eslint.config.js
+tsconfig*.json
+
+# Documentation that's not relevant for UI work
+README.md
+docs/
+CLAUDE.md
+PLANNING.md
+PRD.md
+TASKS.md
+
+# Testing files (não necessários para edição visual)
+**/__tests__/
+**/*.test.ts
+**/*.test.tsx
+test/
+setupTests.ts
+
+# Type definitions and configs
+src/vite-env.d.ts
+src/types/index.ts
+
+# Redux store structure (manter apenas se necessário para contexto de estado)
+src/redux/store.ts
+
+# API layer (não necessário para componentes visuais)
+src/api/
+
+# Shared utilities (manter config.ts para variáveis, excluir resto)
+src/shared/config.ts
+
+# Build and deployment files
+public/
+index.html
+
+# Version control
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
