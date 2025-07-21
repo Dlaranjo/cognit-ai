@@ -33,6 +33,8 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
       email: 'ricardo@cognit.com',
       avatar:
         'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&dpr=1',
+      color: 'from-emerald-500 to-teal-600',
+      icon: '👑',
     },
     {
       name: 'Ana Silva',
@@ -40,6 +42,8 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
       email: 'ana@cognit.com',
       avatar:
         'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&dpr=1',
+      color: 'from-blue-500 to-indigo-600',
+      icon: '✏️',
     },
     {
       name: 'Carlos Santos',
@@ -47,6 +51,8 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
       email: 'carlos@cognit.com',
       avatar:
         'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&dpr=1',
+      color: 'from-gray-500 to-slate-600',
+      icon: '👁️',
     },
   ];
 
@@ -54,52 +60,98 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-red-100 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-400/20 to-red-600/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-red-400/20 to-orange-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-400/10 to-red-600/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-orange-400/15 to-red-600/15 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-tr from-red-400/15 to-orange-600/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-r from-orange-400/8 to-red-600/8 rounded-full blur-3xl animate-pulse delay-500"></div>
+        
+        {/* Additional subtle elements */}
+        <div className="absolute top-1/4 right-1/4 w-32 h-32 bg-gradient-to-br from-orange-300/10 to-red-400/10 rounded-full blur-2xl animate-pulse delay-300"></div>
+        <div className="absolute bottom-1/4 left-1/4 w-40 h-40 bg-gradient-to-tr from-red-300/10 to-orange-400/10 rounded-full blur-2xl animate-pulse delay-700"></div>
       </div>
 
       {/* Floating Elements */}
-      <div className="absolute top-20 left-20 w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-300"></div>
-      <div className="absolute top-40 right-32 w-1 h-1 bg-red-500 rounded-full animate-bounce delay-700"></div>
-      <div className="absolute bottom-32 left-40 w-1.5 h-1.5 bg-orange-400 rounded-full animate-bounce delay-1000"></div>
+      <div className="absolute top-20 left-20 w-2 h-2 bg-orange-400/60 rounded-full animate-bounce delay-300"></div>
+      <div className="absolute top-40 right-32 w-1 h-1 bg-red-500/60 rounded-full animate-bounce delay-700"></div>
+      <div className="absolute bottom-32 left-40 w-1.5 h-1.5 bg-orange-400/60 rounded-full animate-bounce delay-1000"></div>
+      <div className="absolute top-1/3 right-20 w-1 h-1 bg-orange-300/50 rounded-full animate-bounce delay-500"></div>
+      <div className="absolute bottom-1/3 left-16 w-1.5 h-1.5 bg-red-400/50 rounded-full animate-bounce delay-900"></div>
 
-      <div className="w-full max-w-md relative z-10">
+      <div className="w-full max-w-lg relative z-10">
         {/* Logo */}
-        <div className="text-center mb-12">
-          <div className="inline-block mb-6 transform hover:scale-105 transition-all duration-300">
-            <img
-              src="/cognit-logo.svg"
-              alt="Cognit AI"
-              className="h-20 w-auto mx-auto drop-shadow-2xl"
-            />
+        <div className="text-center mb-10">
+          <div className="inline-block mb-6 transform hover:scale-105 transition-all duration-500 hover:rotate-1">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl blur-xl opacity-20 animate-pulse"></div>
+              <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-2xl border border-white/30">
+                <div className="w-16 h-16 mx-auto bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <svg
+                    width="32"
+                    height="19"
+                    viewBox="0 0 474 175"
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="text-white"
+                  >
+                    <g transform="translate(-131 -563)">
+                      <g>
+                        <g>
+                          <text
+                            fill="white"
+                            fontFamily="Sundry,Sundry_MSFontService,sans-serif"
+                            fontWeight="400"
+                            fontSize="96"
+                            transform="matrix(0.999702 0 0 0.994943 140.089 687)"
+                          >
+                            Cognit
+                          </text>
+                          <path
+                            d="M503.45 629.884 503.832 629.884 511.558 655.829 495.724 655.829ZM545.737 617.102 545.737 683.872 561 683.872 561 617.102ZM494.007 617.102 471.21 683.872 487.426 683.872 491.718 669.565 515.565 669.565 519.857 683.872 536.072 683.872 513.275 617.102ZM452.699 579.057 586.021 579.057 586.021 712.379 452.699 712.379Z"
+                            fill="white"
+                            fillRule="evenodd"
+                            transform="matrix(1.00478 0 0 1 -0.124693 3.84206)"
+                          />
+                        </g>
+                      </g>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
-          <p className="text-gray-600 text-lg font-medium">
-            Knowledge Base Platform
-          </p>
-          <div className="flex items-center justify-center space-x-1 mt-2">
-            <Sparkles className="w-4 h-4 text-orange-500" />
-            <span className="text-sm text-gray-500">Powered by AI</span>
+          
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+              COGNIT
+            </h1>
+            <p className="text-gray-600 text-lg font-medium">
+              Knowledge Base Platform
+            </p>
+            <div className="flex items-center justify-center space-x-2 mt-3">
+              <div className="flex items-center space-x-1 px-3 py-1 bg-gradient-to-r from-orange-100 to-red-100 rounded-full border border-orange-200/50">
+                <Sparkles className="w-4 h-4 text-orange-500" />
+                <span className="text-sm font-medium text-orange-700">Powered by AI</span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/10 border border-white/20 p-8 mb-8">
+        <div className="bg-white/85 backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/10 border border-white/30 p-8 mb-8 hover:shadow-3xl transition-all duration-500">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+            <h2 className="text-2xl font-bold text-gray-900 mb-3">
               Bem-vindo de volta
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 leading-relaxed">
               Faça login com sua conta Google para acessar a plataforma
             </p>
           </div>
 
           {/* Google OAuth Button - Ready for Backend Integration */}
-          <div className="mb-6">
+          <div className="mb-8">
             <button
               onClick={handleGoogleLogin}
-              className="w-full flex items-center justify-center py-4 px-6 bg-gradient-to-r from-orange-500 to-red-500 border-2 border-orange-400 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:from-orange-600 hover:to-red-600 hover:border-orange-500 active:scale-[0.98] group"
+              className="w-full flex items-center justify-center py-4 px-6 bg-gradient-to-r from-orange-500 to-red-500 border-2 border-orange-400 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] hover:from-orange-600 hover:to-red-600 hover:border-orange-500 active:scale-[0.98] group relative overflow-hidden"
             >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
               <svg className="w-6 h-6 mr-3" viewBox="0 0 24 24">
                 <path
                   fill="white"
@@ -118,19 +170,19 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              <span className="text-white font-semibold text-lg transition-colors">
+              <span className="text-white font-bold text-lg transition-colors relative z-10">
                 Entrar com Google
               </span>
             </button>
           </div>
 
           {/* Security Notice */}
-          <div className="bg-orange-50 rounded-xl p-4 border border-orange-200">
+          <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-4 border border-orange-200/50">
             <div className="flex items-center space-x-2 text-orange-700 mb-2">
               <Shield className="w-5 h-5" />
-              <span className="font-medium">Login Seguro</span>
+              <span className="font-semibold">Login Seguro</span>
             </div>
-            <p className="text-sm text-orange-600">
+            <p className="text-sm text-orange-600 leading-relaxed">
               Utilizamos autenticação SSO com Google para garantir a máxima
               segurança dos seus dados.
             </p>
@@ -138,12 +190,12 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
         </div>
 
         {/* Demo Access */}
-        <div className="bg-white/60 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/5 border border-white/20 p-6">
+        <div className="bg-white/70 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/5 border border-white/30 p-6 hover:bg-white/80 transition-all duration-300">
           <div className="flex items-center space-x-2 mb-4">
             <Zap className="w-5 h-5 text-orange-500" />
-            <h3 className="text-lg font-semibold text-gray-900">Acesso Demo</h3>
+            <h3 className="text-lg font-bold text-gray-900">Acesso Demo</h3>
           </div>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-gray-600 mb-5 leading-relaxed">
             Para demonstração, você pode acessar com um dos perfis abaixo:
           </p>
           <div className="space-y-3">
@@ -151,45 +203,54 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
               <button
                 key={index}
                 onClick={() => onLogin(option.email, 'demo-sso-token')}
-                className="w-full flex items-center justify-between p-4 bg-white/50 hover:bg-white/80 rounded-xl border border-gray-200/50 hover:border-orange-200 transition-all duration-200 group hover:shadow-md"
+                className="w-full flex items-center justify-between p-4 bg-white/60 hover:bg-white/90 rounded-xl border border-gray-200/50 hover:border-orange-200 transition-all duration-300 group hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
               >
                 <div className="flex items-center space-x-3">
-                  <img
-                    src={option.avatar}
-                    alt={option.name}
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
+                  <div className="relative">
+                    <div className={`absolute inset-0 bg-gradient-to-r ${option.color} rounded-full blur-sm opacity-30 group-hover:opacity-50 transition-opacity`}></div>
+                    <img
+                      src={option.avatar}
+                      alt={option.name}
+                      className="relative w-12 h-12 rounded-full object-cover border-2 border-white shadow-md"
+                    />
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-sm border border-gray-200">
+                      <span className="text-xs">{option.icon}</span>
+                    </div>
+                  </div>
                   <div className="text-left">
-                    <p className="font-medium text-gray-900">{option.name}</p>
+                    <p className="font-semibold text-gray-900 group-hover:text-orange-700 transition-colors">{option.name}</p>
                     <p className="text-sm text-gray-500">
                       {option.role} • {option.email}
                     </p>
                   </div>
                 </div>
-                <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-orange-500 group-hover:translate-x-1 transition-all" />
+                <div className="flex items-center space-x-2">
+                  <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${option.color} opacity-60 group-hover:opacity-100 transition-opacity`}></div>
+                  <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-300" />
+                </div>
               </button>
             ))}
           </div>
-          <p className="text-xs text-gray-500 text-center mt-4">
+          <p className="text-xs text-gray-500 text-center mt-5 bg-gray-50/50 rounded-lg py-2 px-3">
             Clique em qualquer perfil para acesso demo
           </p>
         </div>
 
         {/* Footer */}
         <div className="text-center mt-8">
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 font-medium">
             © 2024 COGNIT. Todos os direitos reservados.
           </p>
-          <div className="flex items-center justify-center space-x-4 mt-2 text-xs text-gray-400">
-            <a href="#" className="hover:text-orange-500 transition-colors">
+          <div className="flex items-center justify-center space-x-4 mt-3 text-xs text-gray-400">
+            <a href="#" className="hover:text-orange-500 transition-colors duration-200 hover:underline">
               Política de Privacidade
             </a>
             <span>•</span>
-            <a href="#" className="hover:text-orange-500 transition-colors">
+            <a href="#" className="hover:text-orange-500 transition-colors duration-200 hover:underline">
               Termos de Uso
             </a>
             <span>•</span>
-            <a href="#" className="hover:text-orange-500 transition-colors">
+            <a href="#" className="hover:text-orange-500 transition-colors duration-200 hover:underline">
               Suporte
             </a>
           </div>
