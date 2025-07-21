@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, Paperclip, X } from 'lucide-react';
-import { ConversationSidebar } from '../organisms/ConversationSidebar';
-import { ModelSelector } from '../molecules/ModelSelector';
+import { Send, Bot, Paperclip, X, MessageSquare, Settings, Zap, ChevronDown, Plus, History, Search } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
+import { ConversationList } from '../organisms/ConversationList';
 import { useChat } from '../../hooks/useChat';
 import { useConversations } from '../../hooks/useConversations';
 import { useStreaming } from '../../hooks/useStreaming';
@@ -78,19 +77,16 @@ export const StudioTemplate: React.FC = () => {
   } = useChat();
 
   const { conversations, removeConversation } = useConversations();
-
   const { isStreaming, startStreaming } = useStreaming();
-
-  // Get streaming message from Redux
   const streamingMessage = useAppSelector(selectStreamingMessage);
 
   // Local UI state
-  const [selectedModel, setSelectedModel] = useState<LLMModel>(
-    availableModels[0]
-  );
+  const [selectedModel, setSelectedModel] = useState<LLMModel>(availableModels[0]);
   const [message, setMessage] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showModelSelector, setShowModelSelector] = useState(false);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -110,7 +106,6 @@ export const StudioTemplate: React.FC = () => {
     }
   }, [selectedModel.id, reduxSelectedModel, changeModel]);
 
-  // Update local model when Redux model changes
   useEffect(() => {
     const model = availableModels.find((m) => m.id === reduxSelectedModel);
     if (model && model.id !== selectedModel.id) {
@@ -123,37 +118,25 @@ export const StudioTemplate: React.FC = () => {
   };
 
   const sendMessage = async () => {
-    if (
-      (!message.trim() && selectedFiles.length === 0) ||
-      isLoading ||
-      isStreaming
-    )
-      return;
+    if ((!message.trim() && selectedFiles.length === 0) || isLoading || isStreaming) return;
 
     const messageContent = message.trim();
     const files = [...selectedFiles];
 
-    // Clear inputs
     setMessage('');
     setSelectedFiles([]);
 
-    // Add user message immediately (sendQuickMessage handles files if provided)
     if (files.length > 0) {
-      // If files are attached, use a different approach
-      // For now, just send the text message and note files were attached
       await sendQuickMessage(
-        messageContent ||
-          `[${files.length} arquivo${files.length > 1 ? 's' : ''} enviado${files.length > 1 ? 's' : ''}]`
+        messageContent || `[${files.length} arquivo${files.length > 1 ? 's' : ''} enviado${files.length > 1 ? 's' : ''}]`
       );
     } else {
       await sendQuickMessage(messageContent);
     }
 
     try {
-      // Start streaming response
       await startStreaming(
-        messageContent ||
-          `Analyze these ${files.length} file${files.length > 1 ? 's' : ''}`,
+        messageContent || `Analyze these ${files.length} file${files.length > 1 ? 's' : ''}`,
         {
           model: selectedModel.id,
           provider: selectedModel.provider.toLowerCase(),
@@ -179,7 +162,6 @@ export const StudioTemplate: React.FC = () => {
 
   const handleRegenerateResponse = async () => {
     if (isLoading || isStreaming) return;
-
     try {
       await regenerateLastMessage();
     } catch (error) {
@@ -197,8 +179,7 @@ export const StudioTemplate: React.FC = () => {
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height =
-        Math.min(textareaRef.current.scrollHeight, 200) + 'px';
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + 'px';
     }
   };
 
@@ -211,7 +192,6 @@ export const StudioTemplate: React.FC = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setSelectedFiles((prev) => [...prev, ...files]);
-    // Clear input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -229,11 +209,8 @@ export const StudioTemplate: React.FC = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  // Message actions
   const handleCopyMessage = () => {};
-
   const handleLikeMessage = () => {};
-
   const handleDislikeMessage = () => {};
 
   useEffect(() => {
@@ -241,76 +218,43 @@ export const StudioTemplate: React.FC = () => {
   }, [message]);
 
   return (
-    <div className="h-full flex bg-gray-50">
-      {/* Conversation Sidebar */}
-      <ConversationSidebar
-        conversations={conversations}
-        currentConversation={currentConversation}
-        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
-        onConversationSelect={setConversation}
-        onNewConversation={createNewConversation}
-        onDeleteConversation={handleDeleteConversation}
-      />
+    <div className="h-full flex flex-col bg-white">
+      {/* Top Header - Grok Style */}
+      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <div className="flex items-center space-x-4">
+          {/* New Chat Button */}
+          <button
+            onClick={createNewConversation}
+            className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+            title="Nova conversa"
+          >
+            <Plus className="w-4 h-4" />
+            <span className="text-sm font-medium">Nova</span>
+          </button>
 
-      {/* Main Chat Interface */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center">
-                  <svg
-                    width="24"
-                    height="14"
-                    viewBox="0 0 474 175"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g transform="translate(-131 -563)">
-                      <g>
-                        <g>
-                          <text
-                            fill="white"
-                            fontFamily="Sundry,Sundry_MSFontService,sans-serif"
-                            fontWeight="400"
-                            fontSize="96"
-                            transform="matrix(0.999702 0 0 0.994943 140.089 687)"
-                          >
-                            Cognit
-                          </text>
-                          <path
-                            d="M503.45 629.884 503.832 629.884 511.558 655.829 495.724 655.829ZM545.737 617.102 545.737 683.872 561 683.872 561 617.102ZM494.007 617.102 471.21 683.872 487.426 683.872 491.718 669.565 515.565 669.565 519.857 683.872 536.072 683.872 513.275 617.102ZM452.699 579.057 586.021 579.057 586.021 712.379 452.699 712.379Z"
-                            fill="white"
-                            fillRule="evenodd"
-                            transform="matrix(1.00478 0 0 1 -0.124693 3.84206)"
-                          />
-                        </g>
-                      </g>
-                    </g>
-                  </svg>
-                </div>
-                <div>
-                  <h1 className="text-xl font-semibold text-gray-900">
-                    Cognit Studio
-                  </h1>
-                  <p className="text-sm text-gray-600">Agregador de LLMs</p>
-                </div>
-              </div>
-            </div>
-
-            <ModelSelector
-              models={availableModels}
-              selectedModel={selectedModel}
-              onModelSelect={setSelectedModel}
-            />
-          </div>
+          {/* History Button */}
+          <button
+            onClick={() => setShowHistoryModal(true)}
+            className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+            title="Histórico"
+          >
+            <History className="w-4 h-4" />
+            <span className="text-sm font-medium">Histórico</span>
+          </button>
         </div>
 
+        {/* Settings */}
+        <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+          <Settings className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col">
         {/* Messages Area */}
         <div className="flex-1 overflow-y-auto">
           {currentConversation && messages.length > 0 ? (
-            <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+            <div className="max-w-4xl mx-auto px-6 py-8 space-y-8">
               {messages.map((message, index) => (
                 <MessageBubble
                   key={message.id}
@@ -334,13 +278,11 @@ export const StudioTemplate: React.FC = () => {
 
               {(isLoading || isStreaming || streamingMessage) && (
                 <div className="flex items-start space-x-4">
-                  <div
-                    className={`w-8 h-8 bg-gradient-to-br ${selectedModel.color} rounded-full flex items-center justify-center flex-shrink-0`}
-                  >
-                    <Bot className="w-4 h-4 text-white" />
+                  <div className={`w-10 h-10 bg-gradient-to-br ${selectedModel.color} rounded-full flex items-center justify-center flex-shrink-0`}>
+                    <Bot className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="bg-white rounded-2xl px-4 py-3 shadow-sm border border-gray-200">
+                    <div className="bg-gray-50 rounded-2xl px-6 py-4 shadow-sm">
                       {streamingMessage ? (
                         <div className="prose max-w-none">
                           <div className="text-gray-900 whitespace-pre-wrap">
@@ -349,7 +291,7 @@ export const StudioTemplate: React.FC = () => {
                           </div>
                         </div>
                       ) : (
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-3">
                           <div className="flex space-x-1">
                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
                             <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
@@ -368,72 +310,35 @@ export const StudioTemplate: React.FC = () => {
               <div ref={messagesEndRef} />
             </div>
           ) : (
-            /* Welcome Screen */
-            <div className="flex-1 flex items-center justify-center">
-              <div className="text-center max-w-md px-4">
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl flex items-center justify-center mx-auto mb-6">
-                  <svg
-                    width="40"
-                    height="24"
-                    viewBox="0 0 474 175"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <g transform="translate(-131 -563)">
-                      <g>
-                        <g>
-                          <text
-                            fill="white"
-                            fontFamily="Sundry,Sundry_MSFontService,sans-serif"
-                            fontWeight="400"
-                            fontSize="96"
-                            transform="matrix(0.999702 0 0 0.994943 140.089 687)"
-                          >
-                            Cognit
-                          </text>
-                          <path
-                            d="M503.45 629.884 503.832 629.884 511.558 655.829 495.724 655.829ZM545.737 617.102 545.737 683.872 561 683.872 561 617.102ZM494.007 617.102 471.21 683.872 487.426 683.872 491.718 669.565 515.565 669.565 519.857 683.872 536.072 683.872 513.275 617.102ZM452.699 579.057 586.021 579.057 586.021 712.379 452.699 712.379Z"
-                            fill="white"
-                            fillRule="evenodd"
-                            transform="matrix(1.00478 0 0 1 -0.124693 3.84206)"
-                          />
-                        </g>
-                      </g>
-                    </g>
-                  </svg>
+            /* Welcome Screen - Grok Style */
+            <div className="flex items-center justify-center h-full">
+              <div className="text-center max-w-2xl px-4">
+                {/* Logo */}
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-8">
+                  <span className="text-white text-2xl font-bold">AI</span>
                 </div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                  Bem-vindo ao Cognit Studio
-                </h2>
-                <p className="text-gray-600 mb-6">
-                  Converse com os melhores modelos de IA em um só lugar. Escolha
-                  seu modelo preferido e comece uma nova conversa.
+
+                <h1 className="text-4xl font-bold text-gray-900 mb-4">
+                  Cognit Studio
+                </h1>
+                <p className="text-xl text-gray-600 mb-8">
+                  O que você quer saber?
                 </p>
-                <div className="bg-orange-50 rounded-xl p-4">
-                  <div className="flex items-center space-x-2 text-orange-700 mb-2">
-                    <Bot className="w-5 h-5" />
-                    <span className="font-medium">
-                      Modelo Atual: {selectedModel.name}
-                    </span>
-                  </div>
-                  <p className="text-sm text-orange-600">
-                    {selectedModel.description}
-                  </p>
-                </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Input Area */}
-        <div className="bg-white border-t border-gray-200 px-6 py-4">
+        {/* Input Area - Grok Style */}
+        <div className="border-t border-gray-100 px-6 py-6 bg-white">
           <div className="max-w-4xl mx-auto">
             {/* File Attachments */}
             {selectedFiles.length > 0 && (
-              <div className="mb-3 flex flex-wrap gap-2">
+              <div className="mb-4 flex flex-wrap gap-2">
                 {selectedFiles.map((file, index) => (
                   <div
                     key={`${file.name}-${index}`}
-                    className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-1 rounded-full text-sm"
+                    className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-2 rounded-full text-sm"
                   >
                     <Paperclip className="w-3 h-3" />
                     <span className="truncate max-w-32">{file.name}</span>
@@ -451,47 +356,101 @@ export const StudioTemplate: React.FC = () => {
               </div>
             )}
 
-            <div className="flex items-end space-x-4">
-              <div className="flex-1 relative">
-                <textarea
-                  ref={textareaRef}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder={
-                    selectedFiles.length > 0
-                      ? `Analise estes arquivos com ${selectedModel.name}...`
-                      : `Converse com ${selectedModel.name}...`
-                  }
-                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent resize-none min-h-[48px] max-h-[200px]"
-                  rows={1}
-                />
-                <div className="absolute bottom-3 right-3 text-xs text-gray-400">
-                  {message.length > 0 && `${message.length} chars`}
+            {/* Main Input Container */}
+            <div className="relative bg-gray-50 rounded-2xl border border-gray-200 focus-within:border-orange-300 focus-within:bg-white transition-all">
+              {/* Input Area */}
+              <div className="flex items-end p-4">
+                <div className="flex-1 relative">
+                  <textarea
+                    ref={textareaRef}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="O que você quer saber?"
+                    className="w-full bg-transparent resize-none border-none outline-none text-gray-900 placeholder-gray-500 text-lg min-h-[24px] max-h-[200px]"
+                    rows={1}
+                  />
+                </div>
+
+                {/* Controls */}
+                <div className="flex items-center space-x-2 ml-4">
+                  {/* File Upload */}
+                  <button
+                    onClick={handleFileSelect}
+                    disabled={isLoading || isStreaming}
+                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                    title="Anexar arquivo"
+                  >
+                    <Paperclip className="w-5 h-5" />
+                  </button>
+
+                  {/* Send Button */}
+                  <button
+                    onClick={sendMessage}
+                    disabled={
+                      (!message.trim() && selectedFiles.length === 0) ||
+                      isLoading ||
+                      isStreaming
+                    }
+                    className="bg-gray-900 text-white p-2 rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <Send className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
 
-              {/* File Upload Button */}
-              <button
-                onClick={handleFileSelect}
-                disabled={isLoading || isStreaming}
-                className="bg-gray-100 text-gray-600 p-3 rounded-xl hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
-                title="Anexar arquivo"
-              >
-                <Paperclip className="w-5 h-5" />
-              </button>
+              {/* Bottom Controls */}
+              <div className="flex items-center justify-between px-4 pb-4">
+                {/* Model Selector */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowModelSelector(!showModelSelector)}
+                    className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                  >
+                    <div className={`w-3 h-3 bg-gradient-to-br ${selectedModel.color} rounded-full`}></div>
+                    <span>{selectedModel.name}</span>
+                    <ChevronDown className={`w-3 h-3 transition-transform ${showModelSelector ? 'rotate-180' : ''}`} />
+                  </button>
 
-              <button
-                onClick={sendMessage}
-                disabled={
-                  (!message.trim() && selectedFiles.length === 0) ||
-                  isLoading ||
-                  isStreaming
-                }
-                className="bg-orange-600 text-white p-3 rounded-xl hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
-              >
-                <Send className="w-5 h-5" />
-              </button>
+                  {/* Model Dropdown */}
+                  {showModelSelector && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setShowModelSelector(false)} />
+                      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-64 overflow-y-auto">
+                        <div className="p-2">
+                          {availableModels.map((model) => (
+                            <button
+                              key={model.id}
+                              onClick={() => {
+                                setSelectedModel(model);
+                                setShowModelSelector(false);
+                              }}
+                              className={`w-full p-3 rounded-lg text-left transition-all ${
+                                selectedModel.id === model.id
+                                  ? 'bg-orange-50 text-orange-700'
+                                  : 'hover:bg-gray-50'
+                              }`}
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className={`w-4 h-4 bg-gradient-to-br ${model.color} rounded-full`}></div>
+                                <div className="flex-1">
+                                  <div className="font-medium text-gray-900">{model.name}</div>
+                                  <div className="text-sm text-gray-500">{model.provider}</div>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {/* Keyboard Shortcut */}
+                <div className="text-xs text-gray-400">
+                  Enter para enviar
+                </div>
+              </div>
             </div>
 
             {/* Hidden File Input */}
@@ -503,23 +462,54 @@ export const StudioTemplate: React.FC = () => {
               accept=".pdf,.doc,.docx,.txt,.md,.jpg,.jpeg,.png,.gif"
               className="hidden"
             />
-
-            <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
-              <div className="flex items-center space-x-4">
-                <span>Modelo: {selectedModel.name}</span>
-                <span>•</span>
-                <span>
-                  Contexto: {selectedModel.contextWindow.toLocaleString()}{' '}
-                  tokens
-                </span>
-              </div>
-              <div>
-                Pressione Enter para enviar, Shift+Enter para nova linha
-              </div>
-            </div>
           </div>
         </div>
       </div>
+
+      {/* History Modal */}
+      {showHistoryModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-hidden flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100">
+              <div className="flex items-center space-x-3">
+                <History className="w-5 h-5 text-gray-600" />
+                <h2 className="text-lg font-semibold text-gray-900">Histórico de Conversas</h2>
+              </div>
+              <button
+                onClick={() => setShowHistoryModal(false)}
+                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="flex-1 overflow-hidden">
+              <ConversationList
+                conversations={conversations.map(conv => ({
+                  id: conv.id,
+                  title: conv.title,
+                  lastMessage: conv.messages[conv.messages.length - 1]?.content,
+                  timestamp: new Date(conv.updatedAt),
+                  model: selectedModel.name,
+                  messageCount: conv.messages.length,
+                }))}
+                selectedConversationId={currentConversation?.id}
+                onConversationSelect={(conversationId) => {
+                  const conversation = conversations.find(c => c.id === conversationId);
+                  if (conversation) {
+                    setConversation(conversation);
+                    setShowHistoryModal(false);
+                  }
+                }}
+                onConversationDelete={handleDeleteConversation}
+                showSearch={true}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
