@@ -3,6 +3,9 @@ export { useAuth } from './useAuth';
 export { useChat } from './useChat';
 export { useConversations } from './useConversations';
 export { useWorkspaces } from './useWorkspaces';
+export { useNavigation } from './useNavigation';
+export { useSidebarState } from './useSidebarState';
+export { useLoginLogic } from './useLoginLogic';
 
 // UI hooks
 export { useModal } from './useModal';

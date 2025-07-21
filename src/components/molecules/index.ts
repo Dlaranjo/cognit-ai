@@ -27,3 +27,12 @@ export { WorkspaceCard } from './WorkspaceCard';
 export { ModelSelector } from './ModelSelector';
 
 export { WorkspaceFilter } from './WorkspaceFilter';
+
+export { SidebarHeader } from './SidebarHeader';
+export { SidebarNavItem } from './SidebarNavItem';
+export { SidebarUserProfile } from './SidebarUserProfile';
+
+export { LoginHeader } from './LoginHeader';
+export { GoogleLoginButton } from './GoogleLoginButton';
+export { DemoUserCard } from './DemoUserCard';
+export type { DemoUser } from './DemoUserCard';

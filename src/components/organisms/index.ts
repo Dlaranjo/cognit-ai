@@ -30,3 +30,12 @@ export { ConversationSidebar } from './ConversationSidebar';
 export { CreateWorkspaceModal } from './CreateWorkspaceModal';
 export { MemberManagement } from './MemberManagement';
 export { WorkspaceList } from './WorkspaceList';
+
+// Studio Components
+export { StudioHeader } from './StudioHeader';
+export { StudioChatInterface } from './StudioChatInterface';
+export { StudioHistoryModal } from './StudioHistoryModal';
+
+// Login Components
+export { LoginCard } from './LoginCard';
+export { DemoAccessSection } from './DemoAccessSection';

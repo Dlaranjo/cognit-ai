@@ -1,0 +1,371 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, Bot, Paperclip, X, ChevronDown } from 'lucide-react';
+import { MessageBubble } from '../molecules/MessageBubble';
+import { useChat } from '../../hooks/useChat';
+import { useStreaming } from '../../hooks/useStreaming';
+import { useAppSelector } from '../../redux/store';
+import { selectStreamingMessage } from '../../redux/chat/chatSelectors';
+import { createAvailableModels, formatFileSize } from '../../shared/utils/modelUtils';
+import type { LLMModel, Message } from '../../types';
+
+interface StudioChatInterfaceProps {
+  className?: string;
+}
+
+export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({ 
+  className = '' 
+}) => {
+  // Redux hooks
+  const {
+    currentConversation,
+    messages,
+    isLoading,
+    selectedModel: reduxSelectedModel,
+    sendQuickMessage,
+    regenerateLastMessage,
+    changeModel,
+  } = useChat();
+
+  const { isStreaming, startStreaming } = useStreaming();
+  const streamingMessage = useAppSelector(selectStreamingMessage);
+
+  // Local UI state
+  const availableModels = createAvailableModels();
+  const [selectedModel, setSelectedModel] = useState<LLMModel>(availableModels[0]);
+  const [message, setMessage] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [showModelSelector, setShowModelSelector] = useState(false);
+  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // Sync model selection with Redux
+  useEffect(() => {
+    const model = availableModels.find((m) => m.id === reduxSelectedModel);
+    if (model && model.id !== selectedModel.id) {
+      setSelectedModel(model);
+    }
+  }, [reduxSelectedModel, selectedModel.id, availableModels]);
+
+  const handleModelSelect = (model: LLMModel) => {
+    setSelectedModel(model);
+    changeModel(model.id);
+  };
+
+  const sendMessage = async () => {
+    if ((!message.trim() && selectedFiles.length === 0) || isLoading || isStreaming) return;
+
+    const messageContent = message.trim();
+    const files = [...selectedFiles];
+
+    setMessage('');
+    setSelectedFiles([]);
+
+    if (files.length > 0) {
+      await sendQuickMessage(
+        messageContent || `[${files.length} arquivo${files.length > 1 ? 's' : ''} enviado${files.length > 1 ? 's' : ''}]`
+      );
+    } else {
+      await sendQuickMessage(messageContent);
+    }
+
+    try {
+      await startStreaming(
+        messageContent || `Analyze these ${files.length} file${files.length > 1 ? 's' : ''}`,
+        {
+          model: selectedModel.id,
+          provider: selectedModel.provider.toLowerCase(),
+          onStart: () => {},
+          onComplete: () => {},
+          onError: (error) => {
+            console.error('Streaming error:', error);
+          },
+        }
+      );
+    } catch (error) {
+      console.error('Failed to start streaming:', error);
+    }
+  };
+
+  const handleRegenerateResponse = async () => {
+    if (isLoading || isStreaming) return;
+    try {
+      await regenerateLastMessage();
+    } catch (error) {
+      console.error('Failed to regenerate message:', error);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = Math.min(textareaRef.current.scrollHeight, 200) + 'px';
+    }
+  };
+
+  const handleFileSelect = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setSelectedFiles((prev) => [...prev, ...files]);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleCopyMessage = () => {};
+  const handleLikeMessage = () => {};
+  const handleDislikeMessage = () => {};
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [message]);
+
+  return (
+    <div className={`flex-1 flex flex-col ${className}`}>
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto">
+        {currentConversation && messages && (messages as Message[]).length > 0 ? (
+          <div className="max-w-4xl mx-auto px-6 py-8 space-y-8">
+            {(messages as Message[]).map((message: Message, index: number) => (
+              <MessageBubble
+                key={message.id}
+                content={message.content}
+                role={message.role as 'user' | 'assistant'}
+                timestamp={new Date(message.timestamp)}
+                model={message.model}
+                onCopy={handleCopyMessage}
+                onLike={handleLikeMessage}
+                onDislike={handleDislikeMessage}
+                onRegenerate={
+                  message.role === 'assistant' &&
+                  index === (messages as Message[]).length - 1 &&
+                  !isLoading &&
+                  !isStreaming
+                    ? handleRegenerateResponse
+                    : undefined
+                }
+              />
+            ))}
+
+            {(isLoading || isStreaming || streamingMessage) && (
+              <div className="flex items-start space-x-4">
+                <div className={`w-10 h-10 bg-gradient-to-br ${selectedModel.color} rounded-full flex items-center justify-center flex-shrink-0`}>
+                  <Bot className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1">
+                  <div className="bg-gray-50 rounded-2xl px-6 py-4 shadow-sm">
+                    {streamingMessage ? (
+                      <div className="prose max-w-none">
+                        <div className="text-gray-900 whitespace-pre-wrap">
+                          {streamingMessage}
+                          <span className="inline-block w-2 h-5 bg-orange-500 ml-1 animate-pulse"></span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center space-x-3">
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
+                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+                        </div>
+                        <span className="text-sm text-gray-600">
+                          {selectedModel.name} está pensando...
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+        ) : (
+          /* Welcome Screen */
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center max-w-2xl px-4">
+              <div className="relative mb-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg hover:shadow-xl transition-shadow duration-300">
+                  <span className="text-white text-2xl font-bold">AI</span>
+                </div>
+              </div>
+
+              <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                Cognit <span className="text-orange-600">Studio</span>
+              </h1>
+              
+              <p className="text-lg text-gray-600 mb-8">
+                O que você quer saber?
+              </p>
+              
+              <div className="text-sm text-gray-500 bg-gray-50 px-4 py-2 rounded-full inline-block">
+                Comece digitando sua pergunta abaixo
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Input Area */}
+      <div className="border-t border-gray-100 px-6 py-6 bg-white">
+        <div className="max-w-4xl mx-auto">
+          {/* File Attachments */}
+          {selectedFiles.length > 0 && (
+            <div className="mb-4 flex flex-wrap gap-2">
+              {selectedFiles.map((file, index) => (
+                <div
+                  key={`${file.name}-${index}`}
+                  className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-2 rounded-full text-sm"
+                >
+                  <Paperclip className="w-3 h-3" />
+                  <span className="truncate max-w-32">{file.name}</span>
+                  <span className="text-orange-500">
+                    ({formatFileSize(file.size)})
+                  </span>
+                  <button
+                    onClick={() => removeFile(index)}
+                    className="text-orange-500 hover:text-orange-700 ml-1"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Main Input Container */}
+          <div className="relative bg-gray-50 rounded-2xl border border-gray-200 focus-within:border-orange-300 focus-within:bg-white transition-all">
+            {/* Input Area */}
+            <div className="flex items-end p-4">
+              <div className="flex-1 relative">
+                <textarea
+                  ref={textareaRef}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="O que você quer saber?"
+                  className="w-full bg-transparent resize-none border-none outline-none text-gray-900 placeholder-gray-500 text-lg min-h-[24px] max-h-[200px]"
+                  rows={1}
+                />
+              </div>
+
+              {/* Controls */}
+              <div className="flex items-center space-x-2 ml-4">
+                {/* File Upload */}
+                <button
+                  onClick={handleFileSelect}
+                  disabled={isLoading || isStreaming}
+                  className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-100 rounded-lg transition-colors disabled:opacity-50"
+                  title="Anexar arquivo"
+                >
+                  <Paperclip className="w-5 h-5" />
+                </button>
+
+                {/* Send Button */}
+                <button
+                  onClick={sendMessage}
+                  disabled={
+                    (!message.trim() && selectedFiles.length === 0) ||
+                    isLoading ||
+                    isStreaming
+                  }
+                  className="bg-orange-600 text-white p-2 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Bottom Controls */}
+            <div className="flex items-center justify-between px-4 pb-4">
+              {/* Model Selector */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowModelSelector(!showModelSelector)}
+                  className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-100 rounded-lg transition-colors"
+                >
+                  <div className={`w-3 h-3 bg-gradient-to-br ${selectedModel.color} rounded-full`}></div>
+                  <span>{selectedModel.name}</span>
+                  <ChevronDown className={`w-3 h-3 transition-transform ${showModelSelector ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Model Dropdown */}
+                {showModelSelector && (
+                  <>
+                    <div className="fixed inset-0 z-10" onClick={() => setShowModelSelector(false)} />
+                    <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-64 overflow-y-auto">
+                      <div className="p-2">
+                        {availableModels.map((model) => (
+                          <button
+                            key={model.id}
+                            onClick={() => {
+                              handleModelSelect(model);
+                              setShowModelSelector(false);
+                            }}
+                            className={`w-full p-3 rounded-lg text-left transition-all ${
+                              selectedModel.id === model.id
+                                ? 'bg-orange-50 text-orange-700'
+                                : 'hover:bg-orange-50 hover:text-orange-600'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-4 h-4 bg-gradient-to-br ${model.color} rounded-full`}></div>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900">{model.name}</div>
+                                <div className="text-sm text-gray-500">{model.provider}</div>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              {/* Keyboard Shortcut */}
+              <div className="text-xs text-gray-400">
+                Enter para enviar
+              </div>
+            </div>
+          </div>
+
+          {/* Hidden File Input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            accept=".pdf,.doc,.docx,.txt,.md,.jpg,.jpeg,.png,.gif"
+            className="hidden"
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
