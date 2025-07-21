@@ -313,17 +313,71 @@ export const StudioTemplate: React.FC = () => {
             /* Welcome Screen - Grok Style */
             <div className="flex items-center justify-center h-full">
               <div className="text-center max-w-2xl px-4">
-                {/* Logo */}
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-8">
-                  <span className="text-white text-2xl font-bold">AI</span>
+                {/* Enhanced Logo with Animation */}
+                <div className="relative mb-12">
+                  {/* Animated Background Circles */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-32 h-32 bg-gradient-to-r from-orange-400/20 to-red-400/20 rounded-full animate-pulse"></div>
+                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-24 h-24 bg-gradient-to-r from-orange-500/30 to-red-500/30 rounded-full animate-pulse delay-300"></div>
+                  </div>
+                  
+                  {/* Main Logo */}
+                  <div className="relative w-20 h-20 bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 rounded-3xl flex items-center justify-center mx-auto shadow-2xl shadow-orange-500/25 transform hover:scale-105 transition-transform duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-3xl"></div>
+                    <span className="relative text-white text-3xl font-bold tracking-tight">AI</span>
+                  </div>
+                  
+                  {/* Floating Elements */}
+                  <div className="absolute -top-2 -right-2 w-3 h-3 bg-orange-400 rounded-full animate-bounce delay-500"></div>
+                  <div className="absolute -bottom-1 -left-3 w-2 h-2 bg-red-400 rounded-full animate-bounce delay-700"></div>
+                  <div className="absolute top-1/2 -right-6 w-1.5 h-1.5 bg-orange-300 rounded-full animate-bounce delay-1000"></div>
                 </div>
 
-                <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                  Cognit Studio
+                {/* Enhanced Title */}
+                <h1 className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-orange-800 to-red-800 bg-clip-text text-transparent mb-6 tracking-tight">
+                  <span className="block">Cognit</span>
+                  <span className="block text-3xl font-medium text-orange-600 mt-1">Studio</span>
                 </h1>
-                <p className="text-xl text-gray-600 mb-8">
+                
+                {/* Enhanced Subtitle */}
+                <p className="text-xl text-gray-600 mb-12 leading-relaxed">
                   O que você quer saber?
                 </p>
+                
+                {/* Feature Highlights */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="group p-4 rounded-xl bg-gradient-to-br from-orange-50 to-red-50 border border-orange-100 hover:border-orange-200 transition-all duration-300 hover:shadow-lg hover:shadow-orange-100">
+                    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
+                      <Zap className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Rápido</h3>
+                    <p className="text-sm text-gray-600">Respostas instantâneas com IA avançada</p>
+                  </div>
+                  
+                  <div className="group p-4 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 hover:border-blue-200 transition-all duration-300 hover:shadow-lg hover:shadow-blue-100">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
+                      <MessageSquare className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Inteligente</h3>
+                    <p className="text-sm text-gray-600">Múltiplos modelos de IA em um só lugar</p>
+                  </div>
+                  
+                  <div className="group p-4 rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border border-green-100 hover:border-green-200 transition-all duration-300 hover:shadow-lg hover:shadow-green-100">
+                    <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform duration-300">
+                      <Bot className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-1">Versátil</h3>
+                    <p className="text-sm text-gray-600">Para qualquer tipo de pergunta ou tarefa</p>
+                  </div>
+                </div>
+                
+                {/* Call to Action */}
+                <div className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-full shadow-lg shadow-orange-500/25 hover:shadow-xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-105">
+                  <span className="font-medium">Comece digitando sua pergunta abaixo</span>
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                </div>
               </div>
             </div>
           )}
