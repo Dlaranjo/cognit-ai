@@ -937,6 +937,38 @@ export function createMockServer() {
         return { data: mockTask };
       });
 
+      this.post('/agents/tasks/:taskId/cancel', async (schema, request) => {
+        await delay(300);
+        return {
+          data: {
+            success: true,
+            message: `Task ${request.params.taskId} cancelled successfully`,
+          },
+        };
+      });
+
+      this.post('/agents/tasks/:taskId/retry', async (schema, request) => {
+        await delay(500);
+        const retryTask = {
+          id: request.params.taskId,
+          agentId: 'presentation-expert',
+          workspaceId: 'ws-1',
+          title: 'Retrying task...',
+          description: 'Task is being retried',
+          status: 'processing' as const,
+          priority: 'medium' as const,
+          input: {
+            prompt: 'Retrying previous task',
+            documentIds: [],
+            parameters: {},
+          },
+          progress: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+        return { data: retryTask };
+      });
+
       this.get('/agents/tasks', async (schema, request) => {
         await delay(400);
         const { queryParams } = request;
