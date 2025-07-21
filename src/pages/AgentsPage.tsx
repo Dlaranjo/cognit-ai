@@ -1,6 +1,6 @@
 import React from 'react';
-import { AgentInterface } from '../components/Agents/AgentInterface';
+import { AgentTemplate } from '../components/templates/AgentTemplate';
 
 export const AgentsPage: React.FC = () => {
-  return <AgentInterface />;
+  return <AgentTemplate />;
 };

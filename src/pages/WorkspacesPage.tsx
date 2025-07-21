@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { WorkspaceList } from '../components/Workspaces/WorkspaceList';
+import { WorkspaceList } from '../components/organisms/WorkspaceList';
 import { useAuth } from '../hooks/useAuth';
 import { useWorkspaces } from '../hooks/useWorkspaces';
 import { Workspace } from '../types';
@@ -12,12 +12,12 @@ export const WorkspacesPage: React.FC = () => {
     workspaces,
     getUserPermission,
     createWorkspace,
-    updateWorkspaceMembers
+    updateWorkspaceMembers,
   } = useWorkspaces(user?.id);
 
   const handleWorkspaceSelect = (workspace: Workspace) => {
     const userPermission = getUserPermission(workspace.id);
-    
+
     // Viewers can only search, not access project management
     if (userPermission === 'VIEWER') {
       navigate(`/search?workspace=${workspace.id}`);

@@ -8,6 +8,7 @@ import {
   fetchDocuments,
   uploadDocument,
   fetchWorkspaceMembers,
+  updateWorkspaceMembers,
 } from './workspacesActions';
 import type { WorkspacesState } from './workspacesTypes';
 import type { Workspace } from '../../api/workspaceApi';
@@ -79,7 +80,9 @@ const workspacesSlice = createSlice({
       })
       .addCase(deleteWorkspace.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.workspaces = state.workspaces.filter(w => w.id !== action.payload);
+        state.workspaces = state.workspaces.filter(
+          (w) => w.id !== action.payload
+        );
         if (state.currentWorkspace?.id === action.payload) {
           state.currentWorkspace = null;
         }
@@ -162,6 +165,29 @@ const workspacesSlice = createSlice({
       .addCase(fetchWorkspaceMembers.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload || 'Failed to fetch members';
+      });
+
+    // Update Members
+    builder
+      .addCase(updateWorkspaceMembers.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateWorkspaceMembers.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // Update members array with new data
+        action.payload.forEach((updatedMember) => {
+          const index = state.members.findIndex(
+            (member) => member.id === updatedMember.id
+          );
+          if (index !== -1) {
+            state.members[index] = updatedMember;
+          }
+        });
+      })
+      .addCase(updateWorkspaceMembers.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload || 'Failed to update members';
       });
   },
 });

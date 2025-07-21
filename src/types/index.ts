@@ -3,7 +3,20 @@
 // Re-export API types
 export type { User, LoginCredentials, AuthResponse } from '../api/authApi';
 export type { Message, Conversation, SendMessageRequest } from '../api/chatApi';
-export type { Workspace, Project, Document, WorkspaceMember } from '../api/workspaceApi';
+export type {
+  Workspace,
+  Project,
+  Document,
+  WorkspaceMember,
+} from '../api/workspaceApi';
+export type {
+  Agent,
+  AgentTask,
+  AgentConversation,
+  AgentMessage,
+  AgentAction,
+  AgentsState,
+} from '../redux/agents/agentsTypes';
 
 // UI Component Props
 export interface ButtonProps {
@@ -33,6 +46,7 @@ export interface RootState {
   conversations: ConversationsState;
   workspaces: WorkspacesState;
   ui: UIState;
+  agents: AgentsState;
 }
 
 export interface AuthState {
@@ -114,8 +128,8 @@ export interface Notification {
   timestamp: Date;
 }
 
-// Legacy types for compatibility
-export interface Agent {
+// Legacy types for compatibility - kept for backward compatibility
+export interface LegacyAgent {
   id: string;
   name: string;
   description: string;

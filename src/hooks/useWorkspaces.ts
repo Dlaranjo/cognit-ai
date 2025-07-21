@@ -9,6 +9,7 @@ import {
   fetchDocuments,
   uploadDocument,
   fetchWorkspaceMembers,
+  updateWorkspaceMembers,
 } from '../redux/workspaces/workspacesActions';
 import {
   setCurrentWorkspace,
@@ -52,43 +53,74 @@ export const useWorkspaces = (userId?: string) => {
     return dispatch(fetchWorkspaces());
   }, [dispatch]);
 
-  const addWorkspace = useCallback((workspaceData: Omit<Workspace, 'id' | 'createdAt' | 'updatedAt'>) => {
-    return dispatch(createWorkspace(workspaceData));
-  }, [dispatch]);
+  const addWorkspace = useCallback(
+    (workspaceData: Omit<Workspace, 'id' | 'createdAt' | 'updatedAt'>) => {
+      return dispatch(createWorkspace(workspaceData));
+    },
+    [dispatch]
+  );
 
-  const removeWorkspace = useCallback((workspaceId: string) => {
-    return dispatch(deleteWorkspace(workspaceId));
-  }, [dispatch]);
+  const removeWorkspace = useCallback(
+    (workspaceId: string) => {
+      return dispatch(deleteWorkspace(workspaceId));
+    },
+    [dispatch]
+  );
 
-  const setWorkspace = useCallback((workspace: Workspace | null) => {
-    dispatch(setCurrentWorkspace(workspace));
-  }, [dispatch]);
+  const setWorkspace = useCallback(
+    (workspace: Workspace | null) => {
+      dispatch(setCurrentWorkspace(workspace));
+    },
+    [dispatch]
+  );
 
-  const loadProjects = useCallback((workspaceId: string) => {
-    return dispatch(fetchProjects(workspaceId));
-  }, [dispatch]);
+  const loadProjects = useCallback(
+    (workspaceId: string) => {
+      return dispatch(fetchProjects(workspaceId));
+    },
+    [dispatch]
+  );
 
-  const addProject = useCallback((workspaceId: string, projectData: Omit<Project, 'id' | 'workspaceId' | 'createdAt' | 'updatedAt'>) => {
-    return dispatch(createProject({ workspaceId, projectData }));
-  }, [dispatch]);
+  const addProject = useCallback(
+    (
+      workspaceId: string,
+      projectData: Omit<
+        Project,
+        'id' | 'workspaceId' | 'createdAt' | 'updatedAt'
+      >
+    ) => {
+      return dispatch(createProject({ workspaceId, projectData }));
+    },
+    [dispatch]
+  );
 
-  const loadDocuments = useCallback((projectId: string) => {
-    return dispatch(fetchDocuments(projectId));
-  }, [dispatch]);
+  const loadDocuments = useCallback(
+    (projectId: string) => {
+      return dispatch(fetchDocuments(projectId));
+    },
+    [dispatch]
+  );
 
-  const addDocument = useCallback((projectId: string, file: File) => {
-    return dispatch(uploadDocument({ projectId, file }));
-  }, [dispatch]);
+  const addDocument = useCallback(
+    (projectId: string, file: File) => {
+      return dispatch(uploadDocument({ projectId, file }));
+    },
+    [dispatch]
+  );
 
-  const loadMembers = useCallback((workspaceId: string) => {
-    return dispatch(fetchWorkspaceMembers(workspaceId));
-  }, [dispatch]);
+  const loadMembers = useCallback(
+    (workspaceId: string) => {
+      return dispatch(fetchWorkspaceMembers(workspaceId));
+    },
+    [dispatch]
+  );
 
-  const updateWorkspaceMembers = useCallback(async (workspaceId: string, members: WorkspaceMember[]) => {
-    // TODO: Implement updateWorkspaceMembers action
-    console.log('updateWorkspaceMembers called with:', workspaceId, members);
-    return Promise.resolve();
-  }, []);
+  const updateMembers = useCallback(
+    (workspaceId: string, members: WorkspaceMember[]) => {
+      return dispatch(updateWorkspaceMembers({ workspaceId, members }));
+    },
+    [dispatch]
+  );
 
   const clearWorkspacesError = useCallback(() => {
     dispatch(clearError());
@@ -152,7 +184,7 @@ export const useWorkspaces = (userId?: string) => {
     loadDocuments,
     addDocument,
     loadMembers,
-    updateWorkspaceMembers,
+    updateMembers,
     clearWorkspacesError,
     resetDocuments,
     resetProjects,

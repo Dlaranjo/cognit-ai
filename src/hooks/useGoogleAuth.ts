@@ -37,7 +37,10 @@ declare global {
         id: {
           initialize: (config: GoogleAuthConfig) => void;
           prompt: () => void;
-          renderButton: (element: HTMLElement, config: GoogleButtonConfig) => void;
+          renderButton: (
+            element: HTMLElement,
+            config: GoogleButtonConfig
+          ) => void;
           disableAutoSelect: () => void;
         };
       };
@@ -61,8 +64,6 @@ export const useGoogleAuth = () => {
         // Initialize Google Auth directly here to avoid dependency issues
         if (window.google?.accounts?.id && config.GOOGLE_CLIENT_ID) {
           try {
-            console.log('🔧 Initializing Google OAuth with client ID:', config.GOOGLE_CLIENT_ID);
-
             window.google.accounts.id.initialize({
               client_id: config.GOOGLE_CLIENT_ID,
               callback: handleGoogleCallback,
@@ -73,7 +74,6 @@ export const useGoogleAuth = () => {
               use_fedcm_for_prompt: false,
             });
 
-            console.log('✅ Google OAuth initialized successfully');
             setIsInitialized(true);
           } catch (error) {
             console.error('❌ Failed to initialize Google OAuth:', error);
@@ -94,23 +94,22 @@ export const useGoogleAuth = () => {
     };
   }, [isInitialized, handleGoogleCallback]);
 
-  const handleGoogleCallback = useCallback(async (response: GoogleCredentialResponse) => {
-    console.log('🔐 Google callback received:', response);
-    
-    try {
-      if (response.credential) {
-        console.log('🔐 Processing Google credential...');
-        await loginWithGoogle(response.credential);
-        console.log('✅ Google login successful');
-      } else {
-        console.error('❌ No credential in Google response');
-        throw new Error('No credential received from Google');
+  const handleGoogleCallback = useCallback(
+    async (response: GoogleCredentialResponse) => {
+      try {
+        if (response.credential) {
+          await loginWithGoogle(response.credential);
+        } else {
+          console.error('❌ No credential in Google response');
+          throw new Error('No credential received from Google');
+        }
+      } catch (error) {
+        console.error('❌ Google auth callback failed:', error);
+        // Don't throw here, let the component handle fallback
       }
-    } catch (error) {
-      console.error('❌ Google auth callback failed:', error);
-      // Don't throw here, let the component handle fallback
-    }
-  }, [loginWithGoogle]);
+    },
+    [loginWithGoogle]
+  );
 
   const initializeGoogleAuth = useCallback(() => {
     if (!window.google?.accounts?.id || !config.GOOGLE_CLIENT_ID) {
@@ -119,8 +118,6 @@ export const useGoogleAuth = () => {
     }
 
     try {
-      console.log('🔧 Initializing Google OAuth with client ID:', config.GOOGLE_CLIENT_ID);
-      
       window.google.accounts.id.initialize({
         client_id: config.GOOGLE_CLIENT_ID,
         callback: handleGoogleCallback,
@@ -130,8 +127,6 @@ export const useGoogleAuth = () => {
         ux_mode: 'popup',
         use_fedcm_for_prompt: false,
       });
-
-      console.log('✅ Google OAuth initialized successfully');
     } catch (error) {
       console.error('❌ Failed to initialize Google OAuth:', error);
     }
@@ -145,30 +140,25 @@ export const useGoogleAuth = () => {
 
     return new Promise<void>((resolve, reject) => {
       try {
-        console.log('🚀 Triggering Google sign-in...');
-        
         // Disable auto-select to force user interaction
         window.google!.accounts.id.disableAutoSelect();
-        
+
         // Show the One Tap prompt
-        window.google!.accounts.id.prompt((notification: GooglePromptNotification) => {
-          console.log('📝 Google prompt notification:', notification);
-          
-          if (notification.isNotDisplayed()) {
-            console.log('⚠️ Google prompt not displayed, reason:', notification.getNotDisplayedReason());
-            // If prompt fails, we'll rely on the fallback in the component
-            resolve();
-          } else if (notification.isSkippedMoment()) {
-            console.log('⚠️ Google prompt skipped, reason:', notification.getSkippedReason());
-            resolve();
-          } else if (notification.isDismissedMoment()) {
-            console.log('⚠️ Google prompt dismissed, reason:', notification.getDismissedReason());
-            resolve();
-          } else {
-            // Prompt was displayed successfully
-            resolve();
+        window.google!.accounts.id.prompt(
+          (notification: GooglePromptNotification) => {
+            if (notification.isNotDisplayed()) {
+              // If prompt fails, we'll rely on the fallback in the component
+              resolve();
+            } else if (notification.isSkippedMoment()) {
+              resolve();
+            } else if (notification.isDismissedMoment()) {
+              resolve();
+            } else {
+              // Prompt was displayed successfully
+              resolve();
+            }
           }
-        });
+        );
       } catch (error) {
         console.error('❌ Google sign-in failed:', error);
         reject(error);
@@ -176,68 +166,68 @@ export const useGoogleAuth = () => {
     });
   }, []);
 
-  const renderGoogleButton = useCallback((element: HTMLElement, theme: 'outline' | 'filled_blue' = 'outline') => {
-    if (!window.google?.accounts?.id || !element) {
-      console.warn('⚠️ Cannot render Google button - SDK not ready or element missing');
-      return;
-    }
+  const renderGoogleButton = useCallback(
+    (element: HTMLElement, theme: 'outline' | 'filled_blue' = 'outline') => {
+      if (!window.google?.accounts?.id || !element) {
+        console.warn(
+          '⚠️ Cannot render Google button - SDK not ready or element missing'
+        );
+        return;
+      }
 
-    try {
-      console.log('🎨 Rendering Google button...');
-      
-      // Clear any existing content
-      element.innerHTML = '';
-      
-      // Add identifier for fallback
-      element.setAttribute('data-google-button', 'true');
+      try {
+        // Clear any existing content
+        element.innerHTML = '';
 
-      window.google.accounts.id.renderButton(element, {
-        theme,
-        size: 'large',
-        width: 400,
-        type: 'standard',
-        shape: 'rectangular',
-        logo_alignment: 'left',
-        text: 'signin_with',
-      });
+        // Add identifier for fallback
+        element.setAttribute('data-google-button', 'true');
 
-      console.log('✅ Google button rendered successfully');
-    } catch (error) {
-      console.error('❌ Failed to render Google button:', error);
-    }
-  }, []);
+        window.google.accounts.id.renderButton(element, {
+          theme,
+          size: 'large',
+          width: 400,
+          type: 'standard',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          text: 'signin_with',
+        });
+      } catch (error) {
+        console.error('❌ Failed to render Google button:', error);
+      }
+    },
+    []
+  );
 
   const loadGoogleScript = useCallback((): Promise<void> => {
     return new Promise((resolve, reject) => {
       // Check if already loaded
       if (window.google?.accounts?.id) {
-        console.log('✅ Google SDK already loaded');
         resolve();
         return;
       }
 
       // Check if script is already being loaded
-      const existingScript = document.querySelector('script[src*="accounts.google.com"]');
+      const existingScript = document.querySelector(
+        'script[src*="accounts.google.com"]'
+      );
       if (existingScript) {
-        console.log('⏳ Google SDK script already loading...');
         existingScript.addEventListener('load', () => resolve());
-        existingScript.addEventListener('error', () => reject(new Error('Failed to load Google SDK')));
+        existingScript.addEventListener('error', () =>
+          reject(new Error('Failed to load Google SDK'))
+        );
         return;
       }
 
-      console.log('📥 Loading Google SDK script...');
-      
       const script = document.createElement('script');
       script.src = 'https://accounts.google.com/gsi/client';
       script.async = true;
       script.defer = true;
-      
+
       script.onload = () => {
-        console.log('✅ Google SDK script loaded successfully');
         // Give it a moment to initialize
         setTimeout(() => resolve(), 100);
       };
-      
+
       script.onerror = () => {
         console.error('❌ Failed to load Google SDK script');
         reject(new Error('Failed to load Google SDK'));

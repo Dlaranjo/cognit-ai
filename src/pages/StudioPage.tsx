@@ -1,6 +1,6 @@
 import React from 'react';
-import { StudioInterface } from '../components/Studio/StudioInterface';
+import { StudioTemplate } from '../components/templates/StudioTemplate';
 
 export const StudioPage: React.FC = () => {
-  return <StudioInterface />;
+  return <StudioTemplate />;
 };

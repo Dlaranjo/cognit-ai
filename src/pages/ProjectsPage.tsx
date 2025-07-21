@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ProjectList } from '../components/Projects/ProjectList';
+import { ProjectList } from '../components/organisms/ProjectList';
 import { useAuth } from '../hooks/useAuth';
 import { useWorkspaces } from '../hooks/useWorkspaces';
 import { Project } from '../types';
@@ -13,10 +13,10 @@ export const ProjectsPage: React.FC = () => {
     workspaces,
     getUserPermission,
     getProjectsByWorkspace,
-    createProject
+    createProject,
   } = useWorkspaces(user?.id);
 
-  const workspace = workspaces.find(w => w.id === workspaceId);
+  const workspace = workspaces.find((w) => w.id === workspaceId);
 
   if (!workspace) {
     return <div>Workspace not found</div>;

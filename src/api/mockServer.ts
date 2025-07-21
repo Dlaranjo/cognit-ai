@@ -80,6 +80,273 @@ const mockUsers = [
   },
 ];
 
+// Mock Agents data
+const mockAgents = [
+  {
+    id: 'presentation-expert',
+    name: 'Presentation Expert',
+    description:
+      'Creates professional PowerPoint presentations from your documents and data',
+    icon: 'presentation',
+    color: 'from-orange-500 to-red-500',
+    capabilities: [
+      'PowerPoint Creation',
+      'Slide Design',
+      'Data Visualization',
+      'Content Structuring',
+    ],
+    examples: [
+      'Create a presentation about our Q4 results',
+      'Build slides summarizing the AI research findings',
+      'Make a pitch deck for the new product launch',
+    ],
+    category: 'presentation' as const,
+    isActive: true,
+    usage: {
+      totalRequests: 15,
+      successRate: 93.3,
+      avgResponseTime: 45000,
+    },
+  },
+  {
+    id: 'document-analyst',
+    name: 'Document Analyst',
+    description:
+      'Analyzes documents, extracts insights, and provides comprehensive summaries',
+    icon: 'file-text',
+    color: 'from-blue-500 to-indigo-500',
+    capabilities: [
+      'Document Analysis',
+      'Content Extraction',
+      'Insight Generation',
+      'Summarization',
+    ],
+    examples: [
+      'Analyze the contract terms and highlight key points',
+      'Summarize all research papers in the ML workspace',
+      'Extract action items from meeting notes',
+    ],
+    category: 'analysis' as const,
+    isActive: true,
+    usage: {
+      totalRequests: 12,
+      successRate: 100,
+      avgResponseTime: 32000,
+    },
+  },
+  {
+    id: 'data-scientist',
+    name: 'Data Scientist',
+    description:
+      'Processes data, creates visualizations, and generates analytical reports',
+    icon: 'bar-chart-3',
+    color: 'from-green-500 to-emerald-500',
+    capabilities: [
+      'Data Analysis',
+      'Statistical Modeling',
+      'Visualization',
+      'Report Generation',
+    ],
+    examples: [
+      'Create charts from the sales data spreadsheet',
+      'Analyze user behavior patterns',
+      'Generate a data quality report',
+    ],
+    category: 'data' as const,
+    isActive: true,
+    usage: {
+      totalRequests: 8,
+      successRate: 87.5,
+      avgResponseTime: 67000,
+    },
+  },
+  {
+    id: 'code-assistant',
+    name: 'Code Assistant',
+    description:
+      'Reviews code, generates documentation, and creates technical specifications',
+    icon: 'code',
+    color: 'from-purple-500 to-pink-500',
+    capabilities: [
+      'Code Review',
+      'Documentation',
+      'API Specs',
+      'Technical Writing',
+    ],
+    examples: [
+      'Generate API documentation from the codebase',
+      'Review the authentication module',
+      'Create technical specifications for the new feature',
+    ],
+    category: 'code' as const,
+    isActive: true,
+    usage: {
+      totalRequests: 6,
+      successRate: 83.3,
+      avgResponseTime: 52000,
+    },
+  },
+  {
+    id: 'content-writer',
+    name: 'Content Writer',
+    description: 'Creates engaging content, reports, and marketing materials',
+    icon: 'pen-tool',
+    color: 'from-teal-500 to-cyan-500',
+    capabilities: [
+      'Content Creation',
+      'Copywriting',
+      'Report Writing',
+      'Marketing Materials',
+    ],
+    examples: [
+      'Write a blog post about our latest features',
+      'Create marketing copy for the product launch',
+      'Draft a comprehensive project report',
+    ],
+    category: 'content' as const,
+    isActive: true,
+    usage: {
+      totalRequests: 4,
+      successRate: 100,
+      avgResponseTime: 38000,
+    },
+  },
+];
+
+const mockAgentTasks = [
+  {
+    id: 'task-1',
+    agentId: 'presentation-expert',
+    workspaceId: 'ws-1',
+    title: 'Criar apresentação Q4 2024',
+    description:
+      'Criar uma apresentação profissional sobre os resultados do Q4 2024 baseada nos relatórios financeiros',
+    status: 'completed' as const,
+    priority: 'high' as const,
+    input: {
+      prompt:
+        'Criar uma apresentação profissional sobre os resultados do Q4 2024 baseada nos relatórios financeiros',
+      documentIds: ['doc-1', 'doc-2', 'doc-3'],
+      parameters: {},
+    },
+    output: {
+      files: [
+        {
+          id: 'file-1',
+          name: 'Q4_2024_Results.pptx',
+          type: 'presentation' as const,
+          format: 'pptx',
+          size: 3145728,
+          downloadUrl: '#download',
+          previewUrl: '#preview',
+          description: 'Apresentação de 18 slides com resultados Q4 2024',
+        },
+      ],
+      summary:
+        'Apresentação criada com 18 slides cobrindo receita, despesas, crescimento e projeções para 2025.',
+      insights: [
+        'Crescimento de 23% na receita comparado ao Q3',
+        'Redução de 15% nos custos operacionais',
+        'Meta de receita para 2025 estabelecida',
+      ],
+    },
+    progress: 100,
+    createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+    updatedAt: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+    completedAt: new Date(Date.now() - 3600000).toISOString(),
+  },
+  {
+    id: 'task-2',
+    agentId: 'document-analyst',
+    workspaceId: 'ws-1',
+    title: 'Análise de contratos fornecedores',
+    description:
+      'Analisar 12 contratos de fornecedores e identificar pontos-chave e riscos',
+    status: 'processing' as const,
+    priority: 'medium' as const,
+    input: {
+      prompt:
+        'Analisar 12 contratos de fornecedores e identificar pontos-chave e riscos',
+      documentIds: Array.from({ length: 12 }, (_, i) => `contract-${i + 1}`),
+      parameters: {},
+    },
+    progress: 67,
+    createdAt: new Date(Date.now() - 7200000).toISOString(), // 2 hours ago
+    updatedAt: new Date(Date.now() - 300000).toISOString(), // 5 minutes ago
+  },
+  {
+    id: 'task-3',
+    agentId: 'data-scientist',
+    workspaceId: 'ws-1',
+    title: 'Dashboard de métricas de vendas',
+    description:
+      'Criar dashboard interativo com métricas de vendas dos últimos 6 meses',
+    status: 'pending' as const,
+    priority: 'low' as const,
+    input: {
+      prompt:
+        'Criar dashboard interativo com métricas de vendas dos últimos 6 meses',
+      documentIds: ['sales-data.xlsx'],
+      parameters: { timeRange: '6months', includeForecasting: true },
+    },
+    progress: 0,
+    createdAt: new Date(Date.now() - 1800000).toISOString(), // 30 minutes ago
+    updatedAt: new Date(Date.now() - 1800000).toISOString(),
+  },
+];
+
+const mockAgentConversations = [
+  {
+    id: 'conv-1',
+    agentId: 'presentation-expert',
+    workspaceId: 'ws-1',
+    title: 'Apresentação AI Research',
+    messages: [
+      {
+        id: 'msg-1',
+        type: 'user' as const,
+        content: 'Preciso de uma apresentação sobre nossas pesquisas em IA',
+        timestamp: new Date(Date.now() - 3600000).toISOString(),
+        attachments: ['research-paper-1.pdf', 'research-paper-2.pdf'],
+      },
+      {
+        id: 'msg-2',
+        type: 'agent' as const,
+        content:
+          'Perfeito! Analisei os papers de pesquisa e vou criar uma apresentação abrangente. Incluirei os principais insights, metodologias e resultados.',
+        timestamp: new Date(Date.now() - 3580000).toISOString(),
+        agentId: 'presentation-expert',
+        actions: [
+          {
+            id: 'action-1',
+            type: 'file_creation' as const,
+            title: 'AI_Research_Presentation.pptx',
+            description:
+              '15 slides cobrindo metodologias, resultados e insights',
+            status: 'completed' as const,
+            result: {
+              id: 'file-pres-1',
+              name: 'AI_Research_Presentation.pptx',
+              type: 'presentation' as const,
+              format: 'pptx',
+              size: 2621440,
+              downloadUrl: '#download',
+              previewUrl: '#preview',
+              description: '15 slides sobre pesquisa em IA',
+            },
+            progress: 100,
+            startedAt: new Date(Date.now() - 3580000).toISOString(),
+            completedAt: new Date(Date.now() - 3300000).toISOString(),
+          },
+        ],
+      },
+    ],
+    status: 'completed' as const,
+    createdAt: new Date(Date.now() - 3600000).toISOString(),
+    updatedAt: new Date(Date.now() - 3300000).toISOString(),
+  },
+];
+
 const mockConversations = [
   {
     id: '1',
@@ -94,7 +361,8 @@ const mockConversations = [
       },
       {
         id: '2',
-        content: 'Para implementar autenticação JWT em React, você pode seguir estes passos:\n\n1. Instalar dependências necessárias\n2. Configurar Axios interceptors\n3. Criar hooks personalizados\n4. Implementar guards de rota',
+        content:
+          'Para implementar autenticação JWT em React, você pode seguir estes passos:\n\n1. Instalar dependências necessárias\n2. Configurar Axios interceptors\n3. Criar hooks personalizados\n4. Implementar guards de rota',
         role: 'assistant' as const,
         timestamp: '2024-01-01T10:00:30Z',
         conversationId: '1',
@@ -255,7 +523,7 @@ const mockLLMProviders = [
 ];
 
 // Helper functions
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
@@ -269,23 +537,38 @@ export function createMockServer() {
       // Configure for test/development environment - no namespace to intercept all calls
       this.timing = 400; // Add some realistic delay
 
-      console.log('🎭 Mirage server configuring routes...');
-
       // Auth endpoints - simple direct approach
       this.post('/auth/login', async (schema, request) => {
-        console.log('🎯 Mirage intercepted login request:', request.requestBody);
         await delay(800); // Simulate network delay
         const attrs = JSON.parse(request.requestBody);
 
         // Support demo users
         const demoUsers = [
-          { email: 'ricardo@cognit.com', password: 'demo-sso-token', user: mockUsers[0] },
-          { email: 'ana@cognit.com', password: 'demo-sso-token', user: mockUsers[1] },
-          { email: 'carlos@cognit.com', password: 'demo-sso-token', user: mockUsers[2] },
-          { email: 'joao@example.com', password: 'password', user: mockUsers[3] } // Legacy support
+          {
+            email: 'ricardo@cognit.com',
+            password: 'demo-sso-token',
+            user: mockUsers[0],
+          },
+          {
+            email: 'ana@cognit.com',
+            password: 'demo-sso-token',
+            user: mockUsers[1],
+          },
+          {
+            email: 'carlos@cognit.com',
+            password: 'demo-sso-token',
+            user: mockUsers[2],
+          },
+          {
+            email: 'joao@example.com',
+            password: 'password',
+            user: mockUsers[3],
+          }, // Legacy support
         ];
 
-        const validUser = demoUsers.find(u => u.email === attrs.email && u.password === attrs.password);
+        const validUser = demoUsers.find(
+          (u) => u.email === attrs.email && u.password === attrs.password
+        );
 
         if (validUser) {
           return {
@@ -299,14 +582,11 @@ export function createMockServer() {
         return new Response(400, {}, { message: 'Credenciais inválidas' });
       });
 
-      console.log('🎭 Mirage registered login route');
-
       // Google OAuth endpoint
       this.post('/auth/google', async (schema, request) => {
-        console.log('🎯 Mirage intercepted Google auth request:', request.requestBody);
         await delay(500);
         const attrs = JSON.parse(request.requestBody);
-        
+
         // For demo purposes, any Google token works
         if (attrs.token) {
           return {
@@ -316,12 +596,16 @@ export function createMockServer() {
             expiresIn: 3600,
           };
         }
-        
+
         return new Response(400, {}, { message: 'Invalid Google token' });
       });
       this.post('/auth/logout', async () => {
         await delay(300);
-        return new Response(200, {}, { message: 'Logout realizado com sucesso' });
+        return new Response(
+          200,
+          {},
+          { message: 'Logout realizado com sucesso' }
+        );
       });
 
       this.post('/auth/refresh', async () => {
@@ -349,28 +633,33 @@ export function createMockServer() {
         const { queryParams } = request;
         const limit = parseInt(queryParams.limit) || 50;
         const offset = parseInt(queryParams.offset) || 0;
-        
+
         return {
           conversations: mockConversations.slice(offset, offset + limit),
           total: mockConversations.length,
-          hasMore: (offset + limit) < mockConversations.length,
+          hasMore: offset + limit < mockConversations.length,
         };
       });
 
       this.get('/chat/conversations/:id', async (schema, request) => {
         await delay(400);
-        const conversation = mockConversations.find(c => c.id === request.params.id);
-        return conversation || new Response(404, {}, { message: 'Conversa não encontrada' });
+        const conversation = mockConversations.find(
+          (c) => c.id === request.params.id
+        );
+        return (
+          conversation ||
+          new Response(404, {}, { message: 'Conversa não encontrada' })
+        );
       });
 
       this.post('/chat/message', async (schema, request) => {
         await delay(1200); // Simulate AI processing time
-        
+
         const formData = request.requestBody as FormData;
         const content = formData.get('content') as string;
         const provider = formData.get('provider') as string;
         const model = formData.get('model') as string;
-        
+
         const newMessage = {
           id: generateId(),
           content: `Esta é uma resposta simulada para: "${content}"\n\nO mock server está funcionando corretamente com o provider ${provider} e modelo ${model}.`,
@@ -382,7 +671,7 @@ export function createMockServer() {
           tokens: { prompt: 50, completion: 100, total: 150 },
           cost: 0.0023,
         };
-        
+
         return newMessage;
       });
 
@@ -395,13 +684,13 @@ export function createMockServer() {
         await delay(300);
         const { queryParams } = request;
         const providerId = queryParams.provider;
-        
+
         if (providerId) {
-          const provider = mockLLMProviders.find(p => p.id === providerId);
+          const provider = mockLLMProviders.find((p) => p.id === providerId);
           return provider?.models || [];
         }
-        
-        return mockLLMProviders.flatMap(p => p.models);
+
+        return mockLLMProviders.flatMap((p) => p.models);
       });
 
       // Workspace endpoints
@@ -412,14 +701,19 @@ export function createMockServer() {
 
       this.get('/workspaces/:id', async (schema, request) => {
         await delay(400);
-        const workspace = mockWorkspaces.find(w => w.id === request.params.id);
-        return workspace || new Response(404, {}, { message: 'Workspace não encontrado' });
+        const workspace = mockWorkspaces.find(
+          (w) => w.id === request.params.id
+        );
+        return (
+          workspace ||
+          new Response(404, {}, { message: 'Workspace não encontrado' })
+        );
       });
 
       this.post('/workspaces', async (schema, request) => {
         await delay(800);
         const attrs = JSON.parse(request.requestBody);
-        
+
         const newWorkspace = {
           id: generateId(),
           name: attrs.name,
@@ -455,7 +749,7 @@ export function createMockServer() {
           projectCount: 0,
           documentCount: 0,
         };
-        
+
         return newWorkspace;
       });
 
@@ -464,18 +758,18 @@ export function createMockServer() {
         const { queryParams } = request;
         const limit = parseInt(queryParams.limit) || 20;
         const offset = parseInt(queryParams.offset) || 0;
-        
+
         return {
           projects: mockProjects.slice(offset, offset + limit),
           total: mockProjects.length,
-          hasMore: (offset + limit) < mockProjects.length,
+          hasMore: offset + limit < mockProjects.length,
         };
       });
 
       // File upload mock
       this.post('/chat/upload', async () => {
         await delay(2000); // Simulate file upload time
-        
+
         return {
           id: generateId(),
           name: 'documento-exemplo.pdf',
@@ -484,6 +778,228 @@ export function createMockServer() {
           url: 'https://example.com/files/documento-exemplo.pdf',
           thumbnailUrl: 'https://example.com/thumbnails/documento-exemplo.jpg',
         };
+      });
+
+      // AI Agents endpoints
+      this.get('/agents', async () => {
+        await delay(300);
+        return mockAgents;
+      });
+
+      this.get('/agents/:id', async (schema, request) => {
+        await delay(300);
+        const agent = mockAgents.find((a) => a.id === request.params.id);
+        return (
+          agent || new Response(404, {}, { message: 'Agent não encontrado' })
+        );
+      });
+
+      this.post('/agents/conversations', async (schema, request) => {
+        await delay(500);
+        const attrs = JSON.parse(request.requestBody);
+
+        const newConversation = {
+          id: generateId(),
+          agentId: attrs.agentId,
+          workspaceId: attrs.workspaceId,
+          title:
+            attrs.title ||
+            `Conversa com ${mockAgents.find((a) => a.id === attrs.agentId)?.name}`,
+          messages: [],
+          status: 'active' as const,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+
+        return newConversation;
+      });
+
+      this.post('/agents/conversations/:conversationId/messages', async () => {
+        await delay(800);
+
+        // Simulate agent response
+        const agentMessage = {
+          id: generateId(),
+          type: 'agent' as const,
+          content:
+            'Entendi sua solicitação. Vou processar os documentos e criar o resultado que você precisa. Isso pode levar alguns minutos.',
+          timestamp: new Date(Date.now() + 1000).toISOString(),
+          agentId: 'presentation-expert',
+          actions: [
+            {
+              id: generateId(),
+              type: 'file_creation' as const,
+              title: 'Criando apresentação...',
+              description:
+                'Analisando documentos e criando slides profissionais',
+              status: 'processing' as const,
+              progress: 0,
+              startedAt: new Date().toISOString(),
+            },
+          ],
+        };
+
+        return {
+          message: agentMessage,
+          actions: agentMessage.actions,
+        };
+      });
+
+      this.post('/agents/tasks', async (schema, request) => {
+        await delay(600);
+        const attrs = JSON.parse(request.requestBody);
+
+        const newTask = {
+          id: generateId(),
+          agentId: attrs.agentId,
+          workspaceId: attrs.workspaceId,
+          title:
+            attrs.prompt.substring(0, 50) +
+            (attrs.prompt.length > 50 ? '...' : ''),
+          description: attrs.prompt,
+          status: 'processing' as const,
+          priority: attrs.priority || ('medium' as const),
+          input: {
+            prompt: attrs.prompt,
+            documentIds: attrs.documentIds || [],
+            parameters: attrs.parameters || {},
+          },
+          progress: 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        };
+
+        return newTask;
+      });
+
+      this.get('/agents/tasks/:taskId', async (schema, request) => {
+        await delay(300);
+
+        // Simulate task progression
+        const mockTask = {
+          id: request.params.taskId,
+          agentId: 'presentation-expert',
+          workspaceId: 'ws-1',
+          title: 'Apresentação sobre IA',
+          description:
+            'Criar uma apresentação profissional sobre inteligência artificial',
+          status: 'completed' as const,
+          priority: 'medium' as const,
+          input: {
+            prompt:
+              'Criar uma apresentação profissional sobre inteligência artificial',
+            documentIds: ['doc-1', 'doc-2'],
+            parameters: {},
+          },
+          output: {
+            files: [
+              {
+                id: generateId(),
+                name: 'Apresentacao_IA.pptx',
+                type: 'presentation' as const,
+                format: 'pptx',
+                size: 2048576,
+                downloadUrl: '#download',
+                previewUrl: '#preview',
+                description:
+                  'Apresentação de 15 slides sobre IA com gráficos e insights',
+              },
+            ],
+            summary:
+              'Apresentação criada com sucesso contendo 15 slides sobre inteligência artificial, incluindo conceitos básicos, aplicações e tendências futuras.',
+            insights: [
+              'Identificadas 3 principais tendências em IA para 2024',
+              'Análise de 12 casos de uso práticos',
+              'Gráficos de crescimento do mercado incluídos',
+            ],
+          },
+          progress: 100,
+          createdAt: new Date(Date.now() - 300000).toISOString(),
+          updatedAt: new Date().toISOString(),
+          completedAt: new Date().toISOString(),
+        };
+
+        return mockTask;
+      });
+
+      this.get('/agents/tasks', async (schema, request) => {
+        await delay(400);
+        const { queryParams } = request;
+        const limit = parseInt(queryParams.limit) || 10;
+        const offset = parseInt(queryParams.offset) || 0;
+
+        return {
+          tasks: mockAgentTasks.slice(offset, offset + limit),
+          usage: {
+            totalTasks: mockAgentTasks.length,
+            completedTasks: mockAgentTasks.filter(
+              (t) => t.status === 'completed'
+            ).length,
+            failedTasks: mockAgentTasks.filter((t) => t.status === 'failed')
+              .length,
+            totalFileSize: 15728640, // 15MB
+          },
+          pagination: {
+            total: mockAgentTasks.length,
+            page: Math.floor(offset / limit) + 1,
+            limit,
+            hasMore: offset + limit < mockAgentTasks.length,
+          },
+        };
+      });
+
+      this.get('/agents/conversations', async (schema, request) => {
+        await delay(400);
+        const { queryParams } = request;
+        const limit = parseInt(queryParams.limit) || 10;
+        const offset = parseInt(queryParams.offset) || 0;
+
+        return mockAgentConversations.slice(offset, offset + limit);
+      });
+
+      this.get('/agents/usage/:workspaceId', async () => {
+        await delay(300);
+
+        return {
+          totalTasks: 45,
+          completedTasks: 38,
+          failedTasks: 2,
+          totalFileSize: 52428800, // 50MB
+          agentUsage: [
+            {
+              agentId: 'presentation-expert',
+              agentName: 'Presentation Expert',
+              totalRequests: 15,
+              successRate: 93.3,
+              avgResponseTime: 45000,
+            },
+            {
+              agentId: 'document-analyst',
+              agentName: 'Document Analyst',
+              totalRequests: 12,
+              successRate: 100,
+              avgResponseTime: 32000,
+            },
+            {
+              agentId: 'data-scientist',
+              agentName: 'Data Scientist',
+              totalRequests: 8,
+              successRate: 87.5,
+              avgResponseTime: 67000,
+            },
+          ],
+          timeRange: {
+            start: new Date(
+              Date.now() - 30 * 24 * 60 * 60 * 1000
+            ).toISOString(),
+            end: new Date().toISOString(),
+          },
+        };
+      });
+
+      this.post('/agents/feedback', async () => {
+        await delay(200);
+        return { success: true };
       });
 
       // Fallback for unmatched requests - temporarily disabled for debugging
@@ -499,9 +1015,8 @@ export function createMockServer() {
 
 // Utility function to check if mock server should be enabled
 export const shouldUseMockServer = (): boolean => {
-  const result = import.meta.env.DEV &&
-         import.meta.env.VITE_USE_MOCK_SERVER === 'true';
-  console.log('🔧 shouldUseMockServer:', result, 'DEV:', import.meta.env.DEV, 'VITE_USE_MOCK_SERVER:', import.meta.env.VITE_USE_MOCK_SERVER);
+  const result =
+    import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_SERVER === 'true';
   return result;
 };
 

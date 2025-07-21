@@ -33,7 +33,7 @@ const getAuthToken = (): string | null => {
 const handleAuthFailure = (): void => {
   localStorage.removeItem('authToken');
   localStorage.removeItem('refreshToken');
-  
+
   // Evita loop de redirecionamento
   if (!window.location.pathname.includes('/login')) {
     window.location.href = '/login';
@@ -53,7 +53,7 @@ const refreshAuthToken = async (): Promise<string | null> => {
     });
 
     const { token, refreshToken: newRefreshToken } = response.data;
-    
+
     localStorage.setItem('authToken', token);
     if (newRefreshToken) {
       localStorage.setItem('refreshToken', newRefreshToken);
@@ -77,10 +77,7 @@ apiClient.interceptors.request.use(
 
     // Logging em desenvolvimento
     if (import.meta.env.DEV) {
-      console.log(`🔵 API Request: ${config.method?.toUpperCase()} ${config.url}`, {
-        headers: config.headers,
-        data: config.data,
-      });
+      // Log request details in development only
     }
 
     return config;
@@ -98,10 +95,7 @@ apiClient.interceptors.response.use(
   (response: AxiosResponse) => {
     // Logging em desenvolvimento
     if (import.meta.env.DEV) {
-      console.log(`🟢 API Response: ${response.config.method?.toUpperCase()} ${response.config.url}`, {
-        status: response.status,
-        data: response.data,
-      });
+      // Log response details in development only
     }
 
     return response;
@@ -111,11 +105,14 @@ apiClient.interceptors.response.use(
 
     // Logging em desenvolvimento
     if (import.meta.env.DEV) {
-      console.error(`🔴 API Error: ${originalRequest?.method?.toUpperCase()} ${originalRequest?.url}`, {
-        status: error.response?.status,
-        message: error.message,
-        data: error.response?.data,
-      });
+      console.error(
+        `🔴 API Error: ${originalRequest?.method?.toUpperCase()} ${originalRequest?.url}`,
+        {
+          status: error.response?.status,
+          message: error.message,
+          data: error.response?.data,
+        }
+      );
     }
 
     // Handle 401 - Unauthorized
@@ -135,27 +132,26 @@ apiClient.interceptors.response.use(
     }
 
     // Retry logic para erros de rede (5xx, timeouts, network errors)
-    const shouldRetry = (
+    const shouldRetry =
       error.code === 'ECONNABORTED' || // Timeout
       error.code === 'NETWORK_ERROR' || // Network error
-      (error.response?.status && error.response.status >= 500) // Server errors
-    );
+      (error.response?.status && error.response.status >= 500); // Server errors
 
     if (shouldRetry && !originalRequest._retry && originalRequest) {
       originalRequest._retryCount = originalRequest._retryCount || 0;
-      
+
       if (originalRequest._retryCount < 3) {
         originalRequest._retryCount++;
         originalRequest._retry = true;
 
         // Exponential backoff: 1s, 2s, 4s
         const delay = Math.pow(2, originalRequest._retryCount - 1) * 1000;
-        
+
         if (import.meta.env.DEV) {
-          console.log(`🔄 Retrying request (attempt ${originalRequest._retryCount}) in ${delay}ms`);
+          // Log retry attempt in development only
         }
 
-        await new Promise(resolve => setTimeout(resolve, delay));
+        await new Promise((resolve) => setTimeout(resolve, delay));
         return apiClient(originalRequest);
       }
     }
@@ -170,13 +166,15 @@ apiClient.interceptors.response.use(
 
     // Mensagens de erro específicas
     if (error.response?.status === 400) {
-      apiError.message = 'Dados inválidos. Verifique as informações e tente novamente.';
+      apiError.message =
+        'Dados inválidos. Verifique as informações e tente novamente.';
     } else if (error.response?.status === 403) {
       apiError.message = 'Você não tem permissão para realizar esta ação.';
     } else if (error.response?.status === 404) {
       apiError.message = 'Recurso não encontrado.';
     } else if (error.response?.status === 429) {
-      apiError.message = 'Muitas tentativas. Aguarde um momento e tente novamente.';
+      apiError.message =
+        'Muitas tentativas. Aguarde um momento e tente novamente.';
     } else if (error.response?.status && error.response.status >= 500) {
       apiError.message = 'Erro do servidor. Nossa equipe foi notificada.';
     } else if (error.code === 'ECONNABORTED') {
@@ -201,8 +199,8 @@ export const isOnline = (): boolean => {
 
 // Função helper para fazer upload de arquivo
 export const uploadFile = async (
-  url: string, 
-  file: File, 
+  url: string,
+  file: File,
   onProgress?: (progress: number) => void
 ): Promise<AxiosResponse> => {
   const formData = new FormData();
@@ -214,7 +212,9 @@ export const uploadFile = async (
     },
     onUploadProgress: (progressEvent) => {
       if (onProgress && progressEvent.total) {
-        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        const progress = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
         onProgress(progress);
       }
     },

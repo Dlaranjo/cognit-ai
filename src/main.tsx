@@ -10,7 +10,6 @@ import './index.css';
 // Initialize mock server if in development mode
 if (shouldUseMockServer()) {
   createMockServer();
-  console.log('🎭 Mock server started for development');
 }
 
 createRoot(document.getElementById('root')!).render(
