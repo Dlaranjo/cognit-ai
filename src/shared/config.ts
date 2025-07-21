@@ -12,8 +12,12 @@ interface Config {
   LLM_PROVIDERS: LLMProvider[];
 }
 
-// Force empty base URL in development to use Mirage mock server
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || '';
+// In development with mock server, use empty base URL to allow Mirage to intercept
+const shouldUseMockServer =
+  import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_SERVER === 'true';
+const apiBaseUrl = shouldUseMockServer
+  ? ''
+  : import.meta.env.VITE_API_BASE_URL || '';
 
 export const config: Config = {
   API_BASE_URL: apiBaseUrl,

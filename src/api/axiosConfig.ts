@@ -26,12 +26,12 @@ const apiClient = axios.create({
 
 // Função para obter token do localStorage
 const getAuthToken = (): string | null => {
-  return localStorage.getItem('authToken');
+  return localStorage.getItem('token');
 };
 
 // Função para remover token e redirecionar
 const handleAuthFailure = (): void => {
-  localStorage.removeItem('authToken');
+  localStorage.removeItem('token');
   localStorage.removeItem('refreshToken');
 
   // Evita loop de redirecionamento
@@ -54,7 +54,7 @@ const refreshAuthToken = async (): Promise<string | null> => {
 
     const { token, refreshToken: newRefreshToken } = response.data;
 
-    localStorage.setItem('authToken', token);
+    localStorage.setItem('token', token);
     if (newRefreshToken) {
       localStorage.setItem('refreshToken', newRefreshToken);
     }

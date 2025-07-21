@@ -534,7 +534,8 @@ export function createMockServer() {
 
   return createServer({
     routes() {
-      // Configure for test/development environment - no namespace to intercept all calls
+      // Configure namespace to match API base URL
+      this.namespace = '';
       this.timing = 400; // Add some realistic delay
 
       // Auth endpoints - simple direct approach

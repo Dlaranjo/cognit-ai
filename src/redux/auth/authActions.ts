@@ -28,7 +28,7 @@ export const googleAuth = createAsyncThunk<
   { rejectValue: string }
 >('auth/googleAuth', async (googleToken, { rejectWithValue }) => {
   try {
-    const response = await authApi.googleAuth(googleToken);
+    const response = await authApi.googleAuth({ token: googleToken });
     localStorage.setItem('token', response.token);
     localStorage.setItem('refreshToken', response.refreshToken);
     return response;

@@ -1,33 +1,29 @@
-import React, { useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
 import { LoginTemplate } from '../components/templates/LoginTemplate';
 import { useAuth } from '../hooks/useAuth';
 
 export const AuthPage: React.FC = () => {
-  const { login, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // Redirect after successful authentication
-  useEffect(() => {
-    if (isAuthenticated) {
-      // Use the intended destination or default to /studio
-      const from =
-        (location.state as { from?: Location })?.from?.pathname || '/studio';
-      navigate(from, { replace: true });
-    }
-  }, [isAuthenticated, navigate, location.state]);
+  const { login, loginWithGoogle } = useAuth();
 
   const handleLogin = async (email: string, password: string) => {
     try {
-      // For demo purposes, create mock credentials
       const credentials = { email, password };
       await login(credentials);
-      // Navigation will be handled by useEffect above
     } catch (error) {
       console.error('🔐 AuthPage - Login failed:', error);
     }
   };
 
-  return <LoginTemplate onLogin={handleLogin} />;
+  const handleGoogleLogin = async () => {
+    try {
+      // Para demo, simular token do Google
+      await loginWithGoogle('demo-google-token');
+    } catch (error) {
+      console.error('🔐 AuthPage - Google login failed:', error);
+    }
+  };
+
+  return (
+    <LoginTemplate onLogin={handleLogin} onGoogleLogin={handleGoogleLogin} />
+  );
 };

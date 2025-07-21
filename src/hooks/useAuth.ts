@@ -1,11 +1,12 @@
 import { useCallback } from 'react';
+import { useNavigate, useLocation, type Location } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/store';
 import {
   loginUser,
   googleAuth,
   refreshToken,
   validateToken,
-  logoutUser
+  logoutUser,
 } from '../redux/auth/authActions';
 import { clearError } from '../redux/auth/authReducer';
 import {
@@ -20,6 +21,8 @@ import type { LoginCredentials } from '../api/authApi';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // Selectors
   const user = useAppSelector(selectUser);
@@ -30,13 +33,29 @@ export const useAuth = () => {
   const userRole = useAppSelector(selectUserRole);
 
   // Actions
-  const login = useCallback((credentials: LoginCredentials) => {
-    return dispatch(loginUser(credentials));
-  }, [dispatch]);
+  const login = useCallback(
+    async (credentials: LoginCredentials) => {
+      const result = await dispatch(loginUser(credentials)).unwrap();
+      // Redirecionar após login bem-sucedido
+      const from =
+        (location.state as { from?: Location })?.from?.pathname || '/studio';
+      navigate(from, { replace: true });
+      return result;
+    },
+    [dispatch, navigate, location.state]
+  );
 
-  const loginWithGoogle = useCallback((googleToken: string) => {
-    return dispatch(googleAuth(googleToken));
-  }, [dispatch]);
+  const loginWithGoogle = useCallback(
+    async (googleToken: string) => {
+      const result = await dispatch(googleAuth(googleToken)).unwrap();
+      // Redirecionar após login bem-sucedido
+      const from =
+        (location.state as { from?: Location })?.from?.pathname || '/studio';
+      navigate(from, { replace: true });
+      return result;
+    },
+    [dispatch, navigate, location.state]
+  );
 
   const logout = useCallback(() => {
     dispatch(logoutUser());
@@ -55,20 +74,27 @@ export const useAuth = () => {
   }, [dispatch]);
 
   // Permission system
-  const hasPermission = useCallback((action: string, workspacePermission?: 'owner' | 'editor' | 'viewer') => {
-    switch (action) {
-      case 'CREATE_WORKSPACE':
-        return userRole === 'admin';
-      case 'CREATE_PROJECT':
-        return workspacePermission === 'owner';
-      case 'ADD_DOCUMENT':
-        return workspacePermission === 'owner' || workspacePermission === 'editor';
-      case 'VIEW_PROJECTS':
-        return workspacePermission === 'owner' || workspacePermission === 'editor';
-      default:
-        return false;
-    }
-  }, [userRole]);
+  const hasPermission = useCallback(
+    (action: string, workspacePermission?: 'owner' | 'editor' | 'viewer') => {
+      switch (action) {
+        case 'CREATE_WORKSPACE':
+          return userRole === 'admin';
+        case 'CREATE_PROJECT':
+          return workspacePermission === 'owner';
+        case 'ADD_DOCUMENT':
+          return (
+            workspacePermission === 'owner' || workspacePermission === 'editor'
+          );
+        case 'VIEW_PROJECTS':
+          return (
+            workspacePermission === 'owner' || workspacePermission === 'editor'
+          );
+        default:
+          return false;
+      }
+    },
+    [userRole]
+  );
 
   // Computed values
   const isAdmin = userRole === 'admin';
