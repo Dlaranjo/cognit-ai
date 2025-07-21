@@ -528,9 +528,10 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export function createMockServer() {
-  if (import.meta.env.PROD) {
-    return; // Don't create mock server in production
-  }
+  // Allow mock server in production for demo/testing purposes
+  // if (import.meta.env.PROD) {
+  //   return; // Don't create mock server in production
+  // }
 
   return createServer({
     routes() {
@@ -1134,9 +1135,11 @@ Esta é uma simulação completa do comportamento esperado do sistema de chat co
 
 // Utility function to check if mock server should be enabled
 export const shouldUseMockServer = (): boolean => {
-  const result =
-    import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_SERVER === 'true';
-  return result;
+  // For production demo, always enable mock server
+  return true;
+  // const result =
+  //   import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_SERVER === 'true';
+  // return result;
 };
 
 export default createMockServer;
