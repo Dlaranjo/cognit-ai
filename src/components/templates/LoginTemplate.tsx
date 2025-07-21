@@ -79,43 +79,36 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
       <div className="w-full max-w-lg relative z-10">
         {/* Logo */}
         <div className="text-center mb-10">
-          <div className="inline-block mb-6 transform hover:scale-105 transition-all duration-500 hover:rotate-1">
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl blur-xl opacity-20 animate-pulse"></div>
-              <div className="relative bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-2xl border border-white/30">
-                <div className="w-16 h-16 mx-auto bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg">
-                  <svg
-                    width="32"
-                    height="19"
-                    viewBox="0 0 474 175"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="text-white"
-                  >
-                    <g transform="translate(-131 -563)">
-                      <g>
-                        <g>
-                          <text
-                            fill="white"
-                            fontFamily="Sundry,Sundry_MSFontService,sans-serif"
-                            fontWeight="400"
-                            fontSize="96"
-                            transform="matrix(0.999702 0 0 0.994943 140.089 687)"
-                          >
-                            Cognit
-                          </text>
-                          <path
-                            d="M503.45 629.884 503.832 629.884 511.558 655.829 495.724 655.829ZM545.737 617.102 545.737 683.872 561 683.872 561 617.102ZM494.007 617.102 471.21 683.872 487.426 683.872 491.718 669.565 515.565 669.565 519.857 683.872 536.072 683.872 513.275 617.102ZM452.699 579.057 586.021 579.057 586.021 712.379 452.699 712.379Z"
-                            fill="white"
-                            fillRule="evenodd"
-                            transform="matrix(1.00478 0 0 1 -0.124693 3.84206)"
-                          />
-                        </g>
-                      </g>
-                    </g>
-                  </svg>
-                </div>
-              </div>
-            </div>
+          <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-xl">
+            <svg
+              width="32"
+              height="19"
+              viewBox="0 0 474 175"
+              xmlns="http://www.w3.org/2000/svg"
+              className="text-white"
+            >
+              <g transform="translate(-131 -563)">
+                <g>
+                  <g>
+                    <text
+                      fill="white"
+                      fontFamily="Sundry,Sundry_MSFontService,sans-serif"
+                      fontWeight="400"
+                      fontSize="96"
+                      transform="matrix(0.999702 0 0 0.994943 140.089 687)"
+                    >
+                      Cognit
+                    </text>
+                    <path
+                      d="M503.45 629.884 503.832 629.884 511.558 655.829 495.724 655.829ZM545.737 617.102 545.737 683.872 561 683.872 561 617.102ZM494.007 617.102 471.21 683.872 487.426 683.872 491.718 669.565 515.565 669.565 519.857 683.872 536.072 683.872 513.275 617.102ZM452.699 579.057 586.021 579.057 586.021 712.379 452.699 712.379Z"
+                      fill="white"
+                      fillRule="evenodd"
+                      transform="matrix(1.00478 0 0 1 -0.124693 3.84206)"
+                    />
+                  </g>
+                </g>
+              </g>
+            </svg>
           </div>
           
           <div className="space-y-2">
