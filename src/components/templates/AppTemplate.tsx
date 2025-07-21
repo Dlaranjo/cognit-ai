@@ -46,7 +46,7 @@ export const AppTemplate: React.FC = () => {
   }
 
   return (
-    <div className="h-screen flex bg-gray-50">
+    <div className="h-screen flex bg-white">
       <Sidebar
         currentUser={user}
         currentView={currentView}

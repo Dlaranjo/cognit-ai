@@ -86,20 +86,19 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
           </div>
 
           {/* Message Bubble */}
-          <Card
-            variant={isUser ? 'outlined' : 'outlined'}
-            padding="none"
-            background={false}
+          <div
             className={`
-              inline-block max-w-full text-sm whitespace-pre-wrap px-3 py-2
-              ${isUser ? 'bg-orange-500 text-white border-orange-500 border' : 'bg-gray-100/80 text-gray-900 border-gray-200/50 border'}
+              rounded-lg transition-all duration-200
+              inline-block max-w-full text-sm whitespace-pre-wrap
+              px-3 py-2
+              ${isUser ? 'bg-orange-500 text-white border-2 border-orange-500' : 'bg-gray-100 text-gray-900 border-2 border-gray-200'}
             `}
           >
             {content}
             {isStreaming && (
               <span className="inline-block w-2 h-4 ml-1 bg-current animate-pulse" />
             )}
-          </Card>
+          </div>
 
           {/* Actions */}
           {!isUser && !isStreaming && (
