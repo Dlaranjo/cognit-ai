@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Button, Badge, Card, Icon } from '../atoms';
+import { Avatar, Button, Badge, Icon } from '../atoms';
 
 export interface MessageBubbleProps {
   content: string;
