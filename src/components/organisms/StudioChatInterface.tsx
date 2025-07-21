@@ -24,6 +24,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     sendQuickMessage,
     regenerateLastMessage,
     changeModel,
+    addNewMessage,
   } = useChat();
 
   const { isStreaming, startStreaming } = useStreaming();
@@ -67,32 +68,53 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     const messageContent = message.trim();
     const files = [...selectedFiles];
 
+    // Clear input immediately
     setMessage('');
     setSelectedFiles([]);
 
-    if (files.length > 0) {
-      await sendQuickMessage(
-        messageContent || `[${files.length} arquivo${files.length > 1 ? 's' : ''} enviado${files.length > 1 ? 's' : ''}]`
-      );
-    } else {
-      await sendQuickMessage(messageContent);
-    }
+    // Add user message immediately to show it in the UI
+    const userMessage: Message = {
+      id: `user-${Date.now()}`,
+      content: messageContent,
+      role: 'user',
+      timestamp: new Date().toISOString(),
+      conversationId: currentConversation?.id || 'temp',
+    };
+
+    addNewMessage(userMessage);
 
     try {
+      // Start streaming the response (this will handle both sending and receiving)
       await startStreaming(
-        messageContent || `Analyze these ${files.length} file${files.length > 1 ? 's' : ''}`,
+        messageContent,
         {
           model: selectedModel.id,
           provider: selectedModel.provider.toLowerCase(),
-          onStart: () => {},
-          onComplete: () => {},
-          onError: (error) => {
+          onStart: () => {
+            console.log('Streaming started');
+          },
+          onComplete: () => {
+            console.log('Streaming completed');
+          },
+          onError: async (error) => {
             console.error('Streaming error:', error);
+            // If streaming fails, fall back to regular message sending
+            try {
+              await sendQuickMessage(messageContent, files);
+            } catch (fallbackError) {
+              console.error('Fallback message sending failed:', fallbackError);
+            }
           },
         }
       );
     } catch (error) {
-      console.error('Failed to start streaming:', error);
+      console.error('Failed to send message:', error);
+      // If streaming fails completely, fall back to regular message sending
+      try {
+        await sendQuickMessage(messageContent, files);
+      } catch (fallbackError) {
+        console.error('Fallback message sending also failed:', fallbackError);
+      }
     }
   };
 
@@ -145,13 +167,15 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     adjustTextareaHeight();
   }, [message]);
 
+  const hasMessages = messages && Array.isArray(messages) && messages.length > 0;
+
   return (
-    <div className={`flex-1 flex flex-col ${className}`}>
+    <div className={`h-full flex flex-col ${className}`}>
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto">
-        {currentConversation && messages && (messages as Message[]).length > 0 ? (
+      <div className={`flex-1 overflow-y-auto ${hasMessages ? 'pb-6' : ''}`}>
+        {hasMessages ? (
           <div className="max-w-4xl mx-auto px-6 py-8 space-y-8">
-            {(messages as Message[]).map((message: Message, index: number) => (
+            {messages.map((message: Message, index: number) => (
               <MessageBubble
                 key={message.id}
                 content={message.content}
@@ -163,7 +187,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                 onDislike={handleDislikeMessage}
                 onRegenerate={
                   message.role === 'assistant' &&
-                  index === (messages as Message[]).length - 1 &&
+                  index === messages.length - 1 &&
                   !isLoading &&
                   !isStreaming
                     ? handleRegenerateResponse
@@ -182,7 +206,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                     {streamingMessage ? (
                       <div className="prose max-w-none">
                         <div className="text-gray-900 whitespace-pre-wrap">
-                          {streamingMessage}
+                          {String(streamingMessage || '')}
                           <span className="inline-block w-2 h-5 bg-orange-500 ml-1 animate-pulse"></span>
                         </div>
                       </div>
@@ -232,7 +256,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-gray-100 px-6 py-6 bg-white">
+      <div className={`${hasMessages ? 'sticky bottom-0 z-10' : ''} border-t border-gray-100 px-6 py-6 bg-white shadow-lg`}>
         <div className="max-w-4xl mx-auto">
           {/* File Attachments */}
           {selectedFiles.length > 0 && (
@@ -279,7 +303,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                 {/* File Upload */}
                 <button
                   onClick={handleFileSelect}
-                  disabled={isLoading || isStreaming}
+                  disabled={Boolean(isLoading || isStreaming)}
                   className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-100 rounded-lg transition-colors disabled:opacity-50"
                   title="Anexar arquivo"
                 >
@@ -289,11 +313,11 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                 {/* Send Button */}
                 <button
                   onClick={sendMessage}
-                  disabled={
+                  disabled={Boolean(
                     (!message.trim() && selectedFiles.length === 0) ||
                     isLoading ||
                     isStreaming
-                  }
+                  )}
                   className="bg-orange-600 text-white p-2 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   <Send className="w-5 h-5" />

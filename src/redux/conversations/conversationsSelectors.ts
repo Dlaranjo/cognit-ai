@@ -7,7 +7,7 @@ export const selectConversationsState = (state: RootState) => state.conversation
 // Memoized selectors
 export const selectConversations = createSelector(
   [selectConversationsState],
-  (conversations) => conversations.conversations
+  (conversations) => Array.isArray(conversations.conversations) ? conversations.conversations : []
 );
 
 export const selectFavoriteConversations = createSelector(

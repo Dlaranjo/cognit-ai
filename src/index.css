@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Prevent horizontal scrollbars */
+html, body {
+  overflow-x: hidden;
+}
+
+/* Ensure root container takes full height */
+#root {
+  height: 100vh;
+  overflow-x: hidden;
+}

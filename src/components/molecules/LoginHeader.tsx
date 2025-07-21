@@ -10,7 +10,7 @@ export const LoginHeader: React.FC<LoginHeaderProps> = ({ className = '' }) => {
     <div className={`text-center mb-12 ${className}`}>
       {/* Main Logo */}
       <div className="flex items-center justify-center space-x-4 mb-6">
-        <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 tracking-tight">
+        <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600 tracking-tight leading-tight py-2">
           Cognit
         </h1>
         <div className="bg-gradient-to-r from-orange-500 to-red-600 text-white px-4 py-2 rounded-xl font-bold text-xl shadow-lg">
@@ -19,9 +19,9 @@ export const LoginHeader: React.FC<LoginHeaderProps> = ({ className = '' }) => {
       </div>
 
       {/* Subtitle */}
-      <p className="text-xl text-gray-700 font-medium mb-2">
+      {/* <p className="text-xl text-gray-700 font-medium mb-2">
         Knowledge Base Platform
-      </p>
+      </p> */}
       
       {/* Feature Badges */}
       <div className="flex items-center justify-center space-x-2 mt-3">

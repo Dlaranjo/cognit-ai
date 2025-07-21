@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StudioHeader } from '../organisms/StudioHeader';
 import { StudioChatInterface } from '../organisms/StudioChatInterface';
 import { StudioHistoryModal } from '../organisms/StudioHistoryModal';
@@ -15,12 +15,17 @@ export const StudioTemplate: React.FC = () => {
     setConversation,
   } = useChat();
 
-  const { conversations, removeConversation } = useConversations();
+  const { conversations, removeConversation, loadConversations } = useConversations();
 
   // Local UI state
   const availableModels = createAvailableModels();
   const [selectedModel] = useState<LLMModel>(availableModels[0]);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+
+  // Load conversations on component mount
+  useEffect(() => {
+    loadConversations();
+  }, [loadConversations]);
 
   const createNewConversation = () => {
     startNewConversation();
@@ -43,14 +48,18 @@ export const StudioTemplate: React.FC = () => {
 
   return (
     <div className="h-full flex flex-col bg-white">
-      {/* Header */}
-      <StudioHeader
-        onNewConversation={createNewConversation}
-        onShowHistory={() => setShowHistoryModal(true)}
-      />
+      {/* Fixed Header within the studio area */}
+      <div className="sticky top-0 z-40 bg-white border-b border-gray-100">
+        <StudioHeader
+          onNewConversation={createNewConversation}
+          onShowHistory={() => setShowHistoryModal(true)}
+        />
+      </div>
 
       {/* Main Chat Interface */}
-      <StudioChatInterface />
+      <div className="flex-1">
+        <StudioChatInterface />
+      </div>
 
       {/* History Modal */}
       <StudioHistoryModal

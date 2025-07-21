@@ -663,7 +663,7 @@ export function createMockServer() {
 
         const newMessage = {
           id: generateId(),
-          content: `Esta é uma resposta simulada para: "${content}"\n\nO mock server está funcionando corretamente com o provider ${provider} e modelo ${model}.`,
+          content: `Esta é uma resposta simulada para: "${content}"\nO mock server está funcionando corretamente com o provider ${provider} e modelo ${model}.\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu sapien non diam faucibus elementum. Donec purus felis, gravida volutpat nibh vel, suscipit sodales sapien. Nam id diam a leo sollicitudin egestas eget quis ex. Curabitur egestas turpis et sollicitudin placerat. Nulla accumsan sapien vel justo mollis, vel pellentesque sapien ultricies. In posuere urna metus, nec egestas nulla ornare vitae. Praesent vel sollicitudin sem.`,
           role: 'assistant' as const,
           timestamp: new Date().toISOString(),
           conversationId: '1',
@@ -692,6 +692,75 @@ export function createMockServer() {
         }
 
         return mockLLMProviders.flatMap((p) => p.models);
+      });
+
+      // Chat streaming endpoint
+      this.post('/api/chat/stream', async (schema, request) => {
+        console.log('🎯 Mock streaming endpoint called');
+
+        const attrs = JSON.parse(request.requestBody);
+        const userMessage = attrs.message;
+        const provider = attrs.provider || 'openai';
+        const model = attrs.model || 'gpt-4-turbo';
+
+        console.log('📝 Streaming request:', { userMessage, provider, model });
+
+        // Simulate streaming response with a longer text for better typing effect
+        const longResponse = `Esta é uma resposta simulada para: "${userMessage}"
+
+O mock server está funcionando corretamente com o provider ${provider} e modelo ${model}.
+
+Vou simular uma resposta mais longa para demonstrar melhor o efeito de digitação que você implementou. Esta resposta incluirá múltiplos parágrafos e informações detalhadas para que possamos ver o efeito de streaming em ação.
+
+**Características do Sistema de Streaming:**
+
+1. **Processamento em Tempo Real**: O sistema processa e exibe as mensagens conforme elas chegam do servidor, criando uma experiência mais fluida e natural.
+
+2. **Controle de Fluxo**: O usuário pode interromper a geração da resposta a qualquer momento usando o botão de parar.
+
+3. **Feedback Visual**: Durante o processo de streaming, há indicadores visuais que mostram que a IA está "digitando" a resposta.
+
+4. **Gerenciamento de Estado**: O Redux está sendo usado para gerenciar o estado das mensagens em streaming de forma eficiente.
+
+**Implementação Técnica:**
+
+- O hook useStreaming gerencia todo o processo de comunicação com o servidor
+- As mensagens são processadas chunk por chunk usando TextDecoder
+- O AbortController permite cancelar requisições em andamento
+- O sistema suporta diferentes providers e modelos de IA
+
+**Vantagens do Streaming:**
+
+- Reduz a percepção de tempo de espera do usuário
+- Permite respostas mais longas sem bloqueio da interface
+- Melhora a experiência geral de interação com a IA
+- Possibilita feedback em tempo real sobre o progresso da geração
+
+Esta é uma simulação completa do comportamento esperado do sistema de chat com streaming. O texto está sendo "digitado" progressivamente para demonstrar o efeito visual desejado.`;
+
+        // Split response into smaller chunks for streaming simulation
+        const words = longResponse.split(' ');
+        const chunks = [];
+        
+        // Create chunks of 3-5 words each
+        for (let i = 0; i < words.length; i += Math.floor(Math.random() * 3) + 3) {
+          const chunk = words.slice(i, i + Math.floor(Math.random() * 3) + 3).join(' ');
+          if (chunk.trim()) {
+            chunks.push(chunk + ' ');
+          }
+        }
+
+        // Simple response for testing
+        const simpleResponse = `Esta é uma resposta simulada para: "${userMessage}". O mock server está funcionando corretamente com o provider ${provider} e modelo ${model}.`;
+
+        console.log('📤 Returning simple response:', simpleResponse);
+
+        // Return a simple object for Mirage.js (not a Response object)
+        return {
+          content: simpleResponse,
+          role: 'assistant',
+          timestamp: new Date().toISOString(),
+        };
       });
 
       // Workspace endpoints

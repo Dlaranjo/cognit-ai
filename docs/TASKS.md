@@ -1,4 +1,4 @@
-# TASKS - Análise de Funcionalidades Implementadas vs Cards Taiga
+# TASKS - Refatoração Crítica do Atomic Design
 
 > **📖 Referências Complementares**
 >
@@ -6,18 +6,324 @@
 > - `PRD.md`: Especificações funcionais e user stories
 > - `PLANNING.md`: Visão estratégica e arquitetura do sistema
 
-## 🎯 OBJETIVO
+## 🚨 SITUAÇÃO CRÍTICA
 
-Analisar as funcionalidades já implementadas no projeto Cognit AI Platform e mapear contra os cards do Taiga para identificar o que está desenvolvido e o que precisa ser implementado.
+**DESCOBERTA**: Auditoria revelou violações graves do Atomic Design. Componentes estão criando elementos UI específicos ao invés de compor atoms, violando completamente os princípios fundamentais.
 
-## 📊 STATUS DA ANÁLISE
+## 🎯 OBJETIVO DA REFATORAÇÃO
 
-### ✅ **ANÁLISE CONCLUÍDA**
+Implementar Atomic Design puro através de refatoração sistemática dos componentes que violam os princípios, garantindo que:
+- **Atoms**: Apenas elementos UI básicos, sem lógica de negócio
+- **Molecules**: Apenas composição de atoms, sem HTML hardcoded  
+- **Organisms**: Apenas lógica de negócio, sem elementos UI específicos
 
-**Data da Análise**: 21 de Julho de 2025
-**Resultado**: Mapeamento completo das funcionalidades implementadas vs cards Taiga
+## 📊 STATUS DA REFATORAÇÃO
 
-## � CARDS TAIGA - ANÁLISE DE IMPLEMENTAÇÃO
+### 🚨 **REFATORAÇÃO NECESSÁRIA - PRIORIDADE MÁXIMA**
+
+**Data da Auditoria**: 21 de Julho de 2025
+**Status**: Violações críticas identificadas - Refatoração obrigatória antes de continuar desenvolvimento
+
+## 🔧 TAREFAS PRIORITÁRIAS DE REFATORAÇÃO
+
+### 📋 **FASE 1: CRIAÇÃO DE ATOMS FALTANTES**
+
+#### ✅ **TAREFA 1.1: Criar Dropdown Atom**
+**Arquivo**: `src/components/atoms/Dropdown.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Descrição**: Criar atom básico de dropdown sem lógica específica
+
+```typescript
+// REQUERIDO: Interface básica
+interface DropdownProps {
+  trigger: React.ReactNode;
+  children: React.ReactNode;
+  isOpen?: boolean;
+  onToggle?: (isOpen: boolean) => void;
+  className?: string;
+}
+```
+
+**Acceptance Criteria:**
+- [ ] Apenas estrutura básica do dropdown
+- [ ] Sem lógica de negócio específica
+- [ ] Props genéricas e reutilizáveis
+- [ ] Funcionalidade de abrir/fechar
+- [ ] Posicionamento configurável
+- [ ] Tipagem TypeScript completa
+
+#### ✅ **TAREFA 1.2: Criar Card Atom**
+**Arquivo**: `src/components/atoms/Card.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Descrição**: Criar atom básico de card reutilizável
+
+```typescript
+interface CardProps {
+  children: React.ReactNode;
+  variant?: 'default' | 'outlined' | 'elevated';
+  padding?: 'none' | 'sm' | 'md' | 'lg';
+  className?: string;
+  onClick?: () => void;
+}
+```
+
+**Acceptance Criteria:**
+- [ ] Estrutura básica de card
+- [ ] Variantes visuais (outlined, elevated)
+- [ ] Configuração de padding
+- [ ] Hover states quando clicável
+- [ ] Totalmente reutilizável
+
+#### ✅ **TAREFA 1.3: Criar Textarea Atom**
+**Arquivo**: `src/components/atoms/Textarea.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Descrição**: Criar atom básico de textarea
+
+```typescript
+interface TextareaProps {
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  placeholder?: string;
+  disabled?: boolean;
+  rows?: number;
+  autoResize?: boolean;
+  className?: string;
+}
+```
+
+**Acceptance Criteria:**
+- [ ] Elemento textarea puro
+- [ ] Auto-resize opcional
+- [ ] Estados disabled/error
+- [ ] Sem lógica de negócio específica
+
+#### ✅ **TAREFA 1.4: Refatorar Input Atom**
+**Arquivo**: `src/components/atoms/Input.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Descrição**: Remover lógica de password toggle, manter apenas input básico
+
+**Mudanças Requeridas:**
+- [ ] Remover useState para showPassword
+- [ ] Remover botão de toggle (linhas 101-114)
+- [ ] Manter apenas input básico
+- [ ] Criar PasswordInput como molecule separado
+
+### 📋 **FASE 2: REFATORAÇÃO DE MOLECULES**
+
+#### ✅ **TAREFA 2.1: Refatorar ModelSelector**
+**Arquivo**: `src/components/molecules/ModelSelector.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Problema**: Hardcoded dropdown (linhas 72-169)
+
+**Refatoração Requerida:**
+```typescript
+// ✅ CORRETO - Apenas composição de atoms
+export const ModelSelector = ({ models, selected, onSelect }) => {
+  return (
+    <Dropdown 
+      trigger={
+        <Button variant="outline">
+          <Badge color={selected.color}>{selected.provider}</Badge>
+          <span>{selected.name}</span>
+          <ChevronDown />
+        </Button>
+      }
+    >
+      {models.map(model => (
+        <Card key={model.id} onClick={() => onSelect(model)}>
+          <Badge color={model.color}>{model.provider}</Badge>
+          <div>{model.name}</div>
+        </Card>
+      ))}
+    </Dropdown>
+  );
+};
+```
+
+**Acceptance Criteria:**
+- [ ] Usar Dropdown atom ao invés de HTML hardcoded
+- [ ] Usar Button atom para trigger
+- [ ] Usar Badge atoms para providers  
+- [ ] Usar Card atoms para options
+- [ ] Zero HTML hardcoded
+- [ ] Manter todas as funcionalidades atuais
+
+#### ✅ **TAREFA 2.2: Refatorar WorkspaceCard**
+**Arquivo**: `src/components/molecules/WorkspaceCard.tsx`
+**Prioridade**: 🔥 CRÍTICA  
+**Problema**: Card layout específico hardcoded
+
+**Refatoração Requerida:**
+```typescript
+// ✅ CORRETO - Apenas composição
+export const WorkspaceCard = ({ workspace, onSelect }) => {
+  return (
+    <Card onClick={() => onSelect(workspace)} className="hover:shadow-md">
+      <div className="flex items-center space-x-3">
+        <Icon name="folder" />
+        <div>
+          <h3>{workspace.name}</h3>
+          <Badge variant="neutral">{workspace.role}</Badge>
+        </div>
+      </div>
+      <p>{workspace.description}</p>
+    </Card>
+  );
+};
+```
+
+**Acceptance Criteria:**
+- [ ] Usar Card atom ao invés de div hardcoded
+- [ ] Usar Icon atoms consistentes
+- [ ] Usar Badge atoms para role
+- [ ] Remover elementos específicos hardcoded
+- [ ] Manter funcionalidade de hover/click
+
+#### ✅ **TAREFA 2.3: Refatorar MessageBubble**
+**Arquivo**: `src/components/molecules/MessageBubble.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Problema**: Estrutura complexa hardcoded
+
+**Refatoração Requerida:**
+- [ ] Usar Card atom para bubble
+- [ ] Usar Button atoms para actions (copy, like, etc)
+- [ ] Usar Badge atom para model info
+- [ ] Simplificar estrutura usando atoms
+
+#### ✅ **TAREFA 2.4: Criar PasswordInput Molecule**
+**Arquivo**: `src/components/molecules/PasswordInput.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Descrição**: Molecule que combina Input atom + toggle button
+
+```typescript
+export const PasswordInput = ({ ...inputProps }) => {
+  const [showPassword, setShowPassword] = useState(false);
+  
+  return (
+    <div className="relative">
+      <Input 
+        {...inputProps} 
+        type={showPassword ? 'text' : 'password'} 
+      />
+      <Button 
+        variant="ghost" 
+        onClick={() => setShowPassword(!showPassword)}
+        className="absolute right-2 top-1/2 -translate-y-1/2"
+      >
+        <Icon name={showPassword ? 'eye-off' : 'eye'} />
+      </Button>
+    </div>
+  );
+};
+```
+
+### 📋 **FASE 3: REFATORAÇÃO DE ORGANISMS**
+
+#### ✅ **TAREFA 3.1: Refatorar Header Organism**
+**Arquivo**: `src/components/organisms/Header.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Problema**: Buttons raw `<button>` (linhas 21-26)
+
+**Refatoração Requerida:**
+```typescript
+// ✅ CORRETO - Usar Button atoms
+export const Header = ({ title, subtitle, actions }) => {
+  return (
+    <div className="bg-white border-b border-gray-200 px-6 py-4">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1>{title}</h1>
+          {subtitle && <p>{subtitle}</p>}
+        </div>
+        <div className="flex items-center space-x-4">
+          {actions}
+          <Button variant="ghost" size="sm">
+            <Icon name="bell" />
+          </Button>
+          <Button variant="ghost" size="sm">
+            <Icon name="settings" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
+```
+
+#### ✅ **TAREFA 3.2: Refatorar ChatInterface**
+**Arquivo**: `src/components/organisms/ChatInterface.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Problema**: Textarea hardcoded ao invés de atoms
+
+**Mudanças Requeridas:**
+- [ ] Substituir `<textarea>` por Textarea atom (linha 140+)
+- [ ] Usar Button atoms para envio
+- [ ] Usar MessageBubble molecules refatorados
+- [ ] Manter toda lógica de negócio
+
+#### ✅ **TAREFA 3.3: Refatorar ConversationList**  
+**Arquivo**: `src/components/organisms/ConversationList.tsx`
+**Prioridade**: 🔥 CRÍTICA
+**Problema**: Elementos específicos hardcoded
+
+**Mudanças Requeridas:**
+- [ ] Usar Button atoms para actions
+- [ ] Usar Card atoms para conversation items
+- [ ] Usar Input atom para edit mode
+- [ ] Remover HTML hardcoded
+
+## 📋 **FASE 4: VALIDAÇÃO E TESTES**
+
+#### ✅ **TAREFA 4.1: Executar Comandos de Verificação**
+**Prioridade**: 🔥 CRÍTICA
+
+```bash
+npm run lint      # Zero warnings
+npm run typecheck # Zero errors  
+npm run build     # Sucesso
+npm run test      # Todos passando
+```
+
+#### ✅ **TAREFA 4.2: Auditoria Pós-Refatoração**
+**Descrição**: Verificar se atomic design está sendo respeitado
+
+**Critérios de Validação:**
+- [ ] Zero HTML hardcoded em molecules
+- [ ] Zero elementos `<button>`, `<input>`, `<textarea>` raw em organisms  
+- [ ] Atoms contêm apenas elementos UI básicos
+- [ ] Molecules fazem apenas composição de atoms
+- [ ] Organisms contêm apenas lógica de negócio
+
+## ⚠️ REGRAS OBRIGATÓRIAS DURANTE REFATORAÇÃO
+
+### ✅ **Atomic Design Principles**
+- **Atoms**: Apenas elementos UI básicos (Button, Input, Icon, etc)
+- **Molecules**: APENAS composição de atoms, ZERO HTML hardcoded
+- **Organisms**: Lógica de negócio + composição de molecules, ZERO elementos UI específicos
+- **Templates**: Apenas layout, composição de organisms
+
+### ✅ **Padrões de Qualidade**
+- TypeScript strict mode obrigatório
+- Props tipadas em todos os componentes
+- Zero uso de `any`
+- Comandos de verificação devem passar
+
+### ✅ **Durante a Refatoração**
+- Manter todas as funcionalidades existentes
+- Executar testes após cada mudança
+- Build deve continuar funcionando
+- Zero breaking changes para páginas
+
+## 🎯 RESULTADO ESPERADO
+
+Após a refatoração completa:
+- ✅ Atomic Design 100% puro implementado
+- ✅ Zero violações arquiteturais  
+- ✅ Componentes totalmente reutilizáveis
+- ✅ Manutenibilidade maximizada
+- ✅ Todas as funcionalidades preservadas
+
+## 💼 CARDS TAIGA FUNCIONAIS (MANTIDOS)
 
 ### 🔐 **ÉPICO - Login com SSO Google IEBT**
 

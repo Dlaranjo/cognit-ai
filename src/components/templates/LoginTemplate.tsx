@@ -54,7 +54,7 @@ export const LoginTemplate: React.FC<LoginScreenProps> = ({
         {/* Footer */}
         <div className="text-center mt-8">
           <p className="text-sm text-gray-500 font-medium">
-            © 2024 COGNIT. Todos os direitos reservados.
+            © 2025 COGNIT. Todos os direitos reservados.
           </p>
           <div className="flex items-center justify-center space-x-4 mt-3 text-xs text-gray-400">
             <a href="#" className="hover:text-orange-500 transition-colors duration-200 hover:underline">

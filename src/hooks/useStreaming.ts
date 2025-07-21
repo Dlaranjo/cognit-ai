@@ -41,6 +41,14 @@ export const useStreaming = () => {
 
         options.onStart?.();
 
+        console.log('🚀 Starting streaming request:', {
+          url: `${config.API_BASE_URL}/api/chat/stream`,
+          message,
+          model: options.model,
+          provider: options.provider,
+          conversationId: currentConversation?.id,
+        });
+
         const response = await fetch(`${config.API_BASE_URL}/api/chat/stream`, {
           method: 'POST',
           headers: {
@@ -56,8 +64,41 @@ export const useStreaming = () => {
           signal: abortControllerRef.current.signal,
         });
 
+        console.log('📡 Response received:', {
+          ok: response.ok,
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers.entries()),
+        });
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Check if this is a streaming response or a regular JSON response
+        const contentType = response.headers.get('content-type') || '';
+
+        if (contentType.includes('application/json')) {
+          // Handle regular JSON response (for mock server)
+          const jsonResponse = await response.json();
+
+          if (jsonResponse.content) {
+            // Simulate streaming by adding the message directly
+            dispatch(clearStreamingMessage());
+            dispatch(
+              addMessage({
+                id: Date.now().toString(),
+                content: jsonResponse.content,
+                role: 'assistant',
+                timestamp: new Date(),
+                model: options.model,
+                provider: options.provider,
+                conversationId: currentConversation?.id,
+              })
+            );
+            options.onComplete?.(jsonResponse.content);
+          }
+          return;
         }
 
         if (!response.body) {
@@ -120,11 +161,19 @@ export const useStreaming = () => {
           }
         }
       } catch (error) {
+        console.error('🔴 Streaming error caught:', error);
+        console.error('🔴 Error details:', {
+          name: error instanceof Error ? error.name : 'Unknown',
+          message: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined,
+        });
+
         if (error instanceof Error) {
           if (error.name === 'AbortError') {
+            console.log('🛑 Streaming aborted by user');
             // Handle abortion gracefully
           } else {
-            console.error('Streaming error:', error);
+            console.error('💥 Streaming error:', error);
             setError(error.message);
             options.onError?.(error);
           }

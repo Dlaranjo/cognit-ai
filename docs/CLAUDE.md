@@ -9,43 +9,61 @@ Você é responsável por desenvolver e manter o **Cognit AI Platform** seguindo
 > - `PRD.md`: Especificações funcionais e user stories
 > - `PLANNING.md`: Visão estratégica e arquitetura do sistema
 > - `TASKS.md`: Lista granular de tarefas para execução
+> - `REFACTORING_CONTEXT.md`: **LEIA PRIMEIRO** - Contexto crítico para agentes
 
 ## 📊 Status do Projeto
 
-### 🏆 **PROJETO 100% COMPLETO + ATOMIC DESIGN PURO IMPLEMENTADO**
+### 🚨 **AUDITORIA ATOMIC DESIGN - VIOLAÇÕES CRÍTICAS IDENTIFICADAS**
 
-**Data de Conclusão**: Julho 2025  
-**Status**: Production Ready com Arquitetura Enterprise Sustentável
+**Data da Auditoria**: 21 de Julho de 2025  
+**Status**: REFATORAÇÃO URGENTE NECESSÁRIA - Violações do Atomic Design
 
-#### ✅ **Funcionalidades Core Implementadas**
+#### ❌ **PROBLEMA CRÍTICO DESCOBERTO**
 
-- ✅ Multi-LLM Studio com chat streaming
-- ✅ AI Agents especializados (5 agents)
-- ✅ Knowledge Management (Workspace → Project → Document)
-- ✅ Autenticação SSO Google + JWT
-- ✅ Search Engine com filtros avançados
+**VIOLAÇÃO FUNDAMENTAL**: Componentes estão criando elementos UI específicos ao invés de compor atoms existentes, violando completamente os princípios do Atomic Design.
 
-#### 🏗️ **Atomic Design 100% Puro Implementado**
+#### ❌ **Violações Identificadas na Auditoria**
 
-- ✅ **4 Templates** implementados (Studio, Agent, Login, App)
-- ✅ **14 Organisms** organizados (ChatInterface, WorkspaceList, etc.)
-- ✅ **11 Molecules** funcionais (WorkspaceCard, ModelSelector, etc.)
-- ✅ **7 Atoms** consistentes (Button, Input, Avatar, etc.)
+**Molecules com UI Hardcoded:**
+- ❌ `ModelSelector.tsx` - Dropdown hardcoded (linhas 72-169)
+- ❌ `WorkspaceCard.tsx` - Card layout específico (linhas 44-104)  
+- ❌ `MessageBubble.tsx` - Estrutura complexa hardcoded
 
-#### 📈 **Qualidade Enterprise Alcançada**
+**Organisms com Elementos Raw:**
+- ❌ `Header.tsx` - Buttons `<button>` raw ao invés de Button atom
+- ❌ `ChatInterface.tsx` - Textarea hardcoded ao invés de Input atom
+- ❌ `ConversationList.tsx` - Elementos específicos hardcoded
 
-- ✅ Performance otimizada (296KB bundle)
-- ✅ Testing coverage (27+ testes)
+**Atoms Híbridos:**
+- ❌ `Input.tsx` - Contém lógica de password toggle (deveria ser molecule)
+
+**Atoms Faltantes:**
+- ❌ `Dropdown.tsx` - Não existe (necessário para ModelSelector)
+- ❌ `Card.tsx` - Não existe (necessário para WorkspaceCard)
+- ❌ `Textarea.tsx` - Não existe (necessário para ChatInterface)
+
+#### 🎯 **Funcionalidades Implementadas (Precisam Refatoração Completa)**
+
+- ✅ Multi-LLM Studio - **UI precisa refatoração atomic**
+- ✅ AI Agents especializados - **Components violam atomic design**
+- ✅ Knowledge Management - **Cards precisam refatoração**
+- ✅ Autenticação SSO Google + JWT - **Funcional, UI precisa refatoração**
+- ✅ Search Engine - **Interface precisa refatoração atomic**
+
+#### 🔧 **Estado Real da Arquitetura (Pós-Auditoria)**
+
+- ✅ **4 Templates** - Corretos (apenas composição)
+- ❌ **14 Organisms** - **VIOLAÇÕES GRAVES** (elementos específicos)
+- ❌ **11 Molecules** - **VIOLAÇÕES CRÍTICAS** (UI hardcoded)  
+- ❌ **7 Atoms** - Parcialmente corretos (faltam atoms básicos)
+
+#### 📈 **Qualidade Técnica Mantida**
+
+- ✅ Performance otimizada (300KB bundle)
+- ✅ Testing coverage (27+ testes passando)
 - ✅ CI/CD pipeline funcionando
 - ✅ TypeScript strict mode (100% compliance)
-- ✅ Zero componentes híbridos (arquitetura pura)
-
-#### 🎯 **Resultados da Conversão**
-
-- **+300% Reutilização** de componentes
-- **+200% Manutenibilidade** da base de código
-- **Zero Breaking Changes** durante a refatoração
-- **Estrutura Enterprise** sustentável implementada
+- ❌ **PROBLEMA CRÍTICO**: Arquitetura atomic design violada
 
 ## 🏗️ Arquitetura Obrigatória
 

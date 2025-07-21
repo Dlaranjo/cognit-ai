@@ -33,7 +33,9 @@ export const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
         
         {/* Tooltip for collapsed state */}
         {!isExpanded && (
-          <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+          <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50
+                          before:content-[''] before:absolute before:right-full before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-transparent before:border-r-gray-900
+                          max-w-[calc(100vw-5rem)] overflow-hidden text-ellipsis">
             {user.name} ({user.role})
           </div>
         )}

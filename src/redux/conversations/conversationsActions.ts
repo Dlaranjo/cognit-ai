@@ -9,8 +9,8 @@ export const fetchConversations = createAsyncThunk<
   'conversations/fetchConversations',
   async (_, { rejectWithValue }) => {
     try {
-      const conversations = await chatApi.getConversations();
-      return conversations;
+      const response = await chatApi.getConversations();
+      return response.conversations || [];
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch conversations';
       return rejectWithValue(errorMessage);
