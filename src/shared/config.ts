@@ -17,7 +17,7 @@ const shouldUseMockServer = 'true';
   // import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_SERVER === 'true';
 const apiBaseUrl = shouldUseMockServer
   ? ''
-  : import.meta.env.VITE_API_BASE_URL || '';
+  : import.meta.env.VITE_API_BASE_URL || 'https://cognit-ai-web-main-rhecs.ondigitalocean.app:3001';
 
 export const config: Config = {
   API_BASE_URL: apiBaseUrl,
