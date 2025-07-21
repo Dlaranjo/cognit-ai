@@ -4,11 +4,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#FF6B35',      // Laranja Cognit
-        secondary: '#2D3748',    // Cinza escuro
-        success: '#48BB78',      // Verde
-        warning: '#ED8936',      // Laranja warning
-        error: '#E53E3E',        // Vermelho
+        primary: '#ea580c', // orange-600
+        secondary: '#475569', // slate-600
+        success: '#16a34a', // green-600
+        warning: '#d97706', // amber-600
+        error: '#dc2626', // red-600
         neutral: {
           50: '#F9FAFB',
           100: '#F3F4F6',

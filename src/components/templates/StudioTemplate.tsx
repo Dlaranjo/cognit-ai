@@ -225,7 +225,7 @@ export const StudioTemplate: React.FC = () => {
           {/* New Chat Button */}
           <button
             onClick={createNewConversation}
-            className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
             title="Nova conversa"
           >
             <Plus className="w-4 h-4" />
@@ -235,7 +235,7 @@ export const StudioTemplate: React.FC = () => {
           {/* History Button */}
           <button
             onClick={() => setShowHistoryModal(true)}
-            className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors"
+            className="flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
             title="Histórico"
           >
             <History className="w-4 h-4" />
@@ -244,7 +244,7 @@ export const StudioTemplate: React.FC = () => {
         </div>
 
         {/* Settings */}
-        <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+        <button className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors">
           <Settings className="w-5 h-5" />
         </button>
       </div>
@@ -378,7 +378,7 @@ export const StudioTemplate: React.FC = () => {
                   <button
                     onClick={handleFileSelect}
                     disabled={isLoading || isStreaming}
-                    className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50"
+                    className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-100 rounded-lg transition-colors disabled:opacity-50"
                     title="Anexar arquivo"
                   >
                     <Paperclip className="w-5 h-5" />
@@ -392,7 +392,7 @@ export const StudioTemplate: React.FC = () => {
                       isLoading ||
                       isStreaming
                     }
-                    className="bg-gray-900 text-white p-2 rounded-lg hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="bg-orange-600 text-white p-2 rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     <Send className="w-5 h-5" />
                   </button>
@@ -405,7 +405,7 @@ export const StudioTemplate: React.FC = () => {
                 <div className="relative">
                   <button
                     onClick={() => setShowModelSelector(!showModelSelector)}
-                    className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+                    className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-100 rounded-lg transition-colors"
                   >
                     <div className={`w-3 h-3 bg-gradient-to-br ${selectedModel.color} rounded-full`}></div>
                     <span>{selectedModel.name}</span>
@@ -428,7 +428,7 @@ export const StudioTemplate: React.FC = () => {
                               className={`w-full p-3 rounded-lg text-left transition-all ${
                                 selectedModel.id === model.id
                                   ? 'bg-orange-50 text-orange-700'
-                                  : 'hover:bg-gray-50'
+                                  : 'hover:bg-orange-50 hover:text-orange-600'
                               }`}
                             >
                               <div className="flex items-center space-x-3">
@@ -478,7 +478,7 @@ export const StudioTemplate: React.FC = () => {
               </div>
               <button
                 onClick={() => setShowHistoryModal(false)}
-                className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>

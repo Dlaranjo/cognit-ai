@@ -104,8 +104,8 @@ export const ConversationList: React.FC<ConversationListProps> = ({
         className={`
           group relative p-3 rounded-lg cursor-pointer transition-colors
           ${isSelected 
-            ? 'bg-primary/10 border border-primary/20' 
-            : 'hover:bg-neutral-50 border border-transparent'
+            ? 'bg-orange-50 border border-orange-200' 
+            : 'hover:bg-orange-50 border border-transparent hover:border-orange-200'
           }
         `}
         onClick={() => !isEditing && onConversationSelect(conversation.id)}
@@ -188,7 +188,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     e.stopPropagation();
                     handleStartEdit(conversation);
                   }}
-                  className="w-full justify-start px-3 py-2 text-left"
+                  className="w-full justify-start px-3 py-2 text-left hover:bg-orange-100 hover:text-orange-700"
                 >
                   <Edit className="w-4 h-4 mr-2" />
                   Renomear
@@ -202,7 +202,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     onConversationToggleFavorite?.(conversation.id);
                     setExpandedMenuId(null);
                   }}
-                  className="w-full justify-start px-3 py-2 text-left"
+                  className="w-full justify-start px-3 py-2 text-left hover:bg-orange-100 hover:text-orange-700"
                 >
                   <Star className="w-4 h-4 mr-2" />
                   {conversation.isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
@@ -216,7 +216,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                     onConversationDelete?.(conversation.id);
                     setExpandedMenuId(null);
                   }}
-                  className="w-full justify-start px-3 py-2 text-left text-error hover:bg-error/10"
+                  className="w-full justify-start px-3 py-2 text-left text-red-600 hover:bg-red-50 hover:text-red-700"
                 >
                   <Trash2 className="w-4 h-4 mr-2" />
                   Excluir

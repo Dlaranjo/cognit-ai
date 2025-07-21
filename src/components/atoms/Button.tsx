@@ -13,10 +13,10 @@ export interface ButtonProps {
 }
 
 const variantClasses = {
-  primary: 'bg-primary text-white hover:bg-primary/90 focus:ring-primary/20',
-  secondary: 'bg-secondary text-white hover:bg-secondary/90 focus:ring-secondary/20',
-  outline: 'border border-neutral-300 text-neutral-700 hover:bg-neutral-50 focus:ring-neutral-200',
-  ghost: 'text-neutral-700 hover:bg-neutral-100 focus:ring-neutral-200',
+  primary: 'bg-orange-600 text-white hover:bg-orange-700 focus:ring-orange-200',
+  secondary: 'bg-gray-600 text-white hover:bg-gray-700 focus:ring-gray-200',
+  outline: 'border border-gray-300 text-gray-700 hover:bg-orange-50 hover:text-orange-600 hover:border-orange-300 focus:ring-orange-200',
+  ghost: 'text-gray-700 hover:bg-orange-50 hover:text-orange-600 focus:ring-orange-200',
 };
 
 const sizeClasses = {

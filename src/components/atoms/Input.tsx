@@ -58,8 +58,8 @@ export const Input: React.FC<InputProps> = memo(({
   const baseClasses = 'w-full border rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const stateClasses = error
-    ? 'border-error focus:border-error focus:ring-error/20'
-    : 'border-neutral-300 focus:border-primary focus:ring-primary/20';
+    ? 'border-red-500 focus:border-red-500 focus:ring-red-200'
+    : 'border-gray-300 focus:border-orange-500 focus:ring-orange-200';
 
   const classes = [
     baseClasses,

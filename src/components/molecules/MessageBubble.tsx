@@ -112,7 +112,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 variant="ghost"
                 size="sm"
                 onClick={handleCopy}
-                className="p-1 h-auto min-h-0"
+                className="p-1 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600"
               >
                 <Copy className="w-3 h-3" />
               </Button>
@@ -121,7 +121,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 variant="ghost"
                 size="sm"
                 onClick={onLike}
-                className="p-1 h-auto min-h-0"
+                className="p-1 h-auto min-h-0 hover:bg-green-100 hover:text-green-600"
               >
                 <ThumbsUp className="w-3 h-3" />
               </Button>
@@ -130,7 +130,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 variant="ghost"
                 size="sm"
                 onClick={onDislike}
-                className="p-1 h-auto min-h-0"
+                className="p-1 h-auto min-h-0 hover:bg-red-100 hover:text-red-600"
               >
                 <ThumbsDown className="w-3 h-3" />
               </Button>
@@ -139,7 +139,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 variant="ghost"
                 size="sm"
                 onClick={onRegenerate}
-                className="p-1 h-auto min-h-0"
+                className="p-1 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600"
               >
                 <RotateCcw className="w-3 h-3" />
               </Button>
