@@ -1,8 +1,43 @@
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import {
+  LucideIcon,
+  Copy,
+  ThumbsUp,
+  ThumbsDown,
+  RotateCcw,
+  ChevronDown,
+  Zap,
+  DollarSign,
+  Cpu,
+  Check,
+  Users,
+  Calendar,
+  FolderOpen,
+  Settings,
+  Bell
+} from 'lucide-react';
+
+// Icon name mapping
+const iconMap = {
+  'copy': Copy,
+  'thumbs-up': ThumbsUp,
+  'thumbs-down': ThumbsDown,
+  'rotate-ccw': RotateCcw,
+  'chevron-down': ChevronDown,
+  'zap': Zap,
+  'dollar-sign': DollarSign,
+  'cpu': Cpu,
+  'check': Check,
+  'users': Users,
+  'calendar': Calendar,
+  'folder-open': FolderOpen,
+  'settings': Settings,
+  'bell': Bell,
+} as const;
 
 export interface IconProps {
-  icon: LucideIcon;
+  name?: keyof typeof iconMap;
+  icon?: LucideIcon;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   color?:
     | 'primary'
@@ -34,10 +69,18 @@ const colorClasses = {
 };
 
 export const Icon = React.memo<IconProps>(
-  ({ icon: IconComponent, size = 'md', color = 'current', className = '' }) => {
+  ({ name, icon, size = 'md', color = 'current', className = '' }) => {
     const classes = [sizeClasses[size], colorClasses[color], className].join(
       ' '
     );
+
+    // Use the provided icon prop or get from name mapping
+    const IconComponent = icon || (name ? iconMap[name] : null);
+
+    if (!IconComponent) {
+      console.warn(`Icon not found: ${name}`);
+      return null;
+    }
 
     return <IconComponent className={classes} />;
   }

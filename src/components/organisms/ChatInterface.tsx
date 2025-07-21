@@ -2,8 +2,7 @@ import React from 'react';
 import { Send, Paperclip, Mic, Square } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
 import { FileUpload } from '../molecules/FileUpload';
-import { Button } from '../atoms/Button';
-import { Spinner } from '../atoms/Spinner';
+import { Button, Spinner, Textarea } from '../atoms';
 
 export interface Message {
   id: string;
@@ -45,20 +44,11 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   const [attachedFiles, setAttachedFiles] = React.useState<File[]>([]);
   const [showFileUpload, setShowFileUpload] = React.useState(false);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
 
   // Auto-scroll to bottom when new messages arrive
   React.useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
-
-  // Auto-resize textarea
-  React.useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 150)}px`;
-    }
-  }, [inputValue]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -69,11 +59,6 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
     setInputValue('');
     setAttachedFiles([]);
     setShowFileUpload(false);
-    
-    // Reset textarea height
-    if (textareaRef.current) {
-      textareaRef.current.style.height = 'auto';
-    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -167,16 +152,16 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
             {/* Text Input */}
             <div className="flex-1 relative">
-              <textarea
-                ref={textareaRef}
+              <Textarea
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={placeholder}
                 disabled={disabled}
                 rows={1}
-                className="w-full px-4 py-2 pr-12 border border-neutral-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ minHeight: '40px', maxHeight: '150px' }}
+                autoResize={true}
+                maxRows={6}
+                className="pr-12"
               />
             </div>
 

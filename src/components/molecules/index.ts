@@ -19,8 +19,6 @@ export type { ToastProps, ToastType } from './Toast';
 export { Tooltip } from './Tooltip';
 export type { TooltipProps } from './Tooltip';
 
-export { Dropdown } from './Dropdown';
-export type { DropdownProps, DropdownOption } from './Dropdown';
 
 export { WorkspaceCard } from './WorkspaceCard';
 
@@ -36,3 +34,6 @@ export { LoginHeader } from './LoginHeader';
 export { GoogleLoginButton } from './GoogleLoginButton';
 export { DemoUserCard } from './DemoUserCard';
 export type { DemoUser } from './DemoUserCard';
+
+export { PasswordInput } from './PasswordInput';
+export type { PasswordInputProps } from './PasswordInput';

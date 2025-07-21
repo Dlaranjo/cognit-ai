@@ -1,8 +1,6 @@
 import React from 'react';
-import { MessageSquare, Star, MoreHorizontal, Trash2, Edit } from 'lucide-react';
 import { SearchBar } from '../molecules/SearchBar';
-import { Button } from '../atoms/Button';
-import { Badge } from '../atoms/Badge';
+import { Button, Badge, Card, Input, Icon } from '../atoms';
 
 export interface Conversation {
   id: string;
@@ -99,29 +97,31 @@ export const ConversationList: React.FC<ConversationListProps> = ({
     const isEditing = editingId === conversation.id;
 
     return (
-      <div
+      <Card
         key={conversation.id}
+        variant={isSelected ? 'outlined' : 'default'}
         className={`
-          group relative p-3 rounded-lg cursor-pointer transition-colors
+          group relative cursor-pointer transition-colors
           ${isSelected 
-            ? 'bg-orange-50 border border-orange-200' 
-            : 'hover:bg-orange-50 border border-transparent hover:border-orange-200'
+            ? 'bg-orange-50 border-orange-200' 
+            : 'hover:bg-orange-50 hover:border-orange-200'
           }
         `}
         onClick={() => !isEditing && onConversationSelect(conversation.id)}
       >
         <div className="flex items-start gap-3">
-          <MessageSquare className="w-4 h-4 text-neutral-400 mt-0.5 flex-shrink-0" />
+          <Icon name="message-square" className="text-neutral-400 mt-0.5 flex-shrink-0" />
           
           <div className="flex-1 min-w-0">
             {isEditing ? (
-              <input
+              <Input
                 type="text"
                 value={editingTitle}
                 onChange={(e) => setEditingTitle(e.target.value)}
                 onBlur={handleSaveEdit}
                 onKeyDown={handleKeyDown}
-                className="w-full text-sm font-medium bg-white border border-primary rounded px-2 py-1"
+                size="sm"
+                className="text-sm font-medium"
                 autoFocus
               />
             ) : (
@@ -174,7 +174,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
             }}
             className="opacity-0 group-hover:opacity-100 transition-opacity p-1 h-auto min-h-0"
           >
-            <MoreHorizontal className="w-4 h-4" />
+            <Icon name="more-horizontal" />
           </Button>
 
           {/* Context Menu */}
@@ -190,7 +190,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   }}
                   className="w-full justify-start px-3 py-2 text-left hover:bg-orange-100 hover:text-orange-700"
                 >
-                  <Edit className="w-4 h-4 mr-2" />
+                  <Icon name="edit" size="sm" className="mr-2" />
                   Renomear
                 </Button>
                 
@@ -204,7 +204,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   }}
                   className="w-full justify-start px-3 py-2 text-left hover:bg-orange-100 hover:text-orange-700"
                 >
-                  <Star className="w-4 h-4 mr-2" />
+                  <Icon name="star" size="sm" className="mr-2" />
                   {conversation.isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
                 </Button>
                 
@@ -218,14 +218,14 @@ export const ConversationList: React.FC<ConversationListProps> = ({
                   }}
                   className="w-full justify-start px-3 py-2 text-left text-red-600 hover:bg-red-50 hover:text-red-700"
                 >
-                  <Trash2 className="w-4 h-4 mr-2" />
+                  <Icon name="trash-2" size="sm" className="mr-2" />
                   Excluir
                 </Button>
               </div>
             </div>
           )}
         </div>
-      </div>
+      </Card>
     );
   };
 

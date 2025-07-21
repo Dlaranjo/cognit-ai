@@ -1,8 +1,5 @@
 import React from 'react';
-import { Copy, ThumbsUp, ThumbsDown, RotateCcw } from 'lucide-react';
-import { Avatar } from '../atoms/Avatar';
-import { Button } from '../atoms/Button';
-import { Badge } from '../atoms/Badge';
+import { Avatar, Button, Badge, Card, Icon } from '../atoms';
 
 export interface MessageBubbleProps {
   content: string;
@@ -89,21 +86,20 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
           </div>
 
           {/* Message Bubble */}
-          <div
+          <Card
+            variant={isUser ? 'outlined' : 'outlined'}
+            padding="none"
+            background={false}
             className={`
-            inline-block max-w-full px-4 py-2 rounded-lg text-sm whitespace-pre-wrap
-            ${
-              isUser
-                ? 'bg-primary text-white'
-                : 'bg-neutral-100 text-neutral-900 border border-neutral-200'
-            }
-          `}
+              inline-block max-w-full text-sm whitespace-pre-wrap px-3 py-2
+              ${isUser ? 'bg-orange-500 text-white border-orange-500 border' : 'bg-gray-100/80 text-gray-900 border-gray-200/50 border'}
+            `}
           >
             {content}
             {isStreaming && (
               <span className="inline-block w-2 h-4 ml-1 bg-current animate-pulse" />
             )}
-          </div>
+          </Card>
 
           {/* Actions */}
           {!isUser && !isStreaming && (
@@ -114,7 +110,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 onClick={handleCopy}
                 className="p-1 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600"
               >
-                <Copy className="w-3 h-3" />
+                <Icon name="copy" size="sm" />
               </Button>
 
               <Button
@@ -123,7 +119,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 onClick={onLike}
                 className="p-1 h-auto min-h-0 hover:bg-green-100 hover:text-green-600"
               >
-                <ThumbsUp className="w-3 h-3" />
+                <Icon name="thumbs-up" size="sm" />
               </Button>
 
               <Button
@@ -132,7 +128,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 onClick={onDislike}
                 className="p-1 h-auto min-h-0 hover:bg-red-100 hover:text-red-600"
               >
-                <ThumbsDown className="w-3 h-3" />
+                <Icon name="thumbs-down" size="sm" />
               </Button>
 
               <Button
@@ -141,7 +137,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 onClick={onRegenerate}
                 className="p-1 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600"
               >
-                <RotateCcw className="w-3 h-3" />
+                <Icon name="rotate-ccw" size="sm" />
               </Button>
             </div>
           )}

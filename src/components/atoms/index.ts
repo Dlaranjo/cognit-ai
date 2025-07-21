@@ -18,3 +18,12 @@ export type { SpinnerProps } from './Spinner';
 
 export { Toggle } from './Toggle';
 export type { ToggleProps } from './Toggle';
+
+export { Dropdown } from './Dropdown';
+export type { DropdownProps } from './Dropdown';
+
+export { Card } from './Card';
+export type { CardProps } from './Card';
+
+export { Textarea } from './Textarea';
+export type { TextareaProps } from './Textarea';
