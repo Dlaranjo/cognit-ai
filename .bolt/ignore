@@ -1,4 +1,6 @@
-# Dependencies and build artifacts
+# ===== ESTRATÉGIA OTIMIZADA PARA REDUÇÃO DE TOKENS =====
+
+# Dependencies e build artifacts (SEMPRE ignorar)
 node_modules/
 dist/
 build/
@@ -7,17 +9,12 @@ build/
 .vercel/
 .netlify/
 
-# Package managers
+# Package managers (SEMPRE ignorar - muito pesados)
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-# Environment and config files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Configurações (ignorar a menos que esteja editando configs)
 vite.config.ts
 vitest.config.ts
 tailwind.config.js
@@ -25,7 +22,7 @@ postcss.config.js
 eslint.config.js
 tsconfig*.json
 
-# Documentation that's not relevant for UI work
+# Documentação (ignorar para trabalho de UX/UI)
 README.md
 docs/
 CLAUDE.md
@@ -33,27 +30,28 @@ PLANNING.md
 PRD.md
 TASKS.md
 
-# Testing files (não necessários para edição visual)
+# Testes (ignorar para trabalho de UX - economiza ~30% tokens)
 **/__tests__/
 **/*.test.ts
 **/*.test.tsx
-test/
+**/*.spec.ts
+**/*.spec.tsx
+src/test/
 setupTests.ts
 
-# Type definitions and configs
-src/vite-env.d.ts
-src/types/index.ts
-
-# Redux store structure (manter apenas se necessário para contexto de estado)
-src/redux/store.ts
-
-# API layer (não necessário para componentes visuais)
+# API e Backend (ignorar para trabalho de UI)
 src/api/
+src/shared/mockData.ts
 
-# Shared utilities (manter config.ts para variáveis, excluir resto)
-src/shared/config.ts
+# Redux (manter apenas slices necessários para o contexto)
+src/redux/store.ts
+src/redux/middleware/
 
-# Build and deployment files
+# Types globais (ignorar se não editando tipos)
+src/types/
+src/vite-env.d.ts
+
+# Arquivos de build e deployment
 public/
 index.html
 
@@ -61,11 +59,13 @@ index.html
 .git/
 .gitignore
 
-# IDE files
+# IDE e OS
 .vscode/
 .idea/
 *.swp
 *.swo
+.DS_Store
+Thumbs.db
 
 # Logs
 logs/
@@ -74,6 +74,61 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# OS files
-.DS_Store
-Thumbs.db
+# ===== FOCO NO STUDIO: IGNORAR OUTROS COMPONENTES =====
+# Para trabalhar apenas na página Studio e seus componentes
+
+# Ignorar outras páginas (manter apenas StudioPage)
+src/pages/AgentsPage.tsx
+src/pages/AuthPage.tsx
+src/pages/DocumentsPage.tsx
+src/pages/ProjectsPage.tsx
+src/pages/SearchPage.tsx
+src/pages/WorkspacesPage.tsx
+
+# Ignorar outros templates (manter apenas StudioTemplate)
+src/components/templates/AgentTemplate.tsx
+src/components/templates/LoginTemplate.tsx
+src/components/templates/AppTemplate.tsx
+
+# Ignorar organisms não relacionados ao Studio
+src/components/organisms/ActionResults.tsx
+src/components/organisms/AgentSelector.tsx
+src/components/organisms/ConversationHistory.tsx
+src/components/organisms/ConversationList.tsx
+src/components/organisms/ConversationSidebar.tsx
+src/components/organisms/CreateProjectModal.tsx
+src/components/organisms/CreateWorkspaceModal.tsx
+src/components/organisms/DemoAccessSection.tsx
+src/components/organisms/DocumentList.tsx
+src/components/organisms/Header.tsx
+src/components/organisms/LoginCard.tsx
+src/components/organisms/MemberManagement.tsx
+src/components/organisms/ProjectList.tsx
+src/components/organisms/SearchInterface.tsx
+src/components/organisms/Sidebar.tsx
+src/components/organisms/WorkspaceList.tsx
+
+# Ignorar molecules não utilizadas no Studio
+src/components/molecules/DemoUserCard.tsx
+src/components/molecules/GoogleLoginButton.tsx
+src/components/molecules/LoginHeader.tsx
+src/components/molecules/PasswordInput.tsx
+src/components/molecules/SidebarHeader.tsx
+src/components/molecules/SidebarNavItem.tsx
+src/components/molecules/SidebarUserProfile.tsx
+src/components/molecules/UserProfile.tsx
+src/components/molecules/WorkspaceCard.tsx
+src/components/molecules/WorkspaceFilter.tsx
+
+# Ignorar hooks não relacionados ao Studio
+src/hooks/useAuth.ts
+src/hooks/useGoogleAuth.ts
+src/hooks/useWorkspaces.ts
+src/hooks/useNavigation.ts
+src/hooks/useAgents.ts
+src/hooks/useLocalStorage.ts
+src/hooks/useInfiniteScroll.ts
+
+# Ignorar Redux modules não essenciais para Studio
+src/redux/workspaces/
+src/redux/agents/
