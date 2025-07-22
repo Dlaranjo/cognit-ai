@@ -15,7 +15,7 @@ interface StreamingOptions {
 export const useStreaming = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { processRealStream, simulateStream, createAbortController, abortStream } = useStreamProcessor();
   const {
     startStreaming,
@@ -23,15 +23,18 @@ export const useStreaming = () => {
     handleStreamComplete,
     clearStreaming
   } = useMessageStreaming();
-  
+
   const currentContentRef = useRef('');
+  const currentOptionsRef = useRef<StreamingOptions | null>(null);
 
   // Handle stream abort - preserve partial content as a complete message
   const handleStreamAbort = useCallback(() => {
     const partialContent = currentContentRef.current;
-    if (partialContent.trim()) {
-      // Complete the message with the partial content
-      handleStreamComplete(partialContent, 'openai', 'gpt-4-turbo', { isRegeneration: false });
+    const options = currentOptionsRef.current;
+
+    if (partialContent.trim() && options) {
+      // Complete the message with the partial content using current options
+      handleStreamComplete(partialContent, options.provider, options.model, { isRegeneration: false });
     } else {
       // If no content, just clear streaming
       clearStreaming();
@@ -126,6 +129,7 @@ export const useStreaming = () => {
       setIsStreaming(true);
       setError(null);
       currentContentRef.current = '';
+      currentOptionsRef.current = options;
 
       options.onStart?.();
       startStreaming();
@@ -151,6 +155,7 @@ export const useStreaming = () => {
       }
     } finally {
       setIsStreaming(false);
+      currentOptionsRef.current = null;
     }
   }, [
     isStreaming,

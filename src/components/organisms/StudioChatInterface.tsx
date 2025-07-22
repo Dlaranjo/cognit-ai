@@ -207,7 +207,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
       await startStreaming(
         messageContent,
         {
-          model: selectedModel.id,
+          model: selectedModel.name,
           provider: selectedModel.provider.toLowerCase(),
           onStart: () => {
             console.log('Streaming started');
@@ -258,7 +258,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
       await startStreaming(
         userMessage.content,
         {
-          model: selectedModel.id,
+          model: selectedModel.name,
           provider: selectedModel.provider.toLowerCase(),
           isRegeneration: false, // Now we use false since we removed the message
           onStart: () => {
