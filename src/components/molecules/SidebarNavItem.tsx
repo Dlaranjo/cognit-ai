@@ -19,7 +19,7 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
     <NavLink
       to={item.path}
       className={({ isActive: navIsActive }) =>
-        `w-full flex items-center ${isExpanded ? 'space-x-3 px-3' : 'justify-center px-2'} py-2.5 rounded-lg text-left transition-all duration-300 relative group/item ${
+        `w-full flex items-center ${isExpanded ? 'space-x-3 px-3' : 'justify-center px-2'} py-2.5 rounded-lg text-left transition-all duration-300 relative group/item h-10 ${
           navIsActive || isActive(item.path)
             ? 'bg-orange-50 text-orange-700 border border-orange-200'
             : 'text-gray-700 hover:bg-gray-100'
@@ -29,8 +29,8 @@ export const SidebarNavItem: React.FC<SidebarNavItemProps> = ({
       <item.icon className="w-5 h-5 flex-shrink-0" />
 
       {isExpanded && (
-        <div className="flex-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-          <span className="font-medium truncate">{item.label}</span>
+        <div className="flex-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 flex items-center h-5">
+          <span className="font-medium truncate leading-none">{item.label}</span>
         </div>
       )}
       

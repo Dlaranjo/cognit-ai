@@ -19,5 +19,7 @@ export { useFileUpload } from './useFileUpload';
 
 // Advanced hooks
 export { useGoogleAuth } from './useGoogleAuth';
-export { useStreaming } from './useStreaming';
+export { useStreaming, useTypingEffect } from './useStreaming';
+export { useStreamProcessor } from './useStreamProcessor';
+export { useMessageStreaming } from './useMessageStreaming';
 export { useInfiniteScroll, useScrollInfiniteScroll } from './useInfiniteScroll';

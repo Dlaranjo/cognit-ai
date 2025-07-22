@@ -39,8 +39,15 @@ TASKS.md
 src/test/
 setupTests.ts
 
-# API e Backend (ignorar para trabalho de UI)
-src/api/
+# API e Backend (ignorar para trabalho de UI - manter apenas chatApi)
+src/api/agentsApi.ts
+src/api/authApi.ts
+src/api/axiosConfig.ts
+src/api/documentApi.ts
+src/api/memberApi.ts
+src/api/projectApi.ts
+src/api/workspaceApi.ts
+src/api/__tests__/
 src/shared/mockData.ts
 
 # Redux (manter apenas slices necessários para o contexto)
@@ -93,7 +100,6 @@ src/components/templates/AppTemplate.tsx
 # Ignorar organisms não relacionados ao Studio
 src/components/organisms/ActionResults.tsx
 src/components/organisms/AgentSelector.tsx
-src/components/organisms/ConversationHistory.tsx
 src/components/organisms/ConversationList.tsx
 src/components/organisms/ConversationSidebar.tsx
 src/components/organisms/CreateProjectModal.tsx
@@ -105,7 +111,6 @@ src/components/organisms/LoginCard.tsx
 src/components/organisms/MemberManagement.tsx
 src/components/organisms/ProjectList.tsx
 src/components/organisms/SearchInterface.tsx
-src/components/organisms/Sidebar.tsx
 src/components/organisms/WorkspaceList.tsx
 
 # Ignorar molecules não utilizadas no Studio
@@ -113,9 +118,6 @@ src/components/molecules/DemoUserCard.tsx
 src/components/molecules/GoogleLoginButton.tsx
 src/components/molecules/LoginHeader.tsx
 src/components/molecules/PasswordInput.tsx
-src/components/molecules/SidebarHeader.tsx
-src/components/molecules/SidebarNavItem.tsx
-src/components/molecules/SidebarUserProfile.tsx
 src/components/molecules/UserProfile.tsx
 src/components/molecules/WorkspaceCard.tsx
 src/components/molecules/WorkspaceFilter.tsx
@@ -124,7 +126,6 @@ src/components/molecules/WorkspaceFilter.tsx
 src/hooks/useAuth.ts
 src/hooks/useGoogleAuth.ts
 src/hooks/useWorkspaces.ts
-src/hooks/useNavigation.ts
 src/hooks/useAgents.ts
 src/hooks/useLocalStorage.ts
 src/hooks/useInfiniteScroll.ts
@@ -132,3 +133,7 @@ src/hooks/useInfiniteScroll.ts
 # Ignorar Redux modules não essenciais para Studio
 src/redux/workspaces/
 src/redux/agents/
+
+# Ignorar utils não relacionados ao Studio
+src/shared/utils/workspaceUtils.ts
+src/shared/utils/modelUtils.ts

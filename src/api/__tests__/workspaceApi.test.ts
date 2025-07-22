@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { workspaceApi, workspaceUtils } from '../workspaceApi';
+import { workspaceApi } from '../workspaceApi';
+import { workspaceUtils } from '../../shared/utils/workspaceUtils';
 import { apiClient } from '../axiosConfig';
-import type { WorkspaceMember } from '../workspaceApi';
+import type { WorkspaceMember } from '../../types';
 
 // Mock the apiClient
 vi.mock('../axiosConfig', () => ({
@@ -197,7 +198,7 @@ describe('workspaceApi', () => {
 
       expect(result).toEqual(mockResponse.data);
       expect(mockedApiClient.get).toHaveBeenCalledWith(
-        '/workspaces/1/projects?'
+        '/workspaces/1/projects'
       );
     });
 

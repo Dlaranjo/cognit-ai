@@ -13,11 +13,10 @@ describe('MessageBubble', () => {
     render(<MessageBubble {...defaultProps} />);
 
     expect(screen.getByText('Test message content')).toBeInTheDocument();
-    expect(screen.getByText('Você')).toBeInTheDocument();
 
-    // Check that timestamp is rendered (format may vary by timezone)
-    const timeElement = screen.getByText(/\d{2}:\d{2}/);
-    expect(timeElement).toBeInTheDocument();
+    // User messages don't show headers (name/timestamp), only the message content
+    expect(screen.queryByText('Você')).not.toBeInTheDocument();
+    expect(screen.queryByText(/\d{2}:\d{2}/)).not.toBeInTheDocument();
   });
 
   it('should render assistant message correctly', () => {
@@ -26,7 +25,8 @@ describe('MessageBubble', () => {
     );
 
     expect(screen.getByText('Test message content')).toBeInTheDocument();
-    expect(screen.getAllByText('gpt-4-turbo')).toHaveLength(2); // Name and Badge
+    expect(screen.getByText('Assistente')).toBeInTheDocument(); // Display name
+    expect(screen.getByText('gpt-4-turbo')).toBeInTheDocument(); // Model badge
   });
 
   it('should show actions for assistant messages', () => {
@@ -162,7 +162,10 @@ describe('MessageBubble', () => {
   it('should handle custom user name', () => {
     render(<MessageBubble {...defaultProps} userName="John Doe" />);
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    // User messages don't show headers, so custom user names are not displayed
+    // This test verifies the component doesn't crash with custom userName prop
+    expect(screen.getByText('Test message content')).toBeInTheDocument();
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
   });
 
   it('should copy content to clipboard when copy action is triggered', async () => {

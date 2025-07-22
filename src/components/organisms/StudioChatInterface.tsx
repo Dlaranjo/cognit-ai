@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Send, Paperclip, X, ChevronDown, Sparkles, Search } from 'lucide-react';
+import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
 import { useChat } from '../../hooks/useChat';
 import { useStreaming } from '../../hooks/useStreaming';
@@ -17,14 +17,18 @@ const TypingIndicator: React.FC<{ modelName: string }> = ({
 }) => {
   // Use orange theme for typing indicator
   const orangeColor = 'from-orange-500 to-red-500';
-  
+
   return (
   <div className="flex items-start space-x-4 animate-fade-in">
     <div className={`w-10 h-10 bg-gradient-to-br ${orangeColor} rounded-full flex items-center justify-center shadow-lg`}>
       <Sparkles className="w-5 h-5 text-white animate-pulse" />
     </div>
     <div className="flex-1">
-      <div className="bg-white rounded-2xl px-6 py-4 shadow-sm border border-gray-200 max-w-xs">
+      <div className="mb-2">
+        <span className="text-sm font-semibold text-gray-700">{modelName}</span>
+      </div>
+      {/* Typing Indicator - No Bubble, Direct Text */}
+      <div className="mr-8 text-base leading-relaxed text-gray-800">
         <div className="flex items-center space-x-3">
           <div className="flex space-x-1">
             <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
@@ -32,7 +36,7 @@ const TypingIndicator: React.FC<{ modelName: string }> = ({
             <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-200"></div>
           </div>
           <span className="text-sm text-gray-600 font-medium">
-            {modelName} está pensando...
+            está pensando...
           </span>
         </div>
       </div>
@@ -55,7 +59,8 @@ const StreamingMessage: React.FC<{
         <div className="mb-2">
           <span className="text-sm font-semibold text-gray-700">{modelName}</span>
         </div>
-        <div className="bg-white rounded-2xl px-6 py-4 shadow-sm border border-gray-200 mr-8">
+        {/* Streaming Message - No Bubble, Direct Text */}
+        <div className="mr-8 text-base leading-relaxed text-gray-800">
           <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-800 prose-strong:text-gray-900 prose-code:text-orange-600 prose-code:bg-orange-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-50 prose-pre:border prose-ul:text-gray-800 prose-ol:text-gray-800 prose-li:text-gray-800 prose-ol:list-decimal prose-ul:list-disc prose-li:list-item">
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
@@ -117,7 +122,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     addNewMessage,
   } = useChat();
 
-  const { isStreaming, startStreaming } = useStreaming();
+  const { isStreaming, startStreaming, stopStreaming } = useStreaming();
   const streamingMessage = useAppSelector(selectStreamingMessage);
 
   // Local UI state
@@ -161,8 +166,16 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     model.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const handleSendOrStop = () => {
+    if (isStreaming || streamingMessage) {
+      stopStreaming();
+    } else {
+      sendMessage();
+    }
+  };
+
   const sendMessage = async () => {
-    if ((!message.trim() && selectedFiles.length === 0) || isLoading || isStreaming) return;
+    if (!message.trim() || isLoading || isStreaming) return;
 
     const messageContent = message.trim();
     const files = [...selectedFiles];
@@ -441,24 +454,30 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                 {/* File Upload */}
                 <button
                   onClick={handleFileSelect}
-                  disabled={Boolean(isLoading || isStreaming)}
+                  disabled={Boolean(isLoading)}
                   className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
                   title="Anexar arquivo"
                 >
                   <Paperclip className="w-5 h-5" />
                 </button>
 
-                {/* Send Button */}
+                {/* Send/Stop Button */}
                 <button
-                  onClick={sendMessage}
+                  onClick={handleSendOrStop}
                   disabled={Boolean(
-                    (!message.trim() && selectedFiles.length === 0) ||
-                    isLoading ||
-                    isStreaming
+                    !(isStreaming || streamingMessage) && (
+                      !message.trim() ||
+                      isLoading
+                    )
                   )}
                   className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-2 rounded-lg hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
+                  title={(isStreaming || streamingMessage) ? 'Parar geração' : 'Enviar mensagem'}
                 >
-                  <Send className="w-5 h-5" />
+                  {(isStreaming || streamingMessage) ? (
+                    <Square className="w-5 h-5" />
+                  ) : (
+                    <Send className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -471,7 +490,6 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                   onClick={() => setShowModelSelector(!showModelSelector)}
                   className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
                 >
-                  <div className={`w-3 h-3 bg-gradient-to-br ${selectedModel.color} rounded-full`}></div>
                   <span>{selectedModel.name}</span>
                   <ChevronDown className={`w-3 h-3 transition-transform ${showModelSelector ? 'rotate-180' : ''}`} />
                 </button>

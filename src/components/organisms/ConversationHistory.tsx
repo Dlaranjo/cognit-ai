@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bot, User } from 'lucide-react';
+import { Bot } from 'lucide-react';
 import { ActionResults } from './ActionResults';
 import type { Agent, AgentMessage } from '../../redux/agents/agentsTypes';
 
@@ -53,59 +53,57 @@ export const ConversationHistory: React.FC<ConversationHistoryProps> = ({
               message.type === 'user' ? 'flex-row-reverse space-x-reverse' : ''
             }`}
           >
-            {/* Avatar */}
-            <div className="flex-shrink-0">
-              {message.type === 'user' ? (
-                <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-white" />
-                </div>
-              ) : agent ? (
-                <div
-                  className={`w-8 h-8 bg-gradient-to-br ${agent.color} rounded-full flex items-center justify-center`}
-                >
-                  <span className="text-white text-sm">
-                    {getIconForAgent(agent.icon)}
-                  </span>
-                </div>
-              ) : (
-                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-white" />
-                </div>
-              )}
-            </div>
+            {/* Avatar - Only show for assistant */}
+            {message.type !== 'user' && (
+              <div className="flex-shrink-0">
+                {agent ? (
+                  <div
+                    className={`w-8 h-8 bg-gradient-to-br ${agent.color} rounded-full flex items-center justify-center`}
+                  >
+                    <span className="text-white text-sm">
+                      {getIconForAgent(agent.icon)}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                    <Bot className="w-4 h-4 text-white" />
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Message Content */}
             <div
               className={`flex-1 max-w-3xl ${message.type === 'user' ? 'text-right' : ''}`}
             >
-              {/* Message Header */}
-              <div
-                className={`flex items-center space-x-2 mb-2 ${
-                  message.type === 'user' ? 'justify-end' : ''
-                }`}
-              >
-                <span className="text-sm font-medium text-gray-900">
-                  {message.type === 'user'
-                    ? 'You'
-                    : agent?.name || 'AI Assistant'}
-                </span>
-                <span className="text-xs text-gray-500">
-                  {formatTime(message.timestamp)}
-                </span>
-              </div>
+              {/* Message Header - Only show for assistant */}
+              {message.type !== 'user' && (
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="text-sm font-medium text-gray-900">
+                    {agent?.name || 'AI Assistant'}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {formatTime(message.timestamp)}
+                  </span>
+                </div>
+              )}
 
-              {/* Message Bubble */}
-              <div
-                className={`rounded-2xl px-4 py-3 ${
-                  message.type === 'user'
-                    ? 'bg-blue-600 text-white ml-12'
-                    : 'bg-gray-100 text-gray-900 mr-12'
-                }`}
-              >
-                <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                  {message.content}
-                </p>
-              </div>
+              {/* Message Content */}
+              {message.type === 'user' ? (
+                /* User Message Bubble */
+                <div className="rounded-2xl px-4 py-3 bg-blue-600 text-white">
+                  <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                    {message.content}
+                  </p>
+                </div>
+              ) : (
+                /* Assistant Message - No Bubble, Direct Text */
+                <div className="mr-12 text-sm leading-relaxed text-gray-900">
+                  <p className="whitespace-pre-wrap">
+                    {message.content}
+                  </p>
+                </div>
+              )}
 
               {/* Action Results */}
               {message.actions && message.actions.length > 0 && (

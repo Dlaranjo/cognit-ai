@@ -16,6 +16,7 @@ export interface Message {
 export interface ChatInterfaceProps {
   messages: Message[];
   onSendMessage: (content: string, files?: File[]) => void;
+  onStopStreaming?: () => void;
   onMessageAction?: (messageId: string, action: 'like' | 'dislike' | 'copy' | 'regenerate') => void;
   isLoading?: boolean;
   isStreaming?: boolean;
@@ -30,6 +31,7 @@ export interface ChatInterfaceProps {
 export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   messages,
   onSendMessage,
+  onStopStreaming,
   onMessageAction,
   isLoading = false,
   isStreaming = false,
@@ -52,13 +54,20 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!inputValue.trim() || disabled || isLoading) return;
+    handleSendOrStop();
+  };
 
-    onSendMessage(inputValue.trim(), attachedFiles.length > 0 ? attachedFiles : undefined);
-    setInputValue('');
-    setAttachedFiles([]);
-    setShowFileUpload(false);
+  const handleSendOrStop = () => {
+    if (isStreaming) {
+      onStopStreaming?.();
+    } else {
+      if (!inputValue.trim() || disabled || isLoading) return;
+
+      onSendMessage(inputValue.trim(), attachedFiles.length > 0 ? attachedFiles : undefined);
+      setInputValue('');
+      setAttachedFiles([]);
+      setShowFileUpload(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -77,6 +86,7 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
   };
 
   const canSend = inputValue.trim().length > 0 && !disabled && !isLoading;
+  const canInteract = isStreaming || canSend;
 
   return (
     <div className={`flex flex-col h-full ${className}`}>
@@ -181,12 +191,13 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
             {/* Send/Stop Button */}
             <Button
               type="submit"
-              variant={canSend ? 'primary' : 'ghost'}
+              variant={canInteract ? 'primary' : 'ghost'}
               size="sm"
-              disabled={!canSend}
+              disabled={!canInteract}
               className="p-2 flex-shrink-0"
+              title={isStreaming ? 'Parar geração' : 'Enviar mensagem'}
             >
-              {isLoading ? (
+              {isStreaming ? (
                 <Square className="w-4 h-4" />
               ) : (
                 <Send className="w-4 h-4" />

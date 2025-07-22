@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Avatar, Badge } from '../atoms';
+import { Badge } from '../atoms';
 import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles, Paperclip, FileText, Image } from 'lucide-react';
 
 export interface MessageAttachment {
@@ -35,7 +35,6 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
     role,
     timestamp,
     model,
-    avatar,
     userName,
     attachments = [],
     onCopy,
@@ -46,7 +45,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
     className = '',
   }) => {
     const isUser = role === 'user';
-    const displayName = isUser ? userName || 'Você' : model || 'Assistente';
+    const displayName = isUser ? userName || 'Você' : 'Assistente';
 
     const formatTime = (date: Date) => {
       return date.toLocaleTimeString('pt-BR', {
@@ -100,50 +99,43 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
 
     return (
       <div className={`flex gap-4 ${isUser ? 'flex-row-reverse' : 'flex-row'} ${className}`}>
-        {/* Avatar */}
-        <div className="flex-shrink-0">
-          {isUser ? (
-            <Avatar
-              src={avatar}
-              name={displayName}
-              size="md"
-              className="ring-2 ring-orange-100"
-            />
-          ) : (
+        {/* Avatar - Only show for assistant */}
+        {!isUser && (
+          <div className="flex-shrink-0">
             <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Message Content */}
         <div
           className={`flex-1 max-w-4xl ${isUser ? 'text-right' : 'text-left'}`}
         >
-          {/* Header */}
-          <div
-            className={`flex items-center gap-2 mb-2 ${isUser ? 'justify-end' : 'justify-start'}`}
-          >
-            <span className="text-sm font-semibold text-gray-700">
-              {displayName}
-            </span>
-
-            {model && !isUser && (
-              <Badge variant="primary" size="sm" className="bg-orange-100 text-orange-700 border-orange-200">
-                {model}
-              </Badge>
-            )}
-
-            {timestamp && (
-              <span className="text-xs text-gray-500">
-                {formatTime(timestamp)}
+          {/* Header - Only show for assistant */}
+          {!isUser && (
+            <div className="flex items-center gap-2 mb-2 justify-start">
+              <span className="text-sm font-semibold text-gray-700">
+                {displayName}
               </span>
-            )}
-          </div>
+
+              {model && (
+                <Badge variant="primary" size="sm" className="bg-orange-100 text-orange-700 border-orange-200">
+                  {model}
+                </Badge>
+              )}
+
+              {timestamp && (
+                <span className="text-xs text-gray-500">
+                  {formatTime(timestamp)}
+                </span>
+              )}
+            </div>
+          )}
 
           {/* Attachments - Above message content */}
           {attachments && attachments.length > 0 && (
-            <div className={`mb-2 space-y-1 ${isUser ? 'ml-8 flex flex-col items-end' : 'mr-8'}`}>
+            <div className={`mb-2 space-y-1 ${isUser ? 'flex flex-col items-end' : 'mr-8'}`}>
               {attachments.map((attachment, index) => (
                 <a
                   key={`${attachment.id}-${index}`}
@@ -174,21 +166,29 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
             </div>
           )}
 
-          {/* Message Bubble */}
-          <div
-            className={`
-              rounded-2xl transition-all duration-300 ease-out
-              inline-block max-w-full text-base leading-relaxed
-              px-4 py-3 shadow-sm
-              ${isUser
-                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white ml-8'
-                : 'bg-white text-gray-800 border border-gray-200 mr-8'
-              }
-            `}
-          >
-            {isUser ? (
+          {/* Message Content */}
+          {isUser ? (
+            /* User Message Bubble */
+            <div
+              className="
+                rounded-2xl transition-all duration-300 ease-out
+                inline-block max-w-full text-base leading-relaxed
+                px-4 py-3 shadow-sm
+                bg-gradient-to-r from-orange-500 to-orange-600 text-white
+              "
+            >
               <div className="whitespace-pre-wrap">{content}</div>
-            ) : (
+              {isStreaming && (
+                <span className="inline-flex items-center ml-2">
+                  <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></span>
+                  <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce delay-100 ml-1"></span>
+                  <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce delay-200 ml-1"></span>
+                </span>
+              )}
+            </div>
+          ) : (
+            /* Assistant Message - No Bubble, Direct Text */
+            <div className="mr-8 text-base leading-relaxed text-gray-800">
               <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-800 prose-strong:text-gray-900 prose-code:text-orange-600 prose-code:bg-orange-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-50 prose-pre:border prose-ul:text-gray-800 prose-ol:text-gray-800 prose-li:text-gray-800 prose-ol:list-decimal prose-ul:list-disc prose-li:list-item">
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
@@ -222,16 +222,16 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 >
                   {content}
                 </ReactMarkdown>
+                {isStreaming && (
+                  <span className="inline-flex items-center ml-2">
+                    <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></span>
+                    <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce delay-100 ml-1"></span>
+                    <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce delay-200 ml-1"></span>
+                  </span>
+                )}
               </div>
-            )}
-            {isStreaming && (
-              <span className="inline-flex items-center ml-2">
-                <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></span>
-                <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce delay-100 ml-1"></span>
-                <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce delay-200 ml-1"></span>
-              </span>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Actions */}
           {!isUser && !isStreaming && (
