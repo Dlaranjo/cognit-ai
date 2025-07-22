@@ -123,15 +123,65 @@ npm run build     # Build funcionando
 - Commits sem passar comandos de verificação
 - Componentes sem tipagem
 - Mutação direta de estado Redux
-- console.log em produção
+- console.log em produção (exceto modo mock - ver seção Logging)
 
-## 📊 Status Atual
+## 🔄 Ambiente Mockado (Produção Atual)
 
-✅ **Arquitetura Enterprise Implementada**
-- Atomic Design 100% puro
-- TypeScript strict compliant
-- Build otimizado (493KB)
-- 27+ testes passando
-- CI/CD pipeline funcional
+⚠️ **IMPORTANTE**: O projeto atualmente usa **dados mockados em produção** até a API real ser desenvolvida.
 
-**Comandos de verificação passando**: lint ✅ typecheck ✅ build ✅
+### Configuração de Mock
+```typescript
+// Variáveis de ambiente atuais
+VITE_USE_MOCK=true          # Ativa modo mock
+VITE_API_BASE_URL=mock      # Indica modo mock ativo
+```
+
+### Sistema de Logging para Mock
+```typescript
+// src/shared/utils/logger.ts - DEVE SER IMPLEMENTADO
+const isDev = import.meta.env.DEV;
+const isMockMode = import.meta.env.VITE_USE_MOCK === 'true';
+
+export const logger = {
+  // Permitido em desenvolvimento OU modo mock
+  mock: (message: string, data?: any) => {
+    if (isDev || isMockMode) {
+      console.log(`[MOCK] ${message}`, data);
+    }
+  },
+  
+  // Logs de desenvolvimento protegidos
+  dev: (message: string, data?: any) => {
+    if (isDev) {
+      console.log(`[DEV] ${message}`, data);
+    }
+  },
+  
+  // Errors sempre permitidos
+  error: (message: string, error?: any) => {
+    console.error(`[ERROR] ${message}`, error);
+  }
+};
+```
+
+## 📊 Status Atual - REFATORAÇÃO NECESSÁRIA
+
+⚠️ **Conformidade com Diretrizes**: 73% (Requer Ação)
+
+### ✅ Conformes
+- **TypeScript**: 100% strict, zero `any`
+- **Atomic Design**: 92% implementado
+- **Redux**: 92% estrutura completa
+- **Funcionalidades**: 100% operacionais
+
+### ❌ Não Conformes (Requerem Correção)
+- **Logging**: 0% - 47 console.logs sem proteção
+- **Imports**: 65% - Barrel exports não utilizados consistentemente
+
+### 🔧 Comandos de Verificação
+```bash
+npm run lint         # ❌ Falhas por console.logs  
+npm run typecheck    # ✅ Passa
+npm run test         # ✅ 27+ testes passando
+npm run build        # ✅ Passa (mas inclui console.logs)
+```

@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square } from 'lucide-react';
+import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, ArrowDown } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
 import { useChat } from '../../hooks/useChat';
 import { useStreaming } from '../../hooks/useStreaming';
@@ -120,6 +120,8 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     regenerateLastMessage,
     changeModel,
     addNewMessage,
+    updateChatMessage,
+    removeMessagesAfterMessage,
   } = useChat();
 
   const { isStreaming, startStreaming, stopStreaming } = useStreaming();
@@ -132,18 +134,124 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
+  // Smart scroll states
+  const [autoScroll, setAutoScroll] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const [userScrolled, setUserScrolled] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (smooth = true) => {
+    messagesEndRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
   };
 
-  useEffect(() => {
+  const scrollToLatestAssistantMessage = useCallback(() => {
+    if (!messagesContainerRef.current) return;
+
+    const container = messagesContainerRef.current;
+
+    // Procurar por elementos com classe 'animate-fade-in' que indicam mensagens
+    const messageElements = container.querySelectorAll('.animate-fade-in');
+    let lastAssistantMessage = null;
+
+    // Procurar de trás para frente pela última mensagem que contém "Gpt"
+    for (let i = messageElements.length - 1; i >= 0; i--) {
+      const messageElement = messageElements[i];
+
+      // Verificar se esta mensagem contém "Gpt" (indicador de mensagem do assistente)
+      if (messageElement.textContent?.includes('Gpt') && messageElement.textContent?.includes('Turbo')) {
+        lastAssistantMessage = messageElement;
+        break;
+      }
+    }
+
+    if (lastAssistantMessage) {
+      // Calcular a posição do elemento em relação ao container
+      const containerRect = container.getBoundingClientRect();
+      const elementRect = lastAssistantMessage.getBoundingClientRect();
+
+      // Calcular o scroll necessário para posicionar o elemento no topo
+      const scrollTop = container.scrollTop + (elementRect.top - containerRect.top);
+
+      // Fazer scroll suave para a posição calculada
+      container.scrollTo({
+        top: scrollTop,
+        behavior: 'smooth'
+      });
+    } else {
+      // Fallback: scroll para o final
+      scrollToBottom();
+    }
+  }, []);
+
+  const checkScrollPosition = useCallback(() => {
+    if (!messagesContainerRef.current) return;
+
+    const container = messagesContainerRef.current;
+    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+
+    setShowScrollButton(!isNearBottom && messages.length > 0);
+  }, [messages.length]);
+
+  const handleScroll = () => {
+    // Marcar que usuário fez scroll manual (isso vai parar o auto-scroll)
+    setUserScrolled(true);
+
+    // Se estava em auto-scroll, desativar
+    if (autoScroll) {
+      setAutoScroll(false);
+    }
+
+    checkScrollPosition();
+  };
+
+  const scrollToBottomButton = () => {
+    // Apenas fazer scroll para o final, sem ativar auto-scroll
     scrollToBottom();
-  }, [messages]);
+    setShowScrollButton(false);
+  };
+
+  // ChatGPT-style scroll logic - position assistant response at top of viewport
+  useEffect(() => {
+    if (messages.length > 0 && !userScrolled) {
+      const lastMessage = messages[messages.length - 1];
+
+      // Se a última mensagem é do assistente, posicionar no topo da viewport
+      if (lastMessage.role === 'assistant') {
+        // Usar timeout para garantir que o DOM foi renderizado
+        setTimeout(() => {
+          scrollToLatestAssistantMessage();
+        }, 300);
+      }
+    }
+
+    // Verificar a posição do scroll para mostrar/esconder o botão
+    setTimeout(() => {
+      checkScrollPosition();
+    }, 400);
+  }, [messages, userScrolled, checkScrollPosition, scrollToLatestAssistantMessage]);
+
+  // Handle streaming messages - keep assistant response visible during streaming
+  useEffect(() => {
+    if (streamingMessage && !userScrolled) {
+      // Durante o streaming, manter a mensagem do assistente visível
+      setTimeout(() => {
+        scrollToLatestAssistantMessage();
+      }, 100);
+    }
+  }, [streamingMessage, userScrolled, scrollToLatestAssistantMessage]);
+
+  // Reset user scroll state when starting new conversation
+  useEffect(() => {
+    if (messages.length === 0) {
+      setUserScrolled(false);
+      setShowScrollButton(false);
+    }
+  }, [messages.length]);
 
   // Sync model selection with Redux
   useEffect(() => {
@@ -325,6 +433,52 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const handleLikeMessage = () => {};
   const handleDislikeMessage = () => {};
 
+  const handleEditMessage = async (messageId: string, newContent: string) => {
+    try {
+      // Find the message being edited
+      const messageIndex = messages.findIndex(msg => msg.id === messageId);
+      if (messageIndex === -1) return;
+
+      const editedMessage = messages[messageIndex];
+
+      // Update the message content
+      updateChatMessage(messageId, newContent);
+
+      // Remove all messages after the edited message (including assistant responses)
+      removeMessagesAfterMessage(messageId);
+
+      // If it's a user message, send the edited content as a new message to get a new response
+      if (editedMessage.role === 'user') {
+        // Wait a bit for the state to update
+        setTimeout(async () => {
+          try {
+            await startStreaming(
+              newContent,
+              {
+                model: selectedModel.name,
+                provider: selectedModel.provider.toLowerCase(),
+                isRegeneration: false,
+                onStart: () => {
+                  console.log('Streaming started for edited message');
+                },
+                onComplete: () => {
+                  console.log('Streaming completed for edited message');
+                },
+                onError: (error) => {
+                  console.error('Streaming error for edited message:', error);
+                },
+              }
+            );
+          } catch (error) {
+            console.error('Failed to send edited message:', error);
+          }
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Failed to edit message:', error);
+    }
+  };
+
   useEffect(() => {
     adjustTextareaHeight();
   }, [message]);
@@ -332,9 +486,14 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const hasMessages = messages && Array.isArray(messages) && messages.length > 0;
 
   return (
-    <div className={`h-full flex flex-col ${className}`}>
-      {/* Messages Area */}
-      <div className={`flex-1 overflow-y-auto ${hasMessages ? 'pb-6' : ''}`}>
+    <div className={`h-full relative ${className}`}>
+      {/* Messages Area - Now takes full height */}
+      <div
+        ref={messagesContainerRef}
+        className="absolute inset-0 overflow-y-auto"
+        style={{ paddingBottom: hasMessages ? '180px' : '160px' }}
+        onScroll={handleScroll}
+      >
         {hasMessages ? (
           <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
             {messages.map((message: Message, index: number) => (
@@ -345,9 +504,15 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                   timestamp={new Date(message.timestamp)}
                   model={message.model}
                   attachments={message.attachments}
+                  isStreaming={isStreaming}
                   onCopy={handleCopyMessage}
                   onLike={handleLikeMessage}
                   onDislike={handleDislikeMessage}
+                  onEdit={
+                    message.role === 'user'
+                      ? (newContent: string) => handleEditMessage(message.id, newContent)
+                      : undefined
+                  }
                   onRegenerate={
                     message.role === 'assistant' &&
                     index === messages.length - 1 &&
@@ -400,11 +565,11 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
         )}
       </div>
 
-      {/* Input Area */}
-      <div className={`${hasMessages ? 'sticky bottom-0 z-10' : ''} px-6 py-6`}>
-        <div className="max-w-5xl mx-auto">
-          {/* Main Input Container */}
-          <div className="relative bg-white/50 backdrop-blur-lg rounded-2xl border border-white/30 focus-within:border-orange-400/70 focus-within:shadow-2xl focus-within:bg-white/95 transition-all duration-300 shadow-xl hover:shadow-2xl hover:bg-white/92">
+      {/* Floating Input Area */}
+      <div className="absolute bottom-0 left-0 right-0 px-6 py-6 pointer-events-none">
+        <div className="pointer-events-auto max-w-5xl mx-auto">
+          {/* Main Input Container - Enhanced floating effect */}
+          <div className="relative bg-white/20 backdrop-blur-xl rounded-2xl border border-white/20 focus-within:border-orange-500 focus-within:shadow-2xl focus-within:bg-white/30 transition-all duration-300 shadow-2xl hover:shadow-3xl hover:bg-white/25 hover:focus-within:border-orange-500">
             {/* File Attachments - Inside the input container */}
             {selectedFiles.length > 0 && (
               <div className="px-4 pt-4 pb-2">
@@ -585,6 +750,18 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
           />
         </div>
       </div>
+
+      {/* Smart Scroll Button - ChatGPT Style */}
+      {showScrollButton && (
+        <div className="absolute bottom-44 left-1/2 transform -translate-x-1/2 z-40">
+          <button
+            onClick={scrollToBottomButton}
+            className="bg-white/20 backdrop-blur-xl border border-white/20 hover:bg-white/30 hover:border-white/30 text-gray-600 hover:text-gray-700 p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
+          >
+            <ArrowDown className="w-4 h-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -11,6 +11,8 @@ import {
   setIsTyping,
   setStreamingMessage,
   addMessage,
+  updateMessage,
+  removeMessagesAfter,
   clearMessages,
   clearError,
 } from '../redux/chat/chatReducer';
@@ -84,6 +86,14 @@ export const useChat = () => {
     dispatch(clearError());
   }, [dispatch]);
 
+  const updateChatMessage = useCallback((messageId: string, content: string) => {
+    dispatch(updateMessage({ messageId, content }));
+  }, [dispatch]);
+
+  const removeMessagesAfterMessage = useCallback((messageId: string) => {
+    dispatch(removeMessagesAfter(messageId));
+  }, [dispatch]);
+
   // Helper functions
   const sendQuickMessage = useCallback((content: string, files?: File[]) => {
     const request: SendMessageRequest = {
@@ -145,6 +155,8 @@ export const useChat = () => {
     setTyping,
     setStreaming,
     addNewMessage,
+    updateChatMessage,
+    removeMessagesAfterMessage,
     clearChatMessages,
     clearChatError,
     regenerateLastMessage,

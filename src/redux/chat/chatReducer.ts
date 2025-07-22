@@ -71,6 +71,21 @@ const chatSlice = createSlice({
         state.messages.splice(lastAssistantIndex, 1);
       }
     },
+    updateMessage: (state, action: PayloadAction<{ messageId: string; content: string }>) => {
+      const messageIndex = state.messages.findIndex(msg => msg.id === action.payload.messageId);
+      if (messageIndex !== -1) {
+        state.messages[messageIndex] = {
+          ...state.messages[messageIndex],
+          content: action.payload.content,
+        };
+      }
+    },
+    removeMessagesAfter: (state, action: PayloadAction<string>) => {
+      const messageIndex = state.messages.findIndex(msg => msg.id === action.payload);
+      if (messageIndex !== -1) {
+        state.messages = state.messages.slice(0, messageIndex + 1);
+      }
+    },
     clearMessages: (state) => {
       state.messages = [];
       state.currentConversation = null;
@@ -124,6 +139,8 @@ export const {
   setStreamingMessage,
   clearStreamingMessage,
   addMessage,
+  updateMessage,
+  removeMessagesAfter,
   replaceLastAssistantMessage,
   removeLastAssistantMessage,
   clearMessages,

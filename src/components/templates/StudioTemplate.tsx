@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StudioHeader } from '../organisms/StudioHeader';
+import { Plus, History } from 'lucide-react';
 import { StudioChatInterface } from '../organisms/StudioChatInterface';
 import { StudioHistoryModal } from '../organisms/StudioHistoryModal';
 import { useChat } from '../../hooks/useChat';
@@ -47,18 +47,43 @@ export const StudioTemplate: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-white">
-      {/* Fixed Header within the studio area */}
-      <div className="sticky top-0 z-40 bg-white border-b border-gray-100">
-        <StudioHeader
-          onNewConversation={createNewConversation}
-          onShowHistory={() => setShowHistoryModal(true)}
-        />
+    <div className="h-full relative bg-white overflow-hidden">
+      {/* Main Chat Interface - Full height */}
+      <div className="h-full">
+        <StudioChatInterface />
       </div>
 
-      {/* Main Chat Interface */}
-      <div className="flex-1">
-        <StudioChatInterface />
+      {/* Floating Action Buttons - Compact & Elegant */}
+      <div className="absolute top-4 right-4 flex flex-col space-y-2 z-50">
+        {/* New Conversation Button */}
+        <button
+          onClick={createNewConversation}
+          className="group relative bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white p-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
+          title="Nova conversa"
+        >
+          <Plus className="w-4 h-4" />
+
+          {/* Tooltip */}
+          <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-gray-900/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-150 whitespace-nowrap pointer-events-none delay-75">
+            Nova conversa
+            <div className="absolute left-full top-1/2 -translate-y-1/2 border-2 border-transparent border-l-gray-900/90"></div>
+          </div>
+        </button>
+
+        {/* History Button */}
+        <button
+          onClick={() => setShowHistoryModal(true)}
+          className="group relative bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:bg-white/90 hover:border-gray-300/60 text-gray-600 hover:text-gray-700 p-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
+          title="Histórico de conversas"
+        >
+          <History className="w-4 h-4" />
+
+          {/* Tooltip */}
+          <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-gray-900/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-150 whitespace-nowrap pointer-events-none delay-75">
+            Histórico
+            <div className="absolute left-full top-1/2 -translate-y-1/2 border-2 border-transparent border-l-gray-900/90"></div>
+          </div>
+        </button>
       </div>
 
       {/* History Modal */}
