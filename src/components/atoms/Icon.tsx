@@ -14,7 +14,12 @@ import {
   Calendar,
   FolderOpen,
   Settings,
-  Bell
+  Bell,
+  MessageSquare,
+  MoreHorizontal,
+  Edit,
+  Star,
+  Trash2
 } from 'lucide-react';
 
 // Icon name mapping
@@ -33,6 +38,11 @@ const iconMap = {
   'folder-open': FolderOpen,
   'settings': Settings,
   'bell': Bell,
+  'message-square': MessageSquare,
+  'more-horizontal': MoreHorizontal,
+  'edit': Edit,
+  'star': Star,
+  'trash-2': Trash2,
 } as const;
 
 export interface IconProps {

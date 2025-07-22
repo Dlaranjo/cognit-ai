@@ -7,6 +7,7 @@ export interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   error?: boolean;
   errorMessage?: string;
@@ -15,6 +16,7 @@ export interface InputProps {
   name?: string;
   required?: boolean;
   autoComplete?: string;
+  autoFocus?: boolean;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
 }
@@ -32,6 +34,7 @@ export const Input: React.FC<InputProps> = memo(({
   onChange,
   onFocus,
   onBlur,
+  onKeyDown,
   disabled = false,
   error = false,
   errorMessage,
@@ -40,6 +43,7 @@ export const Input: React.FC<InputProps> = memo(({
   name,
   required = false,
   autoComplete,
+  autoFocus = false,
   className = '',
   size = 'md',
 }) => {
@@ -79,9 +83,11 @@ export const Input: React.FC<InputProps> = memo(({
         onChange={onChange}
         onFocus={onFocus}
         onBlur={onBlur}
+        onKeyDown={onKeyDown}
         disabled={disabled}
         required={required}
         autoComplete={autoComplete}
+        autoFocus={autoFocus}
         className={classes}
       />
       
