@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Button, Badge } from '../atoms';
+import { Avatar, Badge } from '../atoms';
 import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles } from 'lucide-react';
 
 export interface MessageBubbleProps {

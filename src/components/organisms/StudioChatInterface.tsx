@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, Paperclip, X, ChevronDown, Sparkles } from 'lucide-react';
+import { Send, Paperclip, X, ChevronDown, Sparkles } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
 import { useChat } from '../../hooks/useChat';
 import { useStreaming } from '../../hooks/useStreaming';
@@ -9,9 +9,8 @@ import { createAvailableModels, formatFileSize } from '../../shared/utils/modelU
 import type { LLMModel, Message } from '../../types';
 
 // Componente para animação de digitação melhorada
-const TypingIndicator: React.FC<{ modelName: string; modelColor: string }> = ({ 
-  modelName, 
-  modelColor 
+const TypingIndicator: React.FC<{ modelName: string }> = ({
+  modelName
 }) => {
   // Use orange theme for typing indicator
   const orangeColor = 'from-orange-500 to-red-500';
@@ -40,11 +39,10 @@ const TypingIndicator: React.FC<{ modelName: string; modelColor: string }> = ({
 };
 
 // Componente para mensagem em streaming com animação
-const StreamingMessage: React.FC<{ 
-  content: string; 
-  modelName: string; 
-  modelColor: string;
-}> = ({ content, modelName, modelColor }) => (
+const StreamingMessage: React.FC<{
+  content: string;
+  modelName: string;
+}> = ({ content, modelName }) => (
   <div className="flex items-start space-x-4 animate-fade-in">
     <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
       <Sparkles className="w-5 h-5 text-white" />
@@ -258,15 +256,13 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
             ))}
 
             {streamingMessage ? (
-              <StreamingMessage 
+              <StreamingMessage
                 content={String(streamingMessage || '')}
                 modelName={selectedModel.name}
-                modelColor={selectedModel.color}
               />
             ) : (isLoading || isStreaming) && (
-              <TypingIndicator 
+              <TypingIndicator
                 modelName={selectedModel.name}
-                modelColor={selectedModel.color}
               />
             )}
 

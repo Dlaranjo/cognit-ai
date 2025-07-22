@@ -1,8 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { History, X, Search, MessageSquare, Calendar, Trash2, Star, StarOff, Filter, Clock, Bot } from 'lucide-react';
-import { ConversationList } from './ConversationList';
+import { History, X, Search, MessageSquare, Calendar, Trash2, Star, StarOff, Clock } from 'lucide-react';
 import { Input } from '../atoms/Input';
-import { Button } from '../atoms/Button';
 import { Badge } from '../atoms/Badge';
 import type { Conversation } from '../../types';
 
@@ -10,7 +8,6 @@ interface StudioHistoryModalProps {
   isOpen: boolean;
   conversations: Conversation[];
   currentConversationId?: string;
-  selectedModelName: string;
   onClose: () => void;
   onConversationSelect: (conversationId: string) => void;
   onConversationDelete: (conversationId: string) => void;
@@ -22,7 +19,6 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
   isOpen,
   conversations,
   currentConversationId,
-  selectedModelName,
   onClose,
   onConversationSelect,
   onConversationDelete,

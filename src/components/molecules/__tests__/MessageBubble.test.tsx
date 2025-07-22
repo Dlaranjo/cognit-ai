@@ -129,7 +129,7 @@ describe('MessageBubble', () => {
     );
 
     // Check for streaming cursor (animated span)
-    const streamingIndicator = document.querySelector('.animate-pulse');
+    const streamingIndicator = document.querySelector('.animate-bounce');
     expect(streamingIndicator).toBeInTheDocument();
   });
 
