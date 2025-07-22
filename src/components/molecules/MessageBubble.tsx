@@ -1,5 +1,6 @@
 import React from 'react';
-import { Avatar, Button, Badge, Icon } from '../atoms';
+import { Avatar, Button, Badge } from '../atoms';
+import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles } from 'lucide-react';
 
 export interface MessageBubbleProps {
   content: string;
@@ -47,39 +48,43 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
     };
 
     return (
-      <div
-        className={`flex gap-3 ${isUser ? 'flex-row-reverse' : 'flex-row'} ${className}`}
-      >
+      <div className={`flex gap-4 ${isUser ? 'flex-row-reverse' : 'flex-row'} ${className}`}>
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <Avatar
-            src={avatar}
-            name={displayName}
-            size="md"
-            fallbackIcon={!isUser}
-          />
+          {isUser ? (
+            <Avatar
+              src={avatar}
+              name={displayName}
+              size="md"
+              className="ring-2 ring-blue-100"
+            />
+          ) : (
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+              <Sparkles className="w-5 h-5 text-white" />
+            </div>
+          )}
         </div>
 
         {/* Message Content */}
         <div
-          className={`flex-1 max-w-3xl ${isUser ? 'text-right' : 'text-left'}`}
+          className={`flex-1 max-w-4xl ${isUser ? 'text-right' : 'text-left'}`}
         >
           {/* Header */}
           <div
-            className={`flex items-center gap-2 mb-1 ${isUser ? 'justify-end' : 'justify-start'}`}
+            className={`flex items-center gap-2 mb-2 ${isUser ? 'justify-end' : 'justify-start'}`}
           >
-            <span className="text-sm font-medium text-neutral-700">
+            <span className="text-sm font-semibold text-gray-700">
               {displayName}
             </span>
 
             {model && !isUser && (
-              <Badge variant="secondary" size="sm">
+              <Badge variant="primary" size="sm" className="bg-indigo-100 text-indigo-700 border-indigo-200">
                 {model}
               </Badge>
             )}
 
             {timestamp && (
-              <span className="text-xs text-neutral-500">
+              <span className="text-xs text-gray-500">
                 {formatTime(timestamp)}
               </span>
             )}
@@ -88,55 +93,66 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
           {/* Message Bubble */}
           <div
             className={`
-              rounded-lg transition-all duration-200
-              inline-block max-w-full text-sm whitespace-pre-wrap
-              px-3 py-2
-              ${isUser ? 'bg-orange-500 text-white border-2 border-orange-500' : 'bg-gray-100 text-gray-900 border-2 border-gray-200'}
+              rounded-2xl transition-all duration-300 ease-out
+              inline-block max-w-full text-base whitespace-pre-wrap leading-relaxed
+              px-4 py-3 shadow-sm
+              ${isUser 
+                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white ml-8' 
+                : 'bg-white text-gray-800 border border-gray-200 mr-8'
+              }
             `}
           >
             {content}
             {isStreaming && (
-              <span className="inline-block w-2 h-4 ml-1 bg-current animate-pulse" />
+              <span className="inline-flex items-center ml-2">
+                <span className="w-1 h-1 bg-current rounded-full animate-bounce"></span>
+                <span className="w-1 h-1 bg-current rounded-full animate-bounce delay-100 ml-1"></span>
+                <span className="w-1 h-1 bg-current rounded-full animate-bounce delay-200 ml-1"></span>
+              </span>
             )}
           </div>
 
           {/* Actions */}
           {!isUser && !isStreaming && (
-            <div className="flex items-center gap-1 mt-2">
+            <div className="flex items-center gap-1 mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleCopy}
-                className="p-1 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600"
+                className="p-2 h-auto min-h-0 hover:bg-gray-100 hover:text-gray-700 rounded-lg transition-colors"
+                title="Copiar"
               >
-                <Icon name="copy" size="sm" />
+                <Copy className="w-4 h-4" />
               </Button>
 
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={onLike}
-                className="p-1 h-auto min-h-0 hover:bg-green-100 hover:text-green-600"
+                className="p-2 h-auto min-h-0 hover:bg-green-100 hover:text-green-600 rounded-lg transition-colors"
+                title="Gostei"
               >
-                <Icon name="thumbs-up" size="sm" />
+                <ThumbsUp className="w-4 h-4" />
               </Button>
 
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={onDislike}
-                className="p-1 h-auto min-h-0 hover:bg-red-100 hover:text-red-600"
+                className="p-2 h-auto min-h-0 hover:bg-red-100 hover:text-red-600 rounded-lg transition-colors"
+                title="Não gostei"
               >
-                <Icon name="thumbs-down" size="sm" />
+                <ThumbsDown className="w-4 h-4" />
               </Button>
 
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={onRegenerate}
-                className="p-1 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600"
+                className="p-2 h-auto min-h-0 hover:bg-indigo-100 hover:text-indigo-600 rounded-lg transition-colors"
+                title="Regenerar"
               >
-                <Icon name="rotate-ccw" size="sm" />
+                <RotateCcw className="w-4 h-4" />
               </Button>
             </div>
           )}
