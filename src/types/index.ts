@@ -151,4 +151,5 @@ export interface LLMModel {
   };
   capabilities: string[];
   color: string;
+  priceCategory: 'low' | 'medium' | 'high';
 }

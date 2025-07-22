@@ -1,6 +1,15 @@
 import React from 'react';
 import { Avatar, Badge } from '../atoms';
-import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles } from 'lucide-react';
+import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles, Paperclip, FileText, Image } from 'lucide-react';
+
+export interface MessageAttachment {
+  id: string;
+  name: string;
+  type: string;
+  size: number;
+  url?: string;
+  thumbnailUrl?: string;
+}
 
 export interface MessageBubbleProps {
   content: string;
@@ -9,6 +18,7 @@ export interface MessageBubbleProps {
   model?: string;
   avatar?: string;
   userName?: string;
+  attachments?: MessageAttachment[];
   onCopy?: () => void;
   onLike?: () => void;
   onDislike?: () => void;
@@ -25,6 +35,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
     model,
     avatar,
     userName,
+    attachments = [],
     onCopy,
     onLike,
     onDislike,
@@ -40,6 +51,44 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
         hour: '2-digit',
         minute: '2-digit',
       });
+    };
+
+    const formatFileSize = (bytes: number): string => {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    };
+
+    const getFileIcon = (type: string) => {
+      if (type.startsWith('image/')) {
+        return <Image className="w-4 h-4" />;
+      }
+      if (type.includes('pdf') || type.includes('document') || type.includes('text')) {
+        return <FileText className="w-4 h-4" />;
+      }
+      return <Paperclip className="w-4 h-4" />;
+    };
+
+    const getFileTypeLabel = (type: string): string => {
+      if (type.startsWith('image/')) {
+        return 'Imagem';
+      } else if (type.includes('pdf')) {
+        return 'PDF';
+      } else if (type.includes('text/')) {
+        return 'Texto';
+      } else if (type.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+        return 'Word';
+      } else if (type.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+        return 'Excel';
+      } else if (type.includes('application/vnd.openxmlformats-officedocument.presentationml.presentation')) {
+        return 'PowerPoint';
+      } else if (type.includes('application/zip') || type.includes('application/x-rar')) {
+        return 'Arquivo';
+      } else {
+        return 'Arquivo';
+      }
     };
 
     const handleCopy = () => {
@@ -90,14 +139,47 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
             )}
           </div>
 
+          {/* Attachments - Above message content */}
+          {attachments && attachments.length > 0 && (
+            <div className={`mb-2 space-y-1 ${isUser ? 'ml-8 flex flex-col items-end' : 'mr-8'}`}>
+              {attachments.map((attachment, index) => (
+                <a
+                  key={`${attachment.id}-${index}`}
+                  href={attachment.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`
+                    flex items-center gap-2 p-2 rounded-lg border transition-all duration-200 cursor-pointer max-w-xs
+                    ${isUser
+                      ? 'bg-white/90 border-white/50 text-gray-800 hover:bg-white shadow-sm'
+                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300'
+                    }
+                  `}
+                >
+                  <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0 bg-orange-100 text-orange-600">
+                    {getFileIcon(attachment.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className={`text-sm font-medium truncate ${isUser ? 'text-gray-800' : 'text-gray-900'}`}>
+                      {attachment.name}
+                    </div>
+                    <div className={`text-xs ${isUser ? 'text-gray-600' : 'text-gray-500'}`}>
+                      {getFileTypeLabel(attachment.type)} • {formatFileSize(attachment.size)}
+                    </div>
+                  </div>
+                </a>
+              ))}
+            </div>
+          )}
+
           {/* Message Bubble */}
           <div
             className={`
               rounded-2xl transition-all duration-300 ease-out
               inline-block max-w-full text-base whitespace-pre-wrap leading-relaxed
               px-4 py-3 shadow-sm
-              ${isUser 
-                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white ml-8' 
+              ${isUser
+                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white ml-8'
                 : 'bg-white text-gray-800 border border-gray-200 mr-8'
               }
             `}

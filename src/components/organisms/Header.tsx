@@ -18,19 +18,12 @@ export const Header: React.FC<HeaderProps> = ({ title, subtitle, actions }) => {
 
         <div className="flex items-center space-x-4">
           {actions}
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="sm"
             className="text-gray-400 hover:text-gray-600"
           >
             <Icon name="bell" />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm"
-            className="text-gray-400 hover:text-gray-600"
-          >
-            <Icon name="settings" />
           </Button>
         </div>
       </div>

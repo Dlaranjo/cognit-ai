@@ -39,18 +39,41 @@ export function getProviderColor(providerId: string): string {
   );
 }
 
+function getModelDescription(model: string): string {
+  if (model.includes('gpt-4-turbo')) return 'Modelo avançado ideal para análises complexas e criação de conteúdo';
+  if (model.includes('gpt-4')) return 'Modelo poderoso para tarefas que exigem raciocínio sofisticado';
+  if (model.includes('gpt-3.5')) return 'Modelo equilibrado para uso geral, rápido e eficiente';
+  if (model.includes('claude-3-opus')) return 'Modelo premium para tarefas de alta complexidade e precisão';
+  if (model.includes('claude-3-sonnet')) return 'Modelo versátil com ótima relação custo-benefício';
+  if (model.includes('claude-3-haiku')) return 'Modelo rápido e econômico para tarefas simples';
+  if (model.includes('gemini-pro')) return 'Modelo do Google com capacidades multimodais avançadas';
+  if (model.includes('llama')) return 'Modelo open-source da Meta, gratuito para uso';
+  return 'Modelo de inteligência artificial para conversas e análises';
+}
+
+function getPriceCategory(pricing: { input: number; output: number }): 'low' | 'medium' | 'high' {
+  const avgPrice = (pricing.input + pricing.output) / 2;
+  if (avgPrice <= 0.002) return 'low';
+  if (avgPrice <= 0.02) return 'medium';
+  return 'high';
+}
+
 export function createAvailableModels(): LLMModel[] {
   return config.LLM_PROVIDERS.flatMap((provider) =>
-    provider.models.map((model) => ({
-      id: model,
-      name: model.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
-      provider: provider.name,
-      description: `${provider.name} ${model} model`,
-      contextWindow: getContextWindow(model),
-      pricing: getPricing(model),
-      capabilities: getCapabilities(model),
-      color: getProviderColor(provider.id),
-    }))
+    provider.models.map((model) => {
+      const pricing = getPricing(model);
+      return {
+        id: model,
+        name: model.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+        provider: provider.name,
+        description: getModelDescription(model),
+        contextWindow: getContextWindow(model),
+        pricing,
+        capabilities: getCapabilities(model),
+        color: getProviderColor(provider.id),
+        priceCategory: getPriceCategory(pricing),
+      };
+    })
   );
 }
 
@@ -60,4 +83,19 @@ export function formatFileSize(bytes: number): string {
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+export function formatPrice(price: number): string {
+  if (price === 0) return 'Gratuito';
+  if (price < 0.001) return `$${(price * 1000).toFixed(2)}/M`;
+  return `$${price.toFixed(3)}/1K`;
+}
+
+export function getPriceBadgeColor(category: 'low' | 'medium' | 'high'): string {
+  switch (category) {
+    case 'low': return 'bg-green-100 text-green-800 border-green-200';
+    case 'medium': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+    case 'high': return 'bg-red-100 text-red-800 border-red-200';
+    default: return 'bg-gray-100 text-gray-800 border-gray-200';
+  }
 }

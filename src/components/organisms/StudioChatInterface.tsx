@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Paperclip, X, ChevronDown, Sparkles } from 'lucide-react';
+import { Send, Paperclip, X, ChevronDown, Sparkles, Search } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
 import { useChat } from '../../hooks/useChat';
 import { useStreaming } from '../../hooks/useStreaming';
 import { useAppSelector } from '../../redux/store';
 import { selectStreamingMessage } from '../../redux/chat/chatSelectors';
-import { createAvailableModels, formatFileSize } from '../../shared/utils/modelUtils';
+import { createAvailableModels, formatFileSize, getPriceBadgeColor } from '../../shared/utils/modelUtils';
 import type { LLMModel, Message } from '../../types';
 
 // Componente para animação de digitação melhorada
@@ -94,6 +94,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const [message, setMessage] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [showModelSelector, setShowModelSelector] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -118,7 +119,15 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const handleModelSelect = (model: LLMModel) => {
     setSelectedModel(model);
     changeModel(model.id);
+    setSearchQuery('');
   };
+
+  // Filter models based on search query
+  const filteredModels = availableModels.filter(model => 
+    model.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    model.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    model.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const sendMessage = async () => {
     if ((!message.trim() && selectedFiles.length === 0) || isLoading || isStreaming) return;
@@ -137,6 +146,13 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
       role: 'user',
       timestamp: new Date().toISOString(),
       conversationId: currentConversation?.id || 'temp',
+      attachments: files.length > 0 ? files.map((file, index) => ({
+        id: `attachment-${Date.now()}-${index}`,
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        url: URL.createObjectURL(file), // URL temporária para visualização
+      })) : undefined,
     };
 
     addNewMessage(userMessage);
@@ -228,7 +244,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const hasMessages = messages && Array.isArray(messages) && messages.length > 0;
 
   return (
-    <div className={`h-full flex flex-col bg-gradient-to-b from-gray-50 to-white ${className}`}>
+    <div className={`h-full flex flex-col ${className}`}>
       {/* Messages Area */}
       <div className={`flex-1 overflow-y-auto ${hasMessages ? 'pb-6' : ''}`}>
         {hasMessages ? (
@@ -240,6 +256,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                   role={message.role as 'user' | 'assistant'}
                   timestamp={new Date(message.timestamp)}
                   model={message.model}
+                  attachments={message.attachments}
                   onCopy={handleCopyMessage}
                   onLike={handleLikeMessage}
                   onDislike={handleDislikeMessage}
@@ -270,7 +287,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
           </div>
         ) : (
           /* Welcome Screen */
-          <div className="flex items-center justify-center h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+          <div className="flex items-center justify-center h-full">
             <div className="text-center max-w-2xl px-4">
               <div className="relative mb-8">
                 <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl flex items-center justify-center mx-auto shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
@@ -296,34 +313,40 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
       </div>
 
       {/* Input Area */}
-      <div className={`${hasMessages ? 'sticky bottom-0 z-10' : ''} border-t border-gray-200 px-6 py-6 bg-white/80 backdrop-blur-sm shadow-lg`}>
+      <div className={`${hasMessages ? 'sticky bottom-0 z-10' : ''} px-6 py-6`}>
         <div className="max-w-5xl mx-auto">
-          {/* File Attachments */}
-          {selectedFiles.length > 0 && (
-            <div className="mb-4 flex flex-wrap gap-2">
-              {selectedFiles.map((file, index) => (
-                <div
-                  key={`${file.name}-${index}`}
-                  className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-2 rounded-full text-sm border border-orange-200"
-                >
-                  <Paperclip className="w-3 h-3" />
-                  <span className="truncate max-w-32">{file.name}</span>
-                  <span className="text-orange-500">
-                    ({formatFileSize(file.size)})
-                  </span>
-                  <button
-                    onClick={() => removeFile(index)}
-                    className="text-orange-500 hover:text-orange-700 ml-1 hover:bg-orange-100 rounded-full p-0.5 transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-
           {/* Main Input Container */}
-          <div className="relative bg-white rounded-2xl border-2 border-gray-200 focus-within:border-orange-400 focus-within:shadow-lg transition-all duration-200">
+          <div className="relative bg-white/90 backdrop-blur-lg rounded-2xl border border-white/30 focus-within:border-orange-400/70 focus-within:shadow-2xl focus-within:bg-white/95 transition-all duration-300 shadow-xl hover:shadow-2xl hover:bg-white/92">
+            {/* File Attachments - Inside the input container */}
+            {selectedFiles.length > 0 && (
+              <div className="px-4 pt-4 pb-2">
+                <div className="flex flex-wrap gap-2">
+                  {selectedFiles.map((file, index) => (
+                    <div
+                      key={`${file.name}-${index}`}
+                      className="flex items-center gap-2 bg-white/50 backdrop-blur-sm text-gray-700 px-3 py-2 rounded-lg text-sm border border-white/30 hover:bg-white/70 hover:border-white/40 transition-all duration-200 shadow-sm"
+                    >
+                      <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <Paperclip className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-gray-900 truncate max-w-32">{file.name}</div>
+                        <div className="text-xs text-gray-500">
+                          {formatFileSize(file.size)}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => removeFile(index)}
+                        className="text-gray-400 hover:text-gray-600 ml-1 hover:bg-white/60 rounded-full p-1 transition-all duration-200 flex-shrink-0"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Input Area */}
             <div className="flex items-end p-4">
               <div className="flex-1 relative">
@@ -382,30 +405,69 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                 {showModelSelector && (
                   <>
                     <div className="fixed inset-0 z-10" onClick={() => setShowModelSelector(false)} />
-                    <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-64 overflow-y-auto">
-                      <div className="p-2">
-                        {availableModels.map((model) => (
-                          <button
-                            key={model.id}
-                            onClick={() => {
-                              handleModelSelect(model);
-                              setShowModelSelector(false);
-                            }}
-                            className={`w-full p-3 rounded-lg text-left transition-all ${
-                              selectedModel.id === model.id
-                                ? 'bg-orange-50 text-orange-700 border border-orange-200'
-                                : 'hover:bg-orange-50 hover:text-orange-600'
-                            }`}
-                          >
-                            <div className="flex items-center space-x-3">
-                              <div className={`w-4 h-4 bg-gradient-to-br ${model.color} rounded-full`}></div>
-                              <div className="flex-1">
-                                <div className="font-medium text-gray-900">{model.name}</div>
-                                <div className="text-sm text-gray-500">{model.provider}</div>
-                              </div>
-                            </div>
-                          </button>
-                        ))}
+                    <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-80 overflow-hidden">
+                      {/* Search Header */}
+                      <div className="p-3 border-b border-gray-100">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                          <input
+                            type="text"
+                            placeholder="Pesquisar modelo..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                            autoFocus
+                          />
+                        </div>
+                      </div>
+
+                      {/* Models List */}
+                      <div className="overflow-y-auto max-h-64">
+                        {filteredModels.length > 0 ? (
+                          <div className="p-2">
+                            {filteredModels.map((model) => (
+                              <button
+                                key={model.id}
+                                onClick={() => {
+                                  handleModelSelect(model);
+                                  setShowModelSelector(false);
+                                }}
+                                className={`w-full p-3 rounded-lg text-left transition-all mb-1 ${
+                                  selectedModel.id === model.id
+                                    ? 'bg-orange-50 text-orange-700 border border-orange-200'
+                                    : 'hover:bg-orange-50 hover:text-orange-600'
+                                }`}
+                              >
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between">
+                                    <div>
+                                      <div className="font-medium text-gray-900 text-sm">{model.name}</div>
+                                      <div className="text-xs text-gray-500 flex items-center space-x-2">
+                                        <span>{model.provider}</span>
+                                        <span>•</span>
+                                        <span title="Janela de contexto">📄 {(model.contextWindow / 1000).toFixed(0)}K</span>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center space-x-2">
+                                      <div className={`text-xs px-2 py-0.5 rounded-full ${getPriceBadgeColor(model.priceCategory)}`}>
+                                        {model.pricing.input === 0 ? 'Gratuito' : 
+                                         model.priceCategory === 'low' ? '💰' :
+                                         model.priceCategory === 'medium' ? '💰💰' : '💰💰💰'}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="text-xs text-gray-600 mt-1 truncate" title={model.description}>
+                                    {model.description}
+                                  </div>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="p-4 text-center text-gray-500 text-sm">
+                            Nenhum modelo encontrado para "{searchQuery}"
+                          </div>
+                        )}
                       </div>
                     </div>
                   </>

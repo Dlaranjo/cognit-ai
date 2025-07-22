@@ -89,3 +89,17 @@ button, [role="button"] {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Sidebar navigation item height consistency */
+.sidebar-nav-item {
+  min-height: 3.5rem;
+}
+
+.sidebar-nav-item-collapsed {
+  height: 3rem;
+}
+
+/* Ensure consistent text rendering */
+.sidebar-text {
+  line-height: 1.2;
+}

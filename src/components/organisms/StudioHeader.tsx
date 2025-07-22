@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, History, Settings } from 'lucide-react';
+import { Plus, History } from 'lucide-react';
 
 interface StudioHeaderProps {
   onNewConversation: () => void;
@@ -46,16 +46,7 @@ export const StudioHeader: React.FC<StudioHeaderProps> = ({
         </button>
       </div>
 
-      {/* Settings */}
-      <button className="group/btn relative p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:ring-offset-1">
-        <Settings className="w-5 h-5 transition-transform duration-200 group-hover/btn:scale-110 group-hover/btn:rotate-90" />
-        
-        {/* Tooltip */}
-        {/* <div className="absolute top-full mt-2 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap shadow-lg">
-          Configurações
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-b-4 border-transparent border-b-gray-800"></div>
-        </div> */}
-      </button>
+
     </div>
   );
 };

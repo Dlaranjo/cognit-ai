@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
       <SidebarHeader isExpanded={isExpanded} />
 
       {/* Navigation */}
-      <div className={`flex-1 ${isExpanded ? 'p-4' : 'p-2'} space-y-2 transition-all duration-300`}>
+      <div className={`flex-1 ${isExpanded ? 'px-4' : 'px-2'} py-4 space-y-2 transition-all duration-300`}>
         {navigationItems.map((item) => (
           <SidebarNavItem
             key={item.id}
