@@ -82,3 +82,10 @@ button, [role="button"] {
 .tooltip-enter {
   animation: tooltip-fade-in 0.2s ease-out;
 }
+/* Line clamp utility for text truncation */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
