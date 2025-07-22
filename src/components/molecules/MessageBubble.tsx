@@ -114,46 +114,56 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
 
           {/* Actions */}
           {!isUser && !isStreaming && (
-            <div className="flex items-center gap-1 mt-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              <Button
-                variant="ghost"
-                size="sm"
+            <div className="flex items-center gap-1 mt-4 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
+              {/* Copy Button */}
+              <button
                 onClick={handleCopy}
-                className="p-2 h-auto min-h-0 hover:bg-gray-100 hover:text-gray-700 rounded-lg transition-colors"
-                title="Copiar"
+                className="group/btn relative p-2.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-xl transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-1"
+                title="Copiar mensagem"
               >
-                <Copy className="w-4 h-4" />
-              </Button>
+                <Copy className="w-4 h-4 transition-transform duration-200 group-hover/btn:scale-110" />
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                  Copiar
+                </div>
+              </button>
 
-              <Button
-                variant="ghost"
-                size="sm"
+              {/* Like Button */}
+              <button
                 onClick={onLike}
-                className="p-2 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600 rounded-lg transition-colors"
-                title="Gostei"
+                className="group/btn relative p-2.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-xl transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-green-200 focus:ring-offset-1"
+                title="Gostei da resposta"
               >
-                <ThumbsUp className="w-4 h-4" />
-              </Button>
+                <ThumbsUp className="w-4 h-4 transition-transform duration-200 group-hover/btn:scale-110" />
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                  Gostei
+                </div>
+              </button>
 
-              <Button
-                variant="ghost"
-                size="sm"
+              {/* Dislike Button */}
+              <button
                 onClick={onDislike}
-                className="p-2 h-auto min-h-0 hover:bg-red-100 hover:text-red-600 rounded-lg transition-colors"
-                title="Não gostei"
+                className="group/btn relative p-2.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-200 focus:ring-offset-1"
+                title="Não gostei da resposta"
               >
-                <ThumbsDown className="w-4 h-4" />
-              </Button>
+                <ThumbsDown className="w-4 h-4 transition-transform duration-200 group-hover/btn:scale-110" />
+                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                  Não gostei
+                </div>
+              </button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onRegenerate}
-                className="p-2 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600 rounded-lg transition-colors"
-                title="Regenerar"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </Button>
+              {/* Regenerate Button */}
+              {onRegenerate && (
+                <button
+                  onClick={onRegenerate}
+                  className="group/btn relative p-2.5 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:ring-offset-1"
+                  title="Gerar nova resposta"
+                >
+                  <RotateCcw className="w-4 h-4 transition-transform duration-200 group-hover/btn:scale-110 group-hover/btn:rotate-180" />
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                    Regenerar
+                  </div>
+                </button>
+              )}
             </div>
           )}
         </div>
