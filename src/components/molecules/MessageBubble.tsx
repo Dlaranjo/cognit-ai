@@ -1,4 +1,6 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Avatar, Badge } from '../atoms';
 import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles, Paperclip, FileText, Image } from 'lucide-react';
 
@@ -176,7 +178,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
           <div
             className={`
               rounded-2xl transition-all duration-300 ease-out
-              inline-block max-w-full text-base whitespace-pre-wrap leading-relaxed
+              inline-block max-w-full text-base leading-relaxed
               px-4 py-3 shadow-sm
               ${isUser
                 ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white ml-8'
@@ -184,7 +186,44 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
               }
             `}
           >
-            {content}
+            {isUser ? (
+              <div className="whitespace-pre-wrap">{content}</div>
+            ) : (
+              <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-800 prose-strong:text-gray-900 prose-code:text-orange-600 prose-code:bg-orange-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-50 prose-pre:border prose-ul:text-gray-800 prose-ol:text-gray-800 prose-li:text-gray-800 prose-ol:list-decimal prose-ul:list-disc prose-li:list-item">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    // Customizar componentes se necessário
+                    code: (props) => {
+                      const { children, ...rest } = props;
+                      const isInline = !String(children).includes('\n');
+                      return isInline ? (
+                        <code className="bg-orange-50 text-orange-600 px-1 py-0.5 rounded text-sm" {...rest}>
+                          {children}
+                        </code>
+                      ) : (
+                        <pre className="bg-gray-50 border rounded p-3 overflow-x-auto">
+                          <code className="text-sm" {...rest}>
+                            {children}
+                          </code>
+                        </pre>
+                      );
+                    },
+                    h1: ({ children }) => <h1 className="text-xl font-bold text-gray-800 mb-3">{children}</h1>,
+                    h2: ({ children }) => <h2 className="text-lg font-bold text-gray-800 mb-2">{children}</h2>,
+                    h3: ({ children }) => <h3 className="text-base font-bold text-gray-800 mb-2">{children}</h3>,
+                    p: ({ children }) => <p className="text-gray-800 mb-2 last:mb-0">{children}</p>,
+                    ul: ({ children }) => <ul className="list-disc ml-4 text-gray-800 mb-3 space-y-1">{children}</ul>,
+                    ol: ({ children }) => <ol className="list-decimal ml-4 text-gray-800 mb-3 space-y-1">{children}</ol>,
+                    li: ({ children }) => <li className="text-gray-800 ml-2">{children}</li>,
+                    strong: ({ children }) => <strong className="font-bold text-gray-900">{children}</strong>,
+                    em: ({ children }) => <em className="italic text-gray-800">{children}</em>,
+                  }}
+                >
+                  {content}
+                </ReactMarkdown>
+              </div>
+            )}
             {isStreaming && (
               <span className="inline-flex items-center ml-2">
                 <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></span>

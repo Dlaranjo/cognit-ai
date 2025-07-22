@@ -40,6 +40,37 @@ const chatSlice = createSlice({
     addMessage: (state, action: PayloadAction<Message>) => {
       state.messages.push(action.payload);
     },
+    replaceLastAssistantMessage: (state, action: PayloadAction<Message>) => {
+      // Find the last assistant message and replace it
+      let lastAssistantIndex = -1;
+      for (let i = state.messages.length - 1; i >= 0; i--) {
+        if (state.messages[i].role === 'assistant') {
+          lastAssistantIndex = i;
+          break;
+        }
+      }
+
+      if (lastAssistantIndex !== -1) {
+        state.messages[lastAssistantIndex] = action.payload;
+      } else {
+        // If no assistant message found, add as new message
+        state.messages.push(action.payload);
+      }
+    },
+    removeLastAssistantMessage: (state) => {
+      // Find and remove the last assistant message
+      let lastAssistantIndex = -1;
+      for (let i = state.messages.length - 1; i >= 0; i--) {
+        if (state.messages[i].role === 'assistant') {
+          lastAssistantIndex = i;
+          break;
+        }
+      }
+
+      if (lastAssistantIndex !== -1) {
+        state.messages.splice(lastAssistantIndex, 1);
+      }
+    },
     clearMessages: (state) => {
       state.messages = [];
       state.currentConversation = null;
@@ -93,6 +124,8 @@ export const {
   setStreamingMessage,
   clearStreamingMessage,
   addMessage,
+  replaceLastAssistantMessage,
+  removeLastAssistantMessage,
   clearMessages,
   clearError,
 } = chatSlice.actions;

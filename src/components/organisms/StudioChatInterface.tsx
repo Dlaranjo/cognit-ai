@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { Send, Paperclip, X, ChevronDown, Sparkles, Search } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
 import { useChat } from '../../hooks/useChat';
 import { useStreaming } from '../../hooks/useStreaming';
-import { useAppSelector } from '../../redux/store';
+import { useAppSelector, useAppDispatch } from '../../redux/store';
 import { selectStreamingMessage } from '../../redux/chat/chatSelectors';
+import { removeLastAssistantMessage } from '../../redux/chat/chatReducer';
 import { createAvailableModels, formatFileSize, getPriceBadgeColor } from '../../shared/utils/modelUtils';
 import type { LLMModel, Message } from '../../types';
 
@@ -38,34 +41,62 @@ const TypingIndicator: React.FC<{ modelName: string }> = ({
   );
 };
 
-// Componente para mensagem em streaming com animação
+// Componente para mensagem em streaming com cursor de digitação
 const StreamingMessage: React.FC<{
   content: string;
   modelName: string;
-}> = ({ content, modelName }) => (
-  <div className="flex items-start space-x-4 animate-fade-in">
-    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
-      <Sparkles className="w-5 h-5 text-white" />
-    </div>
-    <div className="flex-1">
-      <div className="mb-2">
-        <span className="text-sm font-semibold text-gray-700">{modelName}</span>
+}> = ({ content, modelName }) => {
+  return (
+    <div className="flex items-start space-x-4 animate-fade-in">
+      <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
+        <Sparkles className="w-5 h-5 text-white" />
       </div>
-      <div className="bg-white rounded-2xl px-6 py-4 shadow-sm border border-gray-200 mr-8">
-        <div className="prose max-w-none">
-          <div className="text-gray-800 whitespace-pre-wrap leading-relaxed">
-            {content}
-            <span className="inline-flex items-center ml-2">
-              <span className="w-1 h-1 bg-orange-500 rounded-full animate-bounce"></span>
-              <span className="w-1 h-1 bg-orange-500 rounded-full animate-bounce delay-100 ml-1"></span>
-              <span className="w-1 h-1 bg-orange-500 rounded-full animate-bounce delay-200 ml-1"></span>
+      <div className="flex-1">
+        <div className="mb-2">
+          <span className="text-sm font-semibold text-gray-700">{modelName}</span>
+        </div>
+        <div className="bg-white rounded-2xl px-6 py-4 shadow-sm border border-gray-200 mr-8">
+          <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-800 prose-strong:text-gray-900 prose-code:text-orange-600 prose-code:bg-orange-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-50 prose-pre:border prose-ul:text-gray-800 prose-ol:text-gray-800 prose-li:text-gray-800 prose-ol:list-decimal prose-ul:list-disc prose-li:list-item">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                code: (props) => {
+                  const { children, ...rest } = props;
+                  const isInline = !String(children).includes('\n');
+                  return isInline ? (
+                    <code className="bg-orange-50 text-orange-600 px-1 py-0.5 rounded text-sm" {...rest}>
+                      {children}
+                    </code>
+                  ) : (
+                    <pre className="bg-gray-50 border rounded p-3 overflow-x-auto">
+                      <code className="text-sm" {...rest}>
+                        {children}
+                      </code>
+                    </pre>
+                  );
+                },
+                h1: ({ children }) => <h1 className="text-xl font-bold text-gray-800 mb-3">{children}</h1>,
+                h2: ({ children }) => <h2 className="text-lg font-bold text-gray-800 mb-2">{children}</h2>,
+                h3: ({ children }) => <h3 className="text-base font-bold text-gray-800 mb-2">{children}</h3>,
+                p: ({ children }) => <p className="text-gray-800 mb-2 last:mb-0">{children}</p>,
+                ul: ({ children }) => <ul className="list-disc ml-4 text-gray-800 mb-3 space-y-1">{children}</ul>,
+                ol: ({ children }) => <ol className="list-decimal ml-4 text-gray-800 mb-3 space-y-1">{children}</ol>,
+                li: ({ children }) => <li className="text-gray-800 ml-2">{children}</li>,
+                strong: ({ children }) => <strong className="font-bold text-gray-900">{children}</strong>,
+                em: ({ children }) => <em className="italic text-gray-800">{children}</em>,
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+            <span className="inline-flex items-center ml-1">
+              <span className="w-0.5 h-4 bg-orange-500 animate-pulse"></span>
             </span>
           </div>
         </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 interface StudioChatInterfaceProps {
   className?: string;
 }
@@ -74,6 +105,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   className = '' 
 }) => {
   // Redux hooks
+  const dispatch = useAppDispatch();
   const {
     currentConversation,
     messages,
@@ -194,10 +226,53 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
 
   const handleRegenerateResponse = async () => {
     if (isLoading || isStreaming) return;
+
+    // Find the last assistant message and the user message that prompted it
+    const assistantMessages = messages.filter((m: Message) => m.role === 'assistant');
+    const lastAssistantMessage = assistantMessages[assistantMessages.length - 1];
+    if (!lastAssistantMessage) return;
+
+    const assistantIndex = messages.findIndex((m: Message) => m.id === lastAssistantMessage.id);
+    const userMessage = messages[assistantIndex - 1];
+
+    if (!userMessage || userMessage.role !== 'user') return;
+
     try {
-      await regenerateLastMessage();
+      // Remove the last assistant message before regenerating
+      dispatch(removeLastAssistantMessage());
+
+      // Use streaming for regeneration just like regular messages
+      await startStreaming(
+        userMessage.content,
+        {
+          model: selectedModel.id,
+          provider: selectedModel.provider.toLowerCase(),
+          isRegeneration: false, // Now we use false since we removed the message
+          onStart: () => {
+            console.log('Regeneration streaming started');
+          },
+          onComplete: () => {
+            console.log('Regeneration streaming completed');
+          },
+          onError: async (error) => {
+            console.error('Regeneration streaming error:', error);
+            // Fallback to regular regeneration
+            try {
+              await regenerateLastMessage();
+            } catch (fallbackError) {
+              console.error('Fallback regeneration failed:', fallbackError);
+            }
+          },
+        }
+      );
     } catch (error) {
-      console.error('Failed to regenerate message:', error);
+      console.error('Failed to regenerate message with streaming:', error);
+      // Fallback to regular regeneration
+      try {
+        await regenerateLastMessage();
+      } catch (fallbackError) {
+        console.error('Fallback regeneration also failed:', fallbackError);
+      }
     }
   };
 
@@ -316,7 +391,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
       <div className={`${hasMessages ? 'sticky bottom-0 z-10' : ''} px-6 py-6`}>
         <div className="max-w-5xl mx-auto">
           {/* Main Input Container */}
-          <div className="relative bg-white/90 backdrop-blur-lg rounded-2xl border border-white/30 focus-within:border-orange-400/70 focus-within:shadow-2xl focus-within:bg-white/95 transition-all duration-300 shadow-xl hover:shadow-2xl hover:bg-white/92">
+          <div className="relative bg-white/50 backdrop-blur-lg rounded-2xl border border-white/30 focus-within:border-orange-400/70 focus-within:shadow-2xl focus-within:bg-white/95 transition-all duration-300 shadow-xl hover:shadow-2xl hover:bg-white/92">
             {/* File Attachments - Inside the input container */}
             {selectedFiles.length > 0 && (
               <div className="px-4 pt-4 pb-2">

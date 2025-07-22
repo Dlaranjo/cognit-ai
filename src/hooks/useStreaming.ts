@@ -3,14 +3,93 @@ import { useAppDispatch, useAppSelector } from '../redux/store';
 import {
   setStreamingMessage,
   addMessage,
+  replaceLastAssistantMessage,
   clearStreamingMessage,
 } from '../redux/chat/chatReducer';
 import { selectCurrentConversation } from '../redux/chat/chatSelectors';
 import { config } from '../shared/config';
 
+// Hook para efeito de digitação
+export const useTypingEffect = (text: string, speed: number = 30) => {
+  const [displayedText, setDisplayedText] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
+  const currentIndexRef = useRef(0);
+  const isTypingRef = useRef(false);
+
+  useEffect(() => {
+    if (!text) {
+      setDisplayedText('');
+      setIsTyping(false);
+      currentIndexRef.current = 0;
+      isTypingRef.current = false;
+      return;
+    }
+
+    // Se o texto mudou e é diferente do que estamos exibindo
+    if (text !== displayedText && !isTypingRef.current) {
+      setIsTyping(true);
+      isTypingRef.current = true;
+
+      const typeNextCharacter = () => {
+        if (currentIndexRef.current < text.length) {
+          const nextText = text.slice(0, currentIndexRef.current + 1);
+          setDisplayedText(nextText);
+          currentIndexRef.current += 1;
+
+          if (timeoutRef.current) {
+            clearTimeout(timeoutRef.current);
+          }
+
+          timeoutRef.current = setTimeout(typeNextCharacter, speed);
+        } else {
+          setIsTyping(false);
+          isTypingRef.current = false;
+          // Garantir que o texto completo seja exibido
+          setDisplayedText(text);
+        }
+      };
+
+      // Se o novo texto é uma extensão do atual, continue de onde parou
+      if (text.startsWith(displayedText) && displayedText.length > 0) {
+        currentIndexRef.current = displayedText.length;
+      } else {
+        // Se o texto mudou completamente, reinicie
+        currentIndexRef.current = 0;
+        setDisplayedText('');
+      }
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(typeNextCharacter, speed);
+    }
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, [text, speed, displayedText]);
+
+  // Cleanup effect
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      isTypingRef.current = false;
+    };
+  }, []);
+
+  return { displayedText, isTyping };
+};
+
 interface StreamingOptions {
   model: string;
   provider: string;
+  isRegeneration?: boolean;
   onStart?: () => void;
   onComplete?: (message: string) => void;
   onError?: (error: Error) => void;
@@ -83,20 +162,64 @@ export const useStreaming = () => {
           const jsonResponse = await response.json();
 
           if (jsonResponse.content) {
-            // Simulate streaming by adding the message directly
-            dispatch(clearStreamingMessage());
-            dispatch(
-              addMessage({
-                id: Date.now().toString(),
-                content: jsonResponse.content,
-                role: 'assistant',
-                timestamp: new Date().toISOString(),
-                model: options.model,
-                provider: options.provider,
-                conversationId: currentConversation?.id,
-              })
-            );
-            options.onComplete?.(jsonResponse.content);
+            if (jsonResponse.isStreaming) {
+              // Simulate streaming by updating the streaming message progressively
+              const content = jsonResponse.content;
+              let currentIndex = 0;
+
+              const streamCharacters = () => {
+                if (currentIndex < content.length) {
+                  // Stream in chunks of 2-3 characters for better performance with Markdown
+                  const chunkSize = Math.floor(Math.random() * 2) + 2; // 2-3 characters
+                  const nextIndex = Math.min(currentIndex + chunkSize, content.length);
+                  const partialContent = content.slice(0, nextIndex);
+                  dispatch(setStreamingMessage(partialContent));
+                  currentIndex = nextIndex;
+
+                  // Fast typing speed - 7ms per chunk
+                  setTimeout(streamCharacters, 7);
+                } else {
+                  // Streaming complete
+                  dispatch(clearStreamingMessage());
+
+                  const messageData = {
+                    id: Date.now().toString(),
+                    content: content,
+                    role: 'assistant' as const,
+                    timestamp: new Date().toISOString(),
+                    model: options.model,
+                    provider: options.provider,
+                    conversationId: currentConversation?.id,
+                  };
+
+                  if (options.isRegeneration) {
+                    dispatch(replaceLastAssistantMessage(messageData));
+                  } else {
+                    dispatch(addMessage(messageData));
+                  }
+
+                  options.onComplete?.(content);
+                }
+              };
+
+              // Start streaming simulation
+              streamCharacters();
+            } else {
+              // Regular response without streaming
+              dispatch(clearStreamingMessage());
+              dispatch(
+                addMessage({
+                  id: Date.now().toString(),
+                  content: jsonResponse.content,
+                  role: 'assistant',
+                  timestamp: new Date().toISOString(),
+                  model: options.model,
+                  provider: options.provider,
+                  conversationId: currentConversation?.id,
+                })
+              );
+              options.onComplete?.(jsonResponse.content);
+            }
           }
           return;
         }
@@ -128,16 +251,23 @@ export const useStreaming = () => {
               if (data === '[DONE]') {
                 // Streaming complete
                 dispatch(clearStreamingMessage());
-                dispatch(
-                  addMessage({
-                    id: Date.now().toString(),
-                    content: fullMessage,
-                    role: 'assistant',
-                    timestamp: new Date().toISOString(),
-                    model: options.model,
-                    provider: options.provider,
-                  })
-                );
+
+                const messageData = {
+                  id: Date.now().toString(),
+                  content: fullMessage,
+                  role: 'assistant' as const,
+                  timestamp: new Date().toISOString(),
+                  model: options.model,
+                  provider: options.provider,
+                  conversationId: currentConversation?.id,
+                };
+
+                if (options.isRegeneration) {
+                  dispatch(replaceLastAssistantMessage(messageData));
+                } else {
+                  dispatch(addMessage(messageData));
+                }
+
                 options.onComplete?.(fullMessage);
                 return;
               }
