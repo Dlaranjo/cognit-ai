@@ -12,18 +12,22 @@ import type { LLMModel, Message } from '../../types';
 const TypingIndicator: React.FC<{ modelName: string; modelColor: string }> = ({ 
   modelName, 
   modelColor 
-}) => (
+}) => {
+  // Use orange theme for typing indicator
+  const orangeColor = 'from-orange-500 to-red-500';
+  
+  return (
   <div className="flex items-start space-x-4 animate-fade-in">
-    <div className={`w-10 h-10 bg-gradient-to-br ${modelColor} rounded-full flex items-center justify-center shadow-lg`}>
+    <div className={`w-10 h-10 bg-gradient-to-br ${orangeColor} rounded-full flex items-center justify-center shadow-lg`}>
       <Sparkles className="w-5 h-5 text-white animate-pulse" />
     </div>
     <div className="flex-1">
       <div className="bg-white rounded-2xl px-6 py-4 shadow-sm border border-gray-200 max-w-xs">
         <div className="flex items-center space-x-3">
           <div className="flex space-x-1">
-            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
-            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce delay-100"></div>
-            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce delay-200"></div>
+            <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
+            <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-100"></div>
+            <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-200"></div>
           </div>
           <span className="text-sm text-gray-600 font-medium">
             {modelName} está pensando...
@@ -32,7 +36,8 @@ const TypingIndicator: React.FC<{ modelName: string; modelColor: string }> = ({
       </div>
     </div>
   </div>
-);
+  );
+};
 
 // Componente para mensagem em streaming com animação
 const StreamingMessage: React.FC<{ 
@@ -41,7 +46,7 @@ const StreamingMessage: React.FC<{
   modelColor: string;
 }> = ({ content, modelName, modelColor }) => (
   <div className="flex items-start space-x-4 animate-fade-in">
-    <div className={`w-10 h-10 bg-gradient-to-br ${modelColor} rounded-full flex items-center justify-center shadow-lg`}>
+    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
       <Sparkles className="w-5 h-5 text-white" />
     </div>
     <div className="flex-1">
@@ -53,9 +58,9 @@ const StreamingMessage: React.FC<{
           <div className="text-gray-800 whitespace-pre-wrap leading-relaxed">
             {content}
             <span className="inline-flex items-center ml-2">
-              <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce"></span>
-              <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce delay-100 ml-1"></span>
-              <span className="w-1 h-1 bg-indigo-500 rounded-full animate-bounce delay-200 ml-1"></span>
+              <span className="w-1 h-1 bg-orange-500 rounded-full animate-bounce"></span>
+              <span className="w-1 h-1 bg-orange-500 rounded-full animate-bounce delay-100 ml-1"></span>
+              <span className="w-1 h-1 bg-orange-500 rounded-full animate-bounce delay-200 ml-1"></span>
             </span>
           </div>
         </div>
@@ -272,21 +277,21 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
           <div className="flex items-center justify-center h-full bg-gradient-to-br from-indigo-50 via-white to-purple-50">
             <div className="text-center max-w-2xl px-4">
               <div className="relative mb-8">
-                <div className="w-20 h-20 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
+                <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-red-500 rounded-3xl flex items-center justify-center mx-auto shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105">
                   <Sparkles className="w-10 h-10 text-white" />
                 </div>
-                <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-pink-400 to-red-400 rounded-full animate-pulse"></div>
+                <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-orange-400 to-red-400 rounded-full animate-pulse"></div>
               </div>
 
               <h1 className="text-4xl font-bold text-gray-900 mb-2">
-                Cognit <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Studio</span>
+                Cognit <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Studio</span>
               </h1>
               
               <p className="text-lg text-gray-600 mb-8">
                 Sua IA pessoal está pronta para ajudar
               </p>
               
-              <div className="text-sm text-indigo-600 bg-indigo-50 px-6 py-3 rounded-full inline-block border border-indigo-100">
+              <div className="text-sm text-orange-600 bg-orange-50 px-6 py-3 rounded-full inline-block border border-orange-100">
                 ✨ Comece digitando sua pergunta abaixo
               </div>
             </div>
@@ -303,16 +308,16 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
               {selectedFiles.map((file, index) => (
                 <div
                   key={`${file.name}-${index}`}
-                  className="flex items-center gap-2 bg-indigo-50 text-indigo-700 px-3 py-2 rounded-full text-sm border border-indigo-200"
+                  className="flex items-center gap-2 bg-orange-50 text-orange-700 px-3 py-2 rounded-full text-sm border border-orange-200"
                 >
                   <Paperclip className="w-3 h-3" />
                   <span className="truncate max-w-32">{file.name}</span>
-                  <span className="text-indigo-500">
+                  <span className="text-orange-500">
                     ({formatFileSize(file.size)})
                   </span>
                   <button
                     onClick={() => removeFile(index)}
-                    className="text-indigo-500 hover:text-indigo-700 ml-1 hover:bg-indigo-100 rounded-full p-0.5 transition-colors"
+                    className="text-orange-500 hover:text-orange-700 ml-1 hover:bg-orange-100 rounded-full p-0.5 transition-colors"
                   >
                     <X className="w-3 h-3" />
                   </button>
@@ -322,7 +327,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
           )}
 
           {/* Main Input Container */}
-          <div className="relative bg-white rounded-2xl border-2 border-gray-200 focus-within:border-indigo-400 focus-within:shadow-lg transition-all duration-200">
+          <div className="relative bg-white rounded-2xl border-2 border-gray-200 focus-within:border-orange-400 focus-within:shadow-lg transition-all duration-200">
             {/* Input Area */}
             <div className="flex items-end p-4">
               <div className="flex-1 relative">
@@ -343,7 +348,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                 <button
                   onClick={handleFileSelect}
                   disabled={Boolean(isLoading || isStreaming)}
-                  className="p-2 text-gray-400 hover:text-indigo-500 hover:bg-indigo-50 rounded-lg transition-colors disabled:opacity-50"
+                  className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
                   title="Anexar arquivo"
                 >
                   <Paperclip className="w-5 h-5" />
@@ -357,7 +362,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                     isLoading ||
                     isStreaming
                   )}
-                  className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-2 rounded-lg hover:from-indigo-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
+                  className="bg-gradient-to-r from-orange-500 to-red-500 text-white p-2 rounded-lg hover:from-orange-600 hover:to-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-md hover:shadow-lg"
                 >
                   <Send className="w-5 h-5" />
                 </button>
@@ -370,7 +375,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
               <div className="relative">
                 <button
                   onClick={() => setShowModelSelector(!showModelSelector)}
-                  className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                  className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
                 >
                   <div className={`w-3 h-3 bg-gradient-to-br ${selectedModel.color} rounded-full`}></div>
                   <span>{selectedModel.name}</span>
@@ -392,8 +397,8 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                             }}
                             className={`w-full p-3 rounded-lg text-left transition-all ${
                               selectedModel.id === model.id
-                                ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
-                                : 'hover:bg-indigo-50 hover:text-indigo-600'
+                                ? 'bg-orange-50 text-orange-700 border border-orange-200'
+                                : 'hover:bg-orange-50 hover:text-orange-600'
                             }`}
                           >
                             <div className="flex items-center space-x-3">

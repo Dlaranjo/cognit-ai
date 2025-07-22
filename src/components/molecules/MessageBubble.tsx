@@ -56,10 +56,10 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
               src={avatar}
               name={displayName}
               size="md"
-              className="ring-2 ring-blue-100"
+              className="ring-2 ring-orange-100"
             />
           ) : (
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
           )}
@@ -78,7 +78,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
             </span>
 
             {model && !isUser && (
-              <Badge variant="primary" size="sm" className="bg-indigo-100 text-indigo-700 border-indigo-200">
+              <Badge variant="primary" size="sm" className="bg-orange-100 text-orange-700 border-orange-200">
                 {model}
               </Badge>
             )}
@@ -97,7 +97,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
               inline-block max-w-full text-base whitespace-pre-wrap leading-relaxed
               px-4 py-3 shadow-sm
               ${isUser 
-                ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white ml-8' 
+                ? 'bg-gradient-to-r from-orange-500 to-orange-600 text-white ml-8' 
                 : 'bg-white text-gray-800 border border-gray-200 mr-8'
               }
             `}
@@ -105,9 +105,9 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
             {content}
             {isStreaming && (
               <span className="inline-flex items-center ml-2">
-                <span className="w-1 h-1 bg-current rounded-full animate-bounce"></span>
-                <span className="w-1 h-1 bg-current rounded-full animate-bounce delay-100 ml-1"></span>
-                <span className="w-1 h-1 bg-current rounded-full animate-bounce delay-200 ml-1"></span>
+                <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce"></span>
+                <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce delay-100 ml-1"></span>
+                <span className="w-1 h-1 bg-orange-400 rounded-full animate-bounce delay-200 ml-1"></span>
               </span>
             )}
           </div>
@@ -129,7 +129,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 variant="ghost"
                 size="sm"
                 onClick={onLike}
-                className="p-2 h-auto min-h-0 hover:bg-green-100 hover:text-green-600 rounded-lg transition-colors"
+                className="p-2 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600 rounded-lg transition-colors"
                 title="Gostei"
               >
                 <ThumbsUp className="w-4 h-4" />
@@ -149,7 +149,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 variant="ghost"
                 size="sm"
                 onClick={onRegenerate}
-                className="p-2 h-auto min-h-0 hover:bg-indigo-100 hover:text-indigo-600 rounded-lg transition-colors"
+                className="p-2 h-auto min-h-0 hover:bg-orange-100 hover:text-orange-600 rounded-lg transition-colors"
                 title="Regenerar"
               >
                 <RotateCcw className="w-4 h-4" />
