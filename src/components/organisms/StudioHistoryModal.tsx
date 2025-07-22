@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { History, X, Search, MessageSquare, Calendar, Trash2, Star, StarOff, Clock } from 'lucide-react';
+import { History, X, Search, MessageSquare, Calendar, Trash2, Star, StarOff, Clock, Bot } from 'lucide-react';
 import { Input } from '../atoms/Input';
 import { Badge } from '../atoms/Badge';
 import type { Conversation } from '../../types';

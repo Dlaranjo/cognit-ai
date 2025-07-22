@@ -39,7 +39,7 @@ const uiSlice = createSlice({
     addNotification: (state, action: PayloadAction<NotificationPayload>) => {
       const notification: Notification = {
         id: Date.now().toString(),
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
         duration: 5000,
         ...action.payload,
       };

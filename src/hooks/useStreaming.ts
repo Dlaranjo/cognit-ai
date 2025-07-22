@@ -90,7 +90,7 @@ export const useStreaming = () => {
                 id: Date.now().toString(),
                 content: jsonResponse.content,
                 role: 'assistant',
-                timestamp: new Date(),
+                timestamp: new Date().toISOString(),
                 model: options.model,
                 provider: options.provider,
                 conversationId: currentConversation?.id,
@@ -133,7 +133,7 @@ export const useStreaming = () => {
                     id: Date.now().toString(),
                     content: fullMessage,
                     role: 'assistant',
-                    timestamp: new Date(),
+                    timestamp: new Date().toISOString(),
                     model: options.model,
                     provider: options.provider,
                   })

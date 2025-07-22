@@ -19,7 +19,7 @@ export interface Notification {
   title: string;
   message?: string;
   duration?: number;
-  timestamp: Date;
+  timestamp: string;
 }
 
 export interface ModalPayload {

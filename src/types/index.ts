@@ -125,7 +125,7 @@ export interface Notification {
   title: string;
   message?: string;
   duration?: number;
-  timestamp: Date;
+  timestamp: string;
 }
 
 // Legacy types for compatibility - kept for backward compatibility
