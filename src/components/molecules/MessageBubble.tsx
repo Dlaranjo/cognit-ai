@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles, Paperclip, FileText, Image } from 'lucide-react';
+import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles, Paperclip, FileText, Image, Check, Heart, HeartOff, Edit3, Save, X } from 'lucide-react';
 
 export interface MessageAttachment {
   id: string;
@@ -45,6 +45,13 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
   }) => {
     const isUser = role === 'user';
     const displayName = isUser ? userName || 'Você' : model || 'Assistente';
+    
+    const [buttonStates, setButtonStates] = useState({
+      copied: false,
+      liked: false,
+      disliked: false,
+      regenerating: false,
+    });
 
     const formatTime = (date: Date) => {
       return date.toLocaleTimeString('pt-BR', {
@@ -93,7 +100,37 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
 
     const handleCopy = () => {
       navigator.clipboard.writeText(content);
+      setButtonStates(prev => ({ ...prev, copied: true }));
+      setTimeout(() => {
+        setButtonStates(prev => ({ ...prev, copied: false }));
+      }, 2000);
       onCopy?.();
+    };
+
+    const handleLike = () => {
+      setButtonStates(prev => ({
+        ...prev,
+        liked: !prev.liked, // Toggle like state
+        disliked: false, // Clear dislike if active
+      }));
+      onLike?.();
+    };
+
+    const handleDislike = () => {
+      setButtonStates(prev => ({
+        ...prev,
+        disliked: !prev.disliked, // Toggle dislike state
+        liked: false, // Clear like if active
+      }));
+      onDislike?.();
+    };
+
+    const handleRegenerate = () => {
+      setButtonStates(prev => ({ ...prev, regenerating: true }));
+      setTimeout(() => {
+        setButtonStates(prev => ({ ...prev, regenerating: false }));
+      }, 2000);
+      onRegenerate?.();
     };
 
     return (
@@ -186,13 +223,24 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
                 <div className="flex justify-end mt-1 opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out">
                   <button
                     onClick={handleCopy}
-                    className="group/btn relative p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-1"
+                    className={`group/btn relative p-1.5 rounded-lg hover:scale-105 active:scale-100 outline-none transition-colors duration-200 ${
+                      buttonStates.copied
+                        ? 'text-green-600'
+                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                    }`}
                     title="Copiar mensagem"
+                    style={{ WebkitTapHighlightColor: 'transparent' }}
                   >
-                    <Copy className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110" />
-                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                      Copiar
-                    </div>
+                    {buttonStates.copied ? (
+                      <Check className="w-3.5 h-3.5 transition-transform duration-200" />
+                    ) : (
+                      <Copy className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110" />
+                    )}
+                    {!buttonStates.copied && (
+                      <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                        Copiar
+                      </div>
+                    )}
                   </button>
                 </div>
               )}
@@ -250,49 +298,93 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
               {/* Copy Button */}
               <button
                 onClick={handleCopy}
-                className="group/btn relative p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-1"
+                className={`group/btn relative p-1.5 rounded-lg hover:scale-105 active:scale-100 outline-none transition-colors duration-200 ${
+                  buttonStates.copied
+                    ? 'text-green-600'
+                    : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
+                }`}
                 title="Copiar mensagem"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
-                <Copy className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110" />
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                  Copiar
-                </div>
+                {buttonStates.copied ? (
+                  <Check className="w-3.5 h-3.5 transition-transform duration-200" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110" />
+                )}
+                {!buttonStates.copied && (
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                    Copiar
+                  </div>
+                )}
               </button>
 
               {/* Like Button */}
               <button
-                onClick={onLike}
-                className="group/btn relative p-1.5 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-green-200 focus:ring-offset-1"
+                onClick={handleLike}
+                className={`group/btn relative p-1.5 rounded-lg hover:scale-105 active:scale-100 outline-none transition-colors duration-200 ${
+                  buttonStates.liked
+                    ? 'text-green-600'
+                    : 'text-gray-400 hover:text-green-600 hover:bg-green-50'
+                }`}
                 title="Gostei da resposta"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
-                <ThumbsUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110" />
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                  Gostei
-                </div>
+                {buttonStates.liked ? (
+                  <Heart className="w-3.5 h-3.5 transition-transform duration-200 fill-current" />
+                ) : (
+                  <ThumbsUp className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110" />
+                )}
+                {!buttonStates.liked && (
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                    Gostei
+                  </div>
+                )}
               </button>
 
               {/* Dislike Button */}
               <button
-                onClick={onDislike}
-                className="group/btn relative p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-200 focus:ring-offset-1"
+                onClick={handleDislike}
+                className={`group/btn relative p-1.5 rounded-lg hover:scale-105 active:scale-100 outline-none transition-colors duration-200 ${
+                  buttonStates.disliked
+                    ? 'text-red-500'
+                    : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                }`}
                 title="Não gostei da resposta"
+                style={{ WebkitTapHighlightColor: 'transparent' }}
               >
-                <ThumbsDown className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110" />
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                  Não gostei
-                </div>
+                {buttonStates.disliked ? (
+                  <HeartOff className="w-3.5 h-3.5 transition-transform duration-200 fill-current" />
+                ) : (
+                  <ThumbsDown className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110" />
+                )}
+                {!buttonStates.disliked && (
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                    Não gostei
+                  </div>
+                )}
               </button>
 
               {/* Regenerate Button */}
               {onRegenerate && (
                 <button
-                  onClick={onRegenerate}
-                  className="group/btn relative p-1.5 text-gray-400 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-200 ease-out hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:ring-offset-1"
-                  title="Gerar nova resposta"
+                  onClick={handleRegenerate}
+                  className={`group/btn relative p-1.5 rounded-lg hover:scale-105 active:scale-100 outline-none transition-colors duration-200 ${
+                    buttonStates.regenerating
+                      ? 'text-orange-600 bg-orange-50'
+                      : 'text-gray-400 hover:text-orange-600 hover:bg-orange-50'
+                  }`}
+                  title={buttonStates.regenerating ? 'Regenerando!' : 'Gerar nova resposta'}
+                  style={{ WebkitTapHighlightColor: 'transparent' }}
                 >
-                  <RotateCcw className="w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110 group-hover/btn:rotate-180" />
-                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                    Regenerar
+                  <RotateCcw className={`w-3.5 h-3.5 transition-transform duration-200 group-hover/btn:scale-110 ${
+                    buttonStates.regenerating ? 'animate-spin' : 'group-hover/btn:rotate-180'
+                  }`} />
+                  <div className={`absolute -top-8 left-1/2 transform -translate-x-1/2 text-white text-xs px-2 py-1 rounded-md transition-opacity duration-200 pointer-events-none whitespace-nowrap ${
+                    buttonStates.regenerating
+                      ? 'bg-orange-600 opacity-100'
+                      : 'bg-gray-800 opacity-0 group-hover/btn:opacity-100'
+                  }`}>
+                    {buttonStates.regenerating ? 'Regenerando!' : 'Regenerar'}
                   </div>
                 </button>
               )}

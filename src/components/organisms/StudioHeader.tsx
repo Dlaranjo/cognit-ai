@@ -18,7 +18,8 @@ export const StudioHeader: React.FC<StudioHeaderProps> = ({
         {/* New Chat Button */}
         <button
           onClick={onNewConversation}
-          className="group/btn relative flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:ring-offset-1"
+          className="group/btn relative flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg hover:scale-105 active:scale-100 outline-none"
+          style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           <Plus className="w-4 h-4 transition-transform duration-200 group-hover/btn:scale-110" />
           <span className="text-sm font-medium">Nova</span>
@@ -33,7 +34,8 @@ export const StudioHeader: React.FC<StudioHeaderProps> = ({
         {/* History Button */}
         <button
           onClick={onShowHistory}
-          className="group/btn relative flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-200 focus:ring-offset-1"
+          className="group/btn relative flex items-center space-x-2 px-3 py-2 text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg hover:scale-105 active:scale-100 outline-none"
+          style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           <History className="w-4 h-4 transition-transform duration-200 group-hover/btn:scale-110" />
           <span className="text-sm font-medium">Histórico</span>
