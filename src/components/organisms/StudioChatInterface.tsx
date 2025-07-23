@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, ArrowDown } from 'lucide-react';
+import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, ArrowDown, Wrench, Calculator, Globe, FileText, Image, Code, Database, BarChart3 } from 'lucide-react';
 import { MessageBubble } from '../molecules/MessageBubble';
 import { useChat } from '../../hooks/useChat';
 import { useStreaming } from '../../hooks/useStreaming';
@@ -134,6 +134,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [showModelSelector, setShowModelSelector] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showToolsMenu, setShowToolsMenu] = useState(false);
 
   // Smart scroll states
   const [autoScroll, setAutoScroll] = useState(false);
@@ -429,6 +430,71 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
+  // Mock tools data
+  const mockTools = [
+    {
+      id: 'calculator',
+      name: 'Calculadora',
+      description: 'Realizar cálculos matemáticos complexos',
+      icon: Calculator,
+      color: 'from-blue-500 to-blue-600',
+      category: 'Matemática'
+    },
+    {
+      id: 'web-search',
+      name: 'Busca Web',
+      description: 'Pesquisar informações atualizadas na internet',
+      icon: Globe,
+      color: 'from-green-500 to-green-600',
+      category: 'Pesquisa'
+    },
+    {
+      id: 'document-analyzer',
+      name: 'Analisador de Documentos',
+      description: 'Analisar e extrair informações de documentos',
+      icon: FileText,
+      color: 'from-purple-500 to-purple-600',
+      category: 'Documentos'
+    },
+    {
+      id: 'image-generator',
+      name: 'Gerador de Imagens',
+      description: 'Criar imagens usando IA generativa',
+      icon: Image,
+      color: 'from-pink-500 to-pink-600',
+      category: 'Criativo'
+    },
+    {
+      id: 'code-executor',
+      name: 'Executor de Código',
+      description: 'Executar e testar código em várias linguagens',
+      icon: Code,
+      color: 'from-indigo-500 to-indigo-600',
+      category: 'Desenvolvimento'
+    },
+    {
+      id: 'data-analyzer',
+      name: 'Analisador de Dados',
+      description: 'Analisar dados e criar visualizações',
+      icon: BarChart3,
+      color: 'from-orange-500 to-orange-600',
+      category: 'Dados'
+    },
+    {
+      id: 'database-query',
+      name: 'Consulta de Banco',
+      description: 'Executar consultas em bancos de dados',
+      icon: Database,
+      color: 'from-teal-500 to-teal-600',
+      category: 'Dados'
+    }
+  ];
+
+  const handleToolSelect = (tool: typeof mockTools[0]) => {
+    console.log('Tool selected:', tool);
+    // TODO: Implementar lógica de seleção de ferramenta
+    setShowToolsMenu(false);
+  };
   const handleCopyMessage = () => {};
   const handleLikeMessage = () => {};
   const handleDislikeMessage = () => {};
@@ -613,9 +679,12 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                   rows={1}
                 />
               </div>
+            </div>
 
-              {/* Controls */}
-              <div className="flex items-center space-x-2 ml-4">
+            {/* Bottom Controls */}
+            <div className="flex items-center justify-between px-4 pb-4">
+              {/* Left side controls */}
+              <div className="flex items-center space-x-2">
                 {/* File Upload */}
                 <button
                   onClick={handleFileSelect}
@@ -625,6 +694,163 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                 >
                   <Paperclip className="w-5 h-5" />
                 </button>
+
+                {/* Tools Button */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowToolsMenu(!showToolsMenu)}
+                    disabled={Boolean(isLoading)}
+                    className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
+                    title="Ferramentas"
+                  >
+                    <Wrench className="w-5 h-5" />
+                  </button>
+
+                  {/* Tools Dropdown */}
+                  {showToolsMenu && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setShowToolsMenu(false)} />
+                      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-96 overflow-hidden">
+                        {/* Header */}
+                        <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-orange-50 to-red-50">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
+                              <Wrench className="w-4 h-4 text-white" />
+                            </div>
+                            <div>
+                              <h3 className="font-semibold text-gray-900">Ferramentas</h3>
+                              <p className="text-xs text-gray-600">Selecione uma ferramenta para usar</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Tools List */}
+                        <div className="overflow-y-auto max-h-80">
+                          <div className="p-2">
+                            {mockTools.map((tool) => (
+                              <button
+                                key={tool.id}
+                                onClick={() => handleToolSelect(tool)}
+                                className="w-full p-3 rounded-lg text-left transition-all mb-1 hover:bg-orange-50 hover:text-orange-600 group"
+                              >
+                                <div className="flex items-start space-x-3">
+                                  <div className={`w-10 h-10 bg-gradient-to-br ${tool.color} rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow`}>
+                                    <tool.icon className="w-5 h-5 text-white" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between">
+                                      <div className="font-medium text-gray-900 text-sm">{tool.name}</div>
+                                      <div className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
+                                        {tool.category}
+                                      </div>
+                                    </div>
+                                    <div className="text-xs text-gray-600 mt-1 leading-relaxed">
+                                      {tool.description}
+                                    </div>
+                                  </div>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-3 border-t border-gray-100 bg-gray-50">
+                          <div className="flex items-center space-x-2 text-xs text-gray-500">
+                            <Sparkles className="w-3 h-3" />
+                            <span>Mais ferramentas serão adicionadas em breve</span>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Right side controls */}
+              <div className="flex items-center space-x-3">
+                {/* Model Selector */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowModelSelector(!showModelSelector)}
+                    className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                  >
+                    <span>{selectedModel.name}</span>
+                    <ChevronDown className={`w-3 h-3 transition-transform ${showModelSelector ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Model Dropdown */}
+                  {showModelSelector && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setShowModelSelector(false)} />
+                      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-80 overflow-hidden">
+                        {/* Search Header */}
+                        <div className="p-3 border-b border-gray-100">
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <input
+                              type="text"
+                              placeholder="Pesquisar modelo..."
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                              autoFocus
+                            />
+                          </div>
+                        </div>
+
+                        {/* Models List */}
+                        <div className="overflow-y-auto max-h-64">
+                          {filteredModels.length > 0 ? (
+                            <div className="p-2">
+                              {filteredModels.map((model) => (
+                                <button
+                                  key={model.id}
+                                  onClick={() => {
+                                    handleModelSelect(model);
+                                    setShowModelSelector(false);
+                                  }}
+                                  className={`w-full p-3 rounded-lg text-left transition-all mb-1 ${
+                                    selectedModel.id === model.id
+                                      ? 'bg-orange-50 text-orange-700 border border-orange-200'
+                                      : 'hover:bg-orange-50 hover:text-orange-600'
+                                  }`}
+                                >
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between">
+                                      <div>
+                                        <div className="font-medium text-gray-900 text-sm">{model.name}</div>
+                                        <div className="text-xs text-gray-500 flex items-center space-x-2">
+                                          <span>{model.provider}</span>
+                                          <span>•</span>
+                                          <span title="Janela de contexto">📄 {(model.contextWindow / 1000).toFixed(0)}K</span>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center space-x-2">
+                                        <div className={`text-xs px-2 py-0.5 rounded-full ${getPriceBadgeColor(model.priceCategory)}`}>
+                                          {model.pricing.input === 0 ? 'Gratuito' : 
+                                           model.priceCategory === 'low' ? '💰' :
+                                           model.priceCategory === 'medium' ? '💰💰' : '💰💰💰'}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="text-xs text-gray-600 mt-1 truncate" title={model.description}>
+                                      {model.description}
+                                    </div>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="p-4 text-center text-gray-500 text-sm">
+                              Nenhum modelo encontrado para "{searchQuery}"
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
 
                 {/* Send/Stop Button */}
                 <button
@@ -644,97 +870,6 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                     <Send className="w-5 h-5" />
                   )}
                 </button>
-              </div>
-            </div>
-
-            {/* Bottom Controls */}
-            <div className="flex items-center justify-between px-4 pb-4">
-              {/* Model Selector */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowModelSelector(!showModelSelector)}
-                  className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                >
-                  <span>{selectedModel.name}</span>
-                  <ChevronDown className={`w-3 h-3 transition-transform ${showModelSelector ? 'rotate-180' : ''}`} />
-                </button>
-
-                {/* Model Dropdown */}
-                {showModelSelector && (
-                  <>
-                    <div className="fixed inset-0 z-10" onClick={() => setShowModelSelector(false)} />
-                    <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-80 overflow-hidden">
-                      {/* Search Header */}
-                      <div className="p-3 border-b border-gray-100">
-                        <div className="relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          <input
-                            type="text"
-                            placeholder="Pesquisar modelo..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                            autoFocus
-                          />
-                        </div>
-                      </div>
-
-                      {/* Models List */}
-                      <div className="overflow-y-auto max-h-64">
-                        {filteredModels.length > 0 ? (
-                          <div className="p-2">
-                            {filteredModels.map((model) => (
-                              <button
-                                key={model.id}
-                                onClick={() => {
-                                  handleModelSelect(model);
-                                  setShowModelSelector(false);
-                                }}
-                                className={`w-full p-3 rounded-lg text-left transition-all mb-1 ${
-                                  selectedModel.id === model.id
-                                    ? 'bg-orange-50 text-orange-700 border border-orange-200'
-                                    : 'hover:bg-orange-50 hover:text-orange-600'
-                                }`}
-                              >
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center justify-between">
-                                    <div>
-                                      <div className="font-medium text-gray-900 text-sm">{model.name}</div>
-                                      <div className="text-xs text-gray-500 flex items-center space-x-2">
-                                        <span>{model.provider}</span>
-                                        <span>•</span>
-                                        <span title="Janela de contexto">📄 {(model.contextWindow / 1000).toFixed(0)}K</span>
-                                      </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                      <div className={`text-xs px-2 py-0.5 rounded-full ${getPriceBadgeColor(model.priceCategory)}`}>
-                                        {model.pricing.input === 0 ? 'Gratuito' : 
-                                         model.priceCategory === 'low' ? '💰' :
-                                         model.priceCategory === 'medium' ? '💰💰' : '💰💰💰'}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="text-xs text-gray-600 mt-1 truncate" title={model.description}>
-                                    {model.description}
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="p-4 text-center text-gray-500 text-sm">
-                            Nenhum modelo encontrado para "{searchQuery}"
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Keyboard Shortcut */}
-              <div className="text-xs text-gray-400">
-                ⏎ Enter para enviar
               </div>
             </div>
           </div>
