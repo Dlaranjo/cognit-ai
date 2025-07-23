@@ -3,101 +3,92 @@
 ## 📋 Informações Básicas
 
 **Produto**: Cognit AI Platform  
-**Versão**: 2.0 Enterprise  
-**Status**: Production Ready  
-**Arquitetura**: Atomic Design Puro
+**Versão**: 3.0 Enterprise Internal  
+**Foco**: Assistente IA + Workflows Conversacionais  
+**Target**: Analistas Organizacionais
 
-> **📖 Referências**: `CLAUDE.md` (técnico), `PLANNING.md` (estratégico), `TASKS.md` (status)
+> **📖 Referências**: `CLAUDE.md` (técnico), `PLANNING.md` (estratégico), `TASKS.md` (roadmap)
 
-## 🎯 Visão do Produto
+## 🎯 Nova Visão do Produto
 
-Plataforma enterprise unificada que permite interação com múltiplos LLMs através de interface moderna, combinada com robusto sistema de gestão de conhecimento organizacional.
+Plataforma enterprise **interna** focada em **duas entregas de alto valor** para analistas organizacionais: Assistente IA personalizado para uso diário e sistema revolucionário de criação de workflows através de linguagem natural.
 
-### Proposta de Valor
-- **Agregação Inteligente**: Acesso unificado aos melhores LLMs
-- **Gestão de Conhecimento**: Organização hierárquica empresarial
-- **Controle Granular**: Permissões enterprise por workspace
-- **Produtividade**: Interface otimizada para fluxos profissionais
+### Proposta de Valor Redefinida
+- **🤖 Assistente IA Organizacional**: Co-piloto inteligente para analistas
+- **⚡ Workflows Conversacionais**: "Crie um workflow que monitore X e faça Y"
+- **🔗 Integração Zero-Friction**: SSO Google + ferramentas internas
+- **📈 ROI Imediato**: Automação de processos manuais identificados
 
-## 🚀 Funcionalidades Core
+## 🚀 Funcionalidades Redefinidas
 
-### 1. Multi-LLM Studio
+### **🎯 ENTREGA 1: Assistente IA Personalizado**
 
-**Interface de conversação unificada com múltiplos modelos de IA**
+#### 1.1 Multi-LLM Studio Empresarial
 
-#### Modelos Suportados
-- **GPT-4 Turbo** (OpenAI) - 128k context, $0.01/$0.03
-- **Claude 3 Opus** (Anthropic) - 200k context, $0.015/$0.075
-- **Claude 3 Sonnet** (Anthropic) - 200k context, $0.003/$0.015
-- **Gemini Pro** (Google) - 32k context, $0.0005/$0.0015
-- **Llama 2 70B** (Meta) - 4k context, $0.0007/$0.0009
+**Interface otimizada para analistas organizacionais com casos de uso específicos**
 
-#### Features Implementadas ✅
-- Seletor dinâmico de modelos com especificações técnicas
-- Conversas persistentes com sidebar de navegação
-- Regeneração de respostas com sistema de feedback
-- Upload de múltiplos arquivos (PDF, DOC, TXT, imagens)
-- Textarea com auto-resize e shortcuts (Enter/Shift+Enter)
-- Streaming de respostas em tempo real
-- Histórico de tokens e custos por conversa
+#### Modelos Focados
+- **GPT-4 Turbo**: Análises complexas e raciocínio avançado
+- **Claude 3 Opus**: Documentação e escrita profissional  
+- **Claude 3 Sonnet**: Análise de dados e relatórios
+- **Gemini Pro**: Pesquisa e integração com Google Workspace
 
-### 2. Sistema de Autenticação Enterprise
+#### Features Empresariais ✅ (Existentes + Adaptações)
+- ✅ **Interface Base**: Multi-LLM completamente funcional
+- 🔄 **Templates Organizacionais**: Prompts pré-configurados por área
+- 🔄 **Google Workspace**: Integração com Sheets, Drive, Gmail
+- 🔄 **Contexto Empresarial**: Acesso a dados organizacionais relevantes
+- ✅ **SSO Google**: Autenticação organizacional já implementada
 
-**Controle robusto de acesso e segurança**
+#### 1.2 AI Agents Empresariais
 
-#### Autenticação ✅
-- **SSO Google**: Integração completa OAuth 2.0
-- **JWT Management**: Tokens seguros com refresh automático
-- **Multi-tenancy**: Suporte organizações múltiplas
-- **Demo Profiles**: Perfis de teste para desenvolvimento
+**Assistentes especializados para casos de uso organizacionais**
 
-#### Autorização ✅
-- **RBAC**: Role-Based Access Control granular
-- **Workspace Permissions**: Owner/Editor/Viewer
-- **API Security**: Interceptors automáticos
-- **Session Management**: Controle de sessões ativas
+#### Agents Redefinidos ✅ (Base Existente)
+- **Research Agent**: Análise de mercado e pesquisa competitiva
+- **Code Agent**: Automação e suporte técnico para analistas
+- **Writing Agent**: Documentação empresarial e comunicação
+- **Data Agent**: Processamento de planilhas e análise de dados
+- **Business Agent**: Insights estratégicos e KPIs organizacionais
 
-### 3. Knowledge Management System
+#### Personalizações Necessárias 🔄
+- **Prompts Empresariais**: Templates específicos por área (vendas, marketing, financeiro)
+- **Integração Google**: Acesso direto a Sheets, Drive, Gmail
+- **Contexto Organizacional**: Conhecimento de processos internos
+- **Output Estruturado**: Formatos padronizados para relatórios
 
-**Sistema hierárquico de organização empresarial**
+### **⚡ ENTREGA 2: Workflows de IA Conversacionais**
 
-#### Estrutura ✅
-```
-Organization
-└── Workspace (Portfolio de Conhecimento)
-    └── Project (Iniciativa Específica)
-        └── Document (Arquivos & Base de Conhecimento)
-```
+#### 2.1 n8n Embedded Interface
 
-#### Permissões por Nível ✅
-- **OWNER**: Criação de projetos, gestão de membros, todas as operações
-- **EDITOR**: Adição de documentos, edição de conteúdo, criação de conversas
-- **VIEWER**: Visualização e busca, sem modificações
+**Interface n8n completa embarcada com segurança empresarial**
 
-#### Features ✅
-- Upload e processamento de documentos
-- Indexação automática para busca full-text
-- Sistema de busca com filtros avançados
-- Compartilhamento granular por workspace
-- Interface responsiva e navegação intuitiva
+#### Implementação Técnica 🆕
+- **Iframe Sandbox**: Isolamento seguro da interface n8n
+- **Authentication Bridge**: SSO Google propagado para n8n
+- **Real-time Sync**: Estado sincronizado entre Cognit e n8n
+- **Mobile Responsive**: Interface adaptada para tablets e mobile
 
-### 4. AI Agents Especializados
+#### 2.2 AI Workflow Assistant
 
-**Assistentes focados por domínio de conhecimento**
+**IA especializada em construção conversacional de workflows**
 
-#### Tipos de Agents ✅
-- **Research Agent**: Pesquisa e análise de documentos
-- **Code Agent**: Assistência em desenvolvimento
-- **Writing Agent**: Criação e edição de conteúdo
-- **Data Agent**: Análise de dados e visualizações
-- **Business Agent**: Insights e estratégias de negócio
+#### Capacidades Core 🆕
+- **Natural Language Processing**: "Crie um workflow que monitore X e envie Y"
+- **Step-by-Step Building**: Constrói workflows explicando cada etapa
+- **Best Practices Integration**: Sugere otimizações e padrões
+- **Learning Mode**: Ensina n8n durante construção
+- **Error Debugging**: Identifica e corrige problemas automaticamente
 
-#### Features ✅
-- Capacidades especializadas por agent
-- Histórico de interações persistente
-- Resultados acionáveis (downloads, previews)
-- Integração com knowledge base
-- Interface dedicada por agent
+#### 2.3 MCP Integration Layer
+
+**Comunicação bidirecional entre IA e n8n via Model Context Protocol**
+
+#### Arquitetura 🆕
+- **MCP Client**: Cliente integrado no frontend
+- **n8n MCP Server**: Servidor dedicado para comunicação com n8n
+- **Documentation Context**: IA com acesso completo à documentação n8n
+- **Workflow State Management**: Sincronização em tempo real
 
 ## 👥 User Stories Implementadas
 

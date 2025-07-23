@@ -1,6 +1,7 @@
 import React from 'react';
-import { Upload, X, File } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 import { Button } from '../atoms';
+import { formatFileSize, getFileIcon, getFileTypeLabel } from '../../shared/utils/fileUtils';
 
 export interface FileUploadProps {
   onFilesSelect?: (files: File[]) => void;
@@ -29,13 +30,7 @@ export const FileUpload = React.memo<FileUploadProps>(
     const [dragActive, setDragActive] = React.useState(false);
     const inputRef = React.useRef<HTMLInputElement>(null);
 
-    const formatFileSize = (bytes: number): string => {
-      if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    };
+
 
     // Simplified validation functions
     const isFileSizeValid = (fileSize: number): boolean => 
@@ -198,14 +193,16 @@ export const FileUpload = React.memo<FileUploadProps>(
                 key={`${file.name}-${index}`}
                 className="flex items-center gap-3 p-3 bg-neutral-50 rounded-md"
               >
-                <File className="w-4 h-4 text-neutral-400 flex-shrink-0" />
+                <div className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0 bg-orange-100 text-orange-600">
+                  {getFileIcon()}
+                </div>
 
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-neutral-900 truncate">
                     {file.name}
                   </p>
                   <p className="text-xs text-neutral-500">
-                    {formatFileSize(file.size)}
+                    {getFileTypeLabel(file.type)} • {formatFileSize(file.size)}
                   </p>
                 </div>
 

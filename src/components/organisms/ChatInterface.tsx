@@ -2,6 +2,7 @@ import React from 'react';
 import { Send, Paperclip, Mic, Square } from 'lucide-react';
 import { MessageBubble, FileUpload } from '../molecules';
 import { Button, Spinner, Textarea } from '../atoms';
+import { formatFileSize, getFileIcon, getFileTypeLabel } from '../../shared/utils/fileUtils';
 
 export interface Message {
   id: string;
@@ -210,15 +211,25 @@ export const ChatInterface: React.FC<ChatInterfaceProps> = ({
               {attachedFiles.map((file, index) => (
                 <div
                   key={`${file.name}-${index}`}
-                  className="flex items-center gap-1 px-2 py-1 bg-neutral-100 rounded text-xs"
+                  className="flex items-center gap-2 px-3 py-2 bg-neutral-100 rounded-lg text-xs border border-neutral-200"
                 >
-                  <span className="truncate max-w-32">{file.name}</span>
+                  <div className="w-6 h-6 rounded flex items-center justify-center flex-shrink-0 bg-orange-100 text-orange-600">
+                    {getFileIcon(file.type)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-neutral-900 truncate max-w-32">
+                      {file.name}
+                    </div>
+                    <div className="text-neutral-500">
+                      {getFileTypeLabel(file.type)} • {formatFileSize(file.size)}
+                    </div>
+                  </div>
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => handleFileRemove(index)}
-                    className="p-0 h-auto min-h-0 ml-1"
+                    className="p-1 h-auto min-h-0 flex-shrink-0 hover:bg-neutral-200 rounded"
                   >
                     ×
                   </Button>

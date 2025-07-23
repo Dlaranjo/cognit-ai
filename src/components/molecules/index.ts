@@ -24,6 +24,9 @@ export { WorkspaceCard } from './WorkspaceCard';
 
 export { ModelSelector } from './ModelSelector';
 
+export { ToolsDropdown } from './ToolsDropdown';
+export type { ToolsDropdownProps } from './ToolsDropdown';
+
 export { WorkspaceFilter } from './WorkspaceFilter';
 
 export { SidebarHeader } from './SidebarHeader';

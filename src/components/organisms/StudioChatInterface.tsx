@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, ArrowDown, Wrench, Calculator, Globe, FileText, Image, Code, Database, BarChart3 } from 'lucide-react';
+import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, ArrowDown, Wrench } from 'lucide-react';
 import { MessageBubble, TypingIndicator, StreamingMessage } from '../molecules';
+import { ToolsDropdown } from '../molecules/ToolsDropdown';
 import { useChat } from '../../hooks/useChat';
 import { useStreaming } from '../../hooks/useStreaming';
 import { useAppSelector, useAppDispatch } from '../../redux/store';
 import { selectStreamingMessage } from '../../redux/chat/chatSelectors';
 import { removeLastAssistantMessage } from '../../redux/chat/chatReducer';
-import { createAvailableModels, formatFileSize, getPriceBadgeColor, logger } from '../../shared/utils';
+import { createAvailableModels, getPriceBadgeColor, logger } from '../../shared/utils';
+import { formatFileSize, getFileIcon, getFileTypeLabel } from '../../shared/utils/fileUtils';
 import { mockTools } from '../../api/mock/mockData';
 import type { LLMModel, Message, Tool } from '../../types';
 
@@ -509,12 +511,12 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                       className="flex items-center gap-2 bg-white/50 backdrop-blur-sm text-gray-700 px-3 py-2 rounded-lg text-sm border border-white/30 hover:bg-white/70 hover:border-white/40 transition-all duration-200 shadow-sm"
                     >
                       <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
-                        <Paperclip className="w-4 h-4 text-white" />
+                        {getFileIcon(file.type)}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-medium text-gray-900 truncate max-w-32">{file.name}</div>
                         <div className="text-xs text-gray-500">
-                          {formatFileSize(file.size)}
+                          {getFileTypeLabel(file.type)} • {formatFileSize(file.size)}
                         </div>
                       </div>
                       <button
@@ -570,81 +572,12 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                   </button>
 
                   {/* Tools Dropdown */}
-                  {showToolsMenu && (
-                    <>
-                      <div className="fixed inset-0 z-10" onClick={() => setShowToolsMenu(false)} />
-                      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-96 overflow-hidden">
-                        {/* Header */}
-                        <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-orange-50 to-red-50">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
-                              <Wrench className="w-4 h-4 text-white" />
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-gray-900">Ferramentas</h3>
-                              <p className="text-xs text-gray-600">Selecione uma ferramenta para usar</p>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Tools List */}
-                        <div className="overflow-y-auto max-h-80">
-                          <div className="p-2">
-                            {mockTools.map((tool) => {
-                              // Map icon string to component
-                              const getIconComponent = (iconName: string) => {
-                                const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-                                  Calculator,
-                                  Globe,
-                                  FileText,
-                                  Image,
-                                  Code,
-                                  BarChart3,
-                                  Database,
-                                };
-                                return iconMap[iconName] || Calculator;
-                              };
-                              
-                              const IconComponent = getIconComponent(tool.icon);
-                              
-                              return (
-                                <button
-                                  key={tool.id}
-                                  onClick={() => handleToolSelect(tool)}
-                                  className="w-full p-3 rounded-lg text-left transition-all mb-1 hover:bg-orange-50 hover:text-orange-600 group"
-                                >
-                                  <div className="flex items-start space-x-3">
-                                    <div className={`w-10 h-10 bg-gradient-to-br ${tool.color} rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow`}>
-                                      <IconComponent className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                      <div className="flex items-center justify-between">
-                                        <div className="font-medium text-gray-900 text-sm">{tool.name}</div>
-                                        <div className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
-                                          {tool.category}
-                                        </div>
-                                      </div>
-                                      <div className="text-xs text-gray-600 mt-1 leading-relaxed">
-                                        {tool.description}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-
-                        {/* Footer */}
-                        <div className="p-3 border-t border-gray-100 bg-gray-50">
-                          <div className="flex items-center space-x-2 text-xs text-gray-500">
-                            <Sparkles className="w-3 h-3" />
-                            <span>Mais ferramentas serão adicionadas em breve</span>
-                          </div>
-                        </div>
-                      </div>
-                    </>
-                  )}
+                  <ToolsDropdown
+                    isOpen={showToolsMenu}
+                    onClose={() => setShowToolsMenu(false)}
+                    onToolSelect={handleToolSelect}
+                    tools={mockTools}
+                  />
                 </div>
               </div>
 

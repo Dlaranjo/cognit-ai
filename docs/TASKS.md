@@ -1,386 +1,246 @@
-# TASKS - Status Atual do Projeto
+# TASKS - Roadmap das Entregas
 
 ## 📊 Status Geral
 
 **Projeto**: Cognit AI Platform  
-**Status**: ✅ **CONFORMIDADE ALCANÇADA**  
-**Última Atualização**: Julho 2025  
+**Nova Visão**: Assistente IA + Workflows Conversacionais  
+**Target**: Analistas Organizacionais  
+**Timeline**: 5-7 semanas totais
 
 > **📖 Referências**: `CLAUDE.md` (técnico), `PLANNING.md` (estratégico), `PRD.md` (funcional)
 
-## 🚨 TAREFAS CRÍTICAS DE CONFORMIDADE
+## 🚀 ROADMAP DAS DUAS ENTREGAS
 
-### 🔄 CONTEXTO ESSENCIAL PARA AGENTES
+### **🎯 ENTREGA 1: Assistente IA Personalizado**
+**Timeline**: 2-3 semanas | **Base Existente**: 80% | **Foco**: Adaptação empresarial
 
-⚠️ **SITUAÇÃO ATUAL**: O **Cognit AI Platform** está em **produção com dados mockados** até a API real ser desenvolvida. Todas as funcionalidades estão operacionais através de sistema mock robusto.
+#### ✅ **Vantagem Competitiva**
+**Já temos implementado e funcionando:**
+- ✅ **Multi-LLM Studio**: Interface completa para 5+ modelos
+- ✅ **AI Agents**: 5 agentes especializados funcionais
+- ✅ **SSO Google**: Autenticação organizacional implementada
+- ✅ **Atomic Design**: Arquitetura de componentes enterprise
+- ✅ **TypeScript 100%**: Strict mode, zero `any`
+- ✅ **Testes**: 111 testes passando
 
-#### Por que isto é CRÍTICO:
-- Sistema mock usa `console.log` para debugging em **produção**
-- Remover todos os console.logs **QUEBRARIA** o ambiente atual
-- Solução: **logging condicional** que preserva funcionalidade mock
+#### 🔄 **Adaptações Necessárias (Semanas 1-3)**
 
-#### Arquivos Mock Críticos (NÃO remover console.logs sem proteção):
+**Semana 1 - Templates Empresariais:**
+- [ ] **ALTA**: Criar prompt templates por área (vendas, marketing, financeiro)
+- [ ] **ALTA**: Configurar AI Agents para contexto organizacional
+- [ ] **ALTA**: Personalizar interface para casos de uso internos
+- [ ] **MÉDIA**: Implementar sistema de favorites por departamento
+
+**Semana 2 - Google Workspace Integration:**
+- [ ] **CRÍTICA**: Integrar Google Sheets API para leitura/escrita
+- [ ] **CRÍTICA**: Conectar Google Drive para acesso a documentos
+- [ ] **ALTA**: Implementar Gmail API para automação de emails
+- [ ] **MÉDIA**: Criar bridge SSO → Google APIs
+
+**Semana 3 - UI/UX Empresarial:**
+- [ ] **ALTA**: Simplificar interface focando em analistas
+- [ ] **ALTA**: Implementar dashboard de analytics de uso
+- [ ] **MÉDIA**: Criar onboarding específico para casos empresariais
+- [ ] **BAIXA**: Otimizar mobile para tablets corporativos
+
+### **⚡ ENTREGA 2: Workflows de IA Conversacionais**
+**Timeline**: 3-4 semanas | **Base Existente**: 0% | **Foco**: Desenvolvimento completo
+
+#### 🆕 **Desenvolvimento Full-Stack (Semanas 4-7)**
+
+**Semana 4 - n8n Frontend Integration:**
+- [ ] **CRÍTICA**: Assumir servidor n8n externo já configurado (responsabilidade backend)
+- [ ] **CRÍTICA**: Implementar MCP Client no frontend (comunicação com servidor MCP existente)
+- [ ] **ALTA**: Configurar autenticação bridge no frontend (SSO Google → n8n)
+- [ ] **ALTA**: Preparar estrutura frontend para receber contexto de documentação
+
+**Semana 5 - Interface Components:**
+- [ ] **CRÍTICA**: Implementar iframe sandbox seguro para n8n (frontend puro)
+- [ ] **CRÍTICA**: Criar componente WorkflowCanvas responsivo
+- [ ] **ALTA**: Implementar comunicação postMessage com iframe n8n
+- [ ] **ALTA**: Desenvolver sistema de state sync frontend-only
+
+**Semana 6 - AI Integration Frontend:**
+- [ ] **CRÍTICA**: Integrar LLM existente para construção de workflows (via API)
+- [ ] **CRÍTICA**: Implementar interface conversacional para comandos
+- [ ] **ALTA**: Criar sistema de step-by-step UI building
+- [ ] **ALTA**: Implementar learning mode interface e best practices
+
+**Semana 7 - Templates & Polish:**
+- [ ] **ALTA**: Criar workflow templates para casos comuns
+- [ ] **ALTA**: Implementar sistema de error debugging
+- [ ] **MÉDIA**: Criar biblioteca de componentes n8n mais usados
+- [ ] **BAIXA**: Otimizar performance e user experience
+
+## 🛠️ STACK TÉCNICA NECESSÁRIA
+
+### **Entrega 1 - Tecnologias a Adicionar:**
 ```bash
-src/api/mockServer.ts           # Servidor mock principal
-src/api/mock/mockResponses.ts   # Responses simuladas  
-src/api/mock/mockData.ts        # Dados de exemplo
-src/components/organisms/StudioChatInterface.tsx  # 8 logs de streaming
+# Google APIs
+npm install googleapis @google-cloud/storage
+npm install @types/google-apps-script
+
+# Template Engine
+npm install handlebars
+npm install @types/handlebars
+
+# Analytics
+npm install @amplitude/analytics-browser
 ```
 
-**Após investigação QA detalhada, foram identificadas violações das diretrizes técnicas que requerem correção com cuidado especial ao ambiente mockado.**
-
-## 🔥 PRIORIDADE CRÍTICA - SEMANA 1
-
-### 1. ✅ SISTEMA DE LOGGING (Mock-Safe) 
-**Status**: 100% Conforme | **Risco**: Resolvido  
-**Problema**: 47 console.* sem proteção - **CORRIGIDO** com sistema mock-safe
-
-#### ⚠️ ATENÇÃO: Abordagem Mock-Safe
-**NÃO** remover console.logs diretamente - isto quebrará produção mockada!
-
-**Tarefas Implementadas**:
-
-**Fase 1 - Criar Sistema de Logging:**
-- [x] **CRÍTICO**: Criar `src/shared/utils/logger.ts` com proteção mock
-- [x] **CRÍTICO**: Implementar logging condicional (`DEV` OR `MOCK` mode)
-- [x] **CRÍTICO**: Configurar variável `VITE_USE_MOCK=true` atual
-
-**Fase 2 - Migrar Console.logs Gradualmente:**
-- [x] **ALTA**: Substituir logs de desenvolvimento por `logger.dev()`
-- [x] **ALTA**: Substituir logs de mock por `logger.mock()`  
-- [x] **ALTA**: Manter logs de erro como `logger.error()`
-
-**Fase 3 - Configurar Build Condicional:**
-- [x] **MÉDIA**: Configurar Vite condicional (só remove se `VITE_USE_MOCK !== 'true'`)
-- [x] **MÉDIA**: Configurar ESLint condicional para console.logs
-
-#### Arquivos Prioritários (47 ocorrências):
+### **Entrega 2 - Tecnologias a Adicionar:**
 ```bash
-# CRÍTICO - Logs de teste para remover imediatamente
-src/api/mock/mockResponses.ts:14 - console.log('Olá, mundo!')
+# MCP Protocol
+npm install @modelcontextprotocol/client
+npm install @modelcontextprotocol/sdk
 
-# IMPORTANTE - Migrar para logger.mock()
-src/components/organisms/StudioChatInterface.tsx - 8 logs de streaming
-src/api/mockServer.ts - 4 logs de servidor mock
+# n8n Integration
+npm install n8n-workflow n8n-core
+npm install @types/n8n
 
-# MÉDIO - Migrar para logger.error()  
-src/hooks/useLocalStorage.ts - 4 logs de error handling
+# WebSocket & Real-time
+npm install socket.io-client
+npm install @types/socket.io-client
+
+# Iframe Security
+npm install dompurify postmate
+npm install @types/dompurify
 ```
 
-#### Template do Logger (DEVE ser implementado primeiro):
-```typescript
-// src/shared/utils/logger.ts
-const isDev = import.meta.env.DEV;
-const isMockMode = import.meta.env.VITE_USE_MOCK === 'true';
+## 📊 MÉTRICAS DE SUCESSO
 
-export const logger = {
-  // Permitido em desenvolvimento OU modo mock
-  mock: (message: string, data?: any) => {
-    if (isDev || isMockMode) {
-      console.log(`[MOCK] ${message}`, data);
-    }
-  },
-  
-  dev: (message: string, data?: any) => {
-    if (isDev) {
-      console.log(`[DEV] ${message}`, data);
-    }
-  },
-  
-  error: (message: string, error?: any) => {
-    console.error(`[ERROR] ${message}`, error);
-  }
-};
-```
+### **Entrega 1 Targets:**
+- **Adoption Rate**: > 80% analistas usando diariamente
+- **Time to Value**: < 5min para primeiro resultado útil
+- **Template Usage**: > 70% usando prompts empresariais
+- **Satisfaction**: > 9/10 em pesquisas internas
 
-#### Verificação Segura:
+### **Entrega 2 Targets:**
+- **Workflow Creation Speed**: 10x mais rápido que manual
+- **Learning Curve**: Analistas criando workflows em < 30min
+- **Success Rate**: > 95% workflows executando corretamente
+- **Process Automation**: > 50% processos manuais automatizados
+
+## 🎯 CASOS DE USO IDENTIFICADOS
+
+### **Entrega 1 - Assistente IA:**
+1. **Análise de Planilhas**: "Analise esta planilha de vendas e gere insights"
+2. **Pesquisa de Mercado**: "Pesquise concorrentes do produto X"
+3. **Documentação**: "Crie um relatório executivo baseado nestes dados"
+4. **Email Marketing**: "Escreva 5 variações de email para campanha Y"
+5. **Análise Financeira**: "Calcule ROI deste investimento com dados do Drive"
+
+### **Entrega 2 - Workflows:**
+1. **Monitor de Planilhas**: "Monitore mudanças na planilha de vendas e avise no Slack"
+2. **Automação de Relatórios**: "Gere relatório semanal e envie por email"
+3. **Lead Processing**: "Quando novo lead no formulário, adicione ao CRM"
+4. **Data Pipeline**: "Sincronize dados entre Sheets e sistema interno"
+5. **Notification System**: "Envie alertas quando KPIs ficarem fora do range"
+
+## ⚠️ RISCOS E MITIGAÇÕES
+
+### **Riscos Técnicos:**
+1. **MCP Integration Complexity**
+   - **Risco**: Protocolo MCP pode ser instável
+   - **Mitigação**: Implementar fallback REST API
+
+2. **n8n Iframe Security**
+   - **Risco**: Vulnerabilidades de segurança
+   - **Mitigação**: Sandbox rigoroso + CSP headers
+
+3. **Google API Quotas**
+   - **Risco**: Limites de rate limiting
+   - **Mitigação**: Implementar cache e batch processing
+
+### **Riscos de Negócio:**
+1. **Adoption Resistance**
+   - **Risco**: Analistas resistentes a mudança
+   - **Mitigação**: Onboarding personalizado + casos de uso claros
+
+2. **Complexity Overload**
+   - **Risco**: Interface muito complexa
+   - **Mitigação**: Progressive disclosure + templates
+
+## 🔄 AMBIENTE DE DESENVOLVIMENTO
+
+### **Setup Frontend (Apenas Frontend):**
 ```bash
-# Após implementar logger
-grep -r "console\." src/           # Deve mostrar apenas logs migrados
-npm run build                      # Deve incluir logs mock se VITE_USE_MOCK=true
-npm run dev                        # Deve funcionar normalmente
+# Configurações de ambiente (servidores externos)
+VITE_N8N_SERVER_URL=http://backend-team-n8n-server:5678
+VITE_MCP_SERVER_URL=http://backend-team-mcp-server:8080
+VITE_GOOGLE_CLIENT_ID=your_google_client_id
 ```
 
-### 2. ✅ IMPORTS INCONSISTENTES (95% Conforme)  
-**Status**: Melhorado Significativamente | **Risco**: Baixo - Manutenibilidade
-**Problema**: Barrel exports não utilizados - **REDUZIDO** de 24+ para ~12 arquivos
-
-#### Contexto para Agente:
-O projeto tem arquivos `index.ts` (barrel exports) implementados, mas muitos componentes importam diretamente dos arquivos específicos ao invés de usar os centralizados.
-
-**Estrutura Atual:**
+### **Comandos de Desenvolvimento:**
 ```bash
-src/components/
-├── atoms/index.ts          # ✅ Existe - exports centralizados
-├── molecules/index.ts      # ✅ Existe - exports centralizados  
-├── organisms/index.ts      # ✅ Existe - exports centralizados
-└── templates/index.ts      # ✅ Existe - exports centralizados
+npm run dev           # Frontend development apenas
+npm run test          # Frontend unit tests
+npm run test:integration  # Tests com mocks de APIs externas
+npm run build         # Build frontend
 ```
 
-**Tarefas Sequenciais:**
+### **⚠️ Dependências Externas (Backend Team):**
+- **n8n Server**: URL configurável via env
+- **MCP Server**: Endpoint para comunicação IA ↔ n8n  
+- **Google OAuth**: Servidor de autenticação (pode usar mock inicial)
 
-**Fase 1 - Verificar Barrel Exports:**
-- [x] **ALTA**: Verificar se todos os index.ts estão completos e atualizados
-- [x] **ALTA**: Garantir que novos componentes estão exportados nos index.ts
+## 📅 CRONOGRAMA DETALHADO
 
-**Fase 2 - Refatorar Imports (24+ arquivos):**
-- [x] **ALTA**: Refatorar atoms: `from '../atoms/Button'` → `from '../atoms'`
-- [x] **ALTA**: Refatorar molecules: `from '../molecules/SearchBar'` → `from '../molecules'`
-- [x] **ALTA**: Refatorar organisms: `from '../organisms/Header'` → `from '../organisms'`
+```
+📅 SEMANA 1-3: Entrega 1 (Assistente IA)
+├── Semana 1: Templates + AI Agents personalization
+├── Semana 2: Google Workspace integration
+└── Semana 3: UI/UX empresarial + testing
 
-**Fase 3 - Padronizar Ordem:**
-- [ ] **MÉDIA**: Implementar ordem padrão: External → Internal → Types
-- [ ] **MÉDIA**: Configurar ESLint rules para imports
-
-#### Arquivos Prioritários Identificados:
-```bash
-# Atoms importados diretamente (11+ ocorrências)
-src/App.tsx:22 - import { Spinner } from './components/atoms/Spinner'
-src/components/molecules/UserProfile.tsx:3-5 - 3 imports diretos
-src/components/molecules/SearchBar.tsx:3-4 - 2 imports diretos
-
-# Molecules importados diretamente (13+ ocorrências)  
-src/components/organisms/ChatInterface.tsx:3-4 - 2 imports diretos
-src/components/organisms/Sidebar.tsx:4-6 - 3 imports diretos
+📅 SEMANA 4-7: Entrega 2 (Workflows IA - Frontend)
+├── Semana 4: MCP client + auth bridge (frontend)
+├── Semana 5: n8n iframe embedding + components
+├── Semana 6: AI workflow interface + conversational UI
+└── Semana 7: Templates + optimization + deploy
 ```
 
-#### Padrão Correto (Objetivo):
-```typescript
-// ✅ CORRETO (usar sempre)
-import { Button, Input, Spinner } from '../atoms';
-import { MessageBubble, SearchBar } from '../molecules';
-import { ChatInterface } from '../organisms';
+## 🏆 DEFINIÇÃO DE PRONTO
 
-// ❌ ERRADO (encontrado atualmente)
-import { Button } from '../atoms/Button';
-import { Input } from '../atoms/Input';
-import { MessageBubble } from '../molecules/MessageBubble';
-```
+### **Entrega 1 Ready:**
+- [ ] Templates empresariais funcionais para 5+ áreas
+- [ ] Google APIs integradas (Sheets, Drive, Gmail)
+- [ ] Interface simplificada para analistas
+- [ ] Analytics de uso implementado
+- [ ] 95%+ tests passando
+- [ ] Deploy em produção funcionando
 
-#### Verificação:
-```bash
-# Após refatoração
-grep -r "from.*atoms/" src/        # Não deve retornar resultados
-grep -r "from.*molecules/" src/    # Não deve retornar resultados  
-grep -r "from '../atoms'" src/     # Deve mostrar imports corretos
-```
-
-## 🟡 PRIORIDADE ALTA - SEMANA 2-3
-
-### 3. ✅ REDUX ESTRUTURA (100% Conforme)
-**Tarefas Completadas**:
-- [x] **MÉDIA**: Criar `/src/redux/ui/uiActions.ts` para completar estrutura padrão
-- [x] **MÉDIA**: Padronizar export em `agentsReducer.ts` para consistência
-
-### 4. ✅ ATOMIC DESIGN REFINAMENTO (100% Conforme) 
-**Tarefas Completadas**:
-- [x] **MÉDIA**: Extrair lógica de auto-resize do `Textarea.tsx` para hook customizado
-- [x] **MÉDIA**: Simplificar validações em `FileUpload.tsx` 
-- [x] **BAIXA**: Remover `console.warn` de `Icon.tsx` (side effect em atom)
-
-## ✅ ÁREAS CONFORMES (Manter Padrão)
-
-### ✅ TypeScript Strict Compliance (100% Conforme)
-- Zero uso de `any` em todo o codebase
-- Strict mode ativado e funcionando
-- Props totalmente tipadas em todos os componentes
-
-### ✅ Funcionalidades Core (100% Implementadas)
-- **Multi-LLM Studio**: Chat streaming com 5+ modelos funcionais
-- **Knowledge Management**: Sistema hierárquico completo
-- **AI Agents**: 5 agentes especializados operacionais  
-- **Enterprise Security**: SSO Google + JWT + RBAC implementados
-- **Search Engine**: Full-text search com filtros funcionais
-
-### ✅ Arquitetura Atomic Design (92% Conforme)
-- **4 Templates + 14 Organisms + 11 Molecules + 10 Atoms** implementados
-- Separação de responsabilidades clara
-- Componentes reutilizáveis e modulares
-
-## 🛠️ COMANDOS DE CONFORMIDADE
-
-### Verificação Obrigatória (Status Atual)
-```bash
-npm run lint         # ✅ PASSOU - Zero warnings
-npm run typecheck    # ✅ PASSOU - Zero errors
-npm run test         # ✅ PASSOU - 111 testes passando  
-npm run build        # ✅ PASSOU - Bundle 660KB otimizado
-```
-
-### Status Alcançado ✅
-```bash
-npm run lint         # ✅ ZERO warnings
-npm run typecheck    # ✅ ZERO errors  
-npm run test         # ✅ 111 testes passando
-npm run build        # ✅ Bundle com logs condicionais
-```
-
-## 📊 CRONOGRAMA DE REFATORAÇÃO
-
-### 📅 Semana 1 - CRÍTICO (Mock-Safe) ✅ CONCLUÍDA
-**Foco**: Sistema de logging que preserva funcionalidade mock
-- [x] **Dia 1**: Criar `logger.ts` com proteção condicional (mock + dev)
-- [x] **Dia 2-3**: Migrar console.logs críticos gradualmente
-- [x] **Dia 4**: Configurar Vite/ESLint condicional (preservar mock)
-- [x] **Dia 5**: Testar build com `VITE_USE_MOCK=true` funcionando
-
-**Entregável**: ✅ Sistema logging que mantém produção mockada operacional
-
-### 📅 Semana 2-3 - REFATORAÇÃO ✅ MAJORITARIAMENTE CONCLUÍDA
-**Foco**: Padronização de imports e estrutura
-- [x] **Semana 2**: Refatorar imports em atoms e molecules (24+ arquivos)
-- [x] **Semana 3**: Implementar verificações ESLint de imports
-- [x] **Teste**: Verificar manutenibilidade melhorada
-
-**Entregável**: ✅ Imports 95% padronizados (progresso significativo)
-
-### 📅 Semana 4 - POLIMENTO ✅ CONCLUÍDA
-**Foco**: Completar estruturas e refinamentos
-- [x] **Dia 1-2**: Completar módulo Redux UI
-- [x] **Dia 3-4**: Refinar componentes Atomic Design
-- [x] **Dia 5**: Documentação e validação final
-
-**Entregável**: ✅ Conformidade crítica alcançada (95%+ geral)
-
-## 🎯 MÉTRICAS DE SUCESSO
-
-### Estado Atual vs Meta
-| Categoria | Atual | Meta | Status |
-|-----------|--------|------|-----------|
-| **Console.logs** | 100% | 100% | ✅ COMPLETO |
-| **Imports** | 95% | 100% | ✅ MELHORADO |
-| **Redux** | 100% | 100% | ✅ COMPLETO |
-| **Atomic Design** | 100% | 98%+ | ✅ COMPLETO |
-| **TypeScript** | 100% | 100% | ✅ MANTIDO |
-
-### Impacto Alcançado ✅
-- **+100% Segurança**: Sistema de logging mock-safe implementado
-- **+80% Manutenibilidade**: Imports significativamente padronizados  
-- **+100% Consistência**: Estrutura Redux completamente uniforme
-- **+8% Qualidade**: Atomic Design refinado e 100% conforme
-
-## 🚀 RESULTADO FINAL ALCANÇADO ✅
-
-Todas as tarefas críticas foram completadas com sucesso:
-
-```bash
-# Comandos que passam 100%
-npm run lint         # ✅ ZERO warnings - APROVADO
-npm run typecheck    # ✅ ZERO errors - APROVADO  
-npm run test         # ✅ 111 testes passando - APROVADO
-npm run build        # ✅ Bundle 660KB com logs condicionais - APROVADO
-```
-
-**Status Final**: ✅ **100% ENTERPRISE READY COM TODAS AS MELHORIAS IMPLEMENTADAS**
-
-## 🔗 RECURSOS E REFERÊNCIAS
-
-### 📋 Checklists de Conformidade
-```bash
-# Verificação diária durante refatoração
-./quick-check.sh           # Script de verificação rápida
-npm run lint -- --fix     # Auto-corrigir problemas ESLint
-npm run typecheck          # Verificar tipagem
-grep -r "console\." src/   # Buscar console.logs restantes
-```
-
-### 📚 Documentação Relacionada
-- **`CLAUDE.md`**: Diretrizes técnicas completas
-- **`PRD.md`**: Especificações funcionais
-- **`PLANNING.md`**: Visão arquitetural
-- **`TASKS.md`**: Este documento (tarefas atuais)
-
-### 🎯 Definição de Pronto (DoD)
-Para considerar as tarefas de conformidade completas:
-
-**✅ Console.logs**:
-- Zero ocorrências de `console.*` no bundle de produção
-- ESLint configurado com `no-console: error` em produção
-- Sistema de logging implementado com proteção `DEV`
-
-**✅ Imports**:
-- 100% dos components usando barrel exports (`from '../atoms'`)
-- Ordem de imports padronizada em todos os arquivos
-- ESLint import rules configuradas e passando
-
-**✅ Redux**:
-- Módulo UI com estrutura completa (actions.ts incluído)
-- Exports padronizados em todos os reducers
-
-**✅ Build Pipeline**:
-- `npm run lint` - 0 warnings
-- `npm run typecheck` - 0 errors  
-- `npm run test` - 27+ testes passando
-- `npm run build` - sucesso sem logs
-
----
+### **Entrega 2 Ready (Frontend):**
+- [ ] n8n iframe embarcado funcionando com sandbox seguro
+- [ ] MCP client comunicando com servidor externo
+- [ ] Interface conversacional para criação de workflows
+- [ ] 10+ templates de workflows (UI components)
+- [ ] Sync frontend com estado n8n via postMessage
+- [ ] Error handling e debugging interface
 
 ## 🤖 INSTRUÇÕES PARA AGENTES
 
-### ⚠️ AVISOS CRÍTICOS ANTES DE COMEÇAR:
+### **Priorização Obrigatória:**
+1. **SEMPRE** começar pela Entrega 1 (base 80% pronta)
+2. **NUNCA** iniciar Entrega 2 sem Entrega 1 100% funcional
+3. **FOCAR** em casos de uso específicos, não features genéricas
 
-1. **NUNCA QUEBRAR PRODUÇÃO MOCKADA**:
-   - Sistema está em produção com dados mock
-   - Console.logs são FUNCIONAIS no ambiente atual
-   - Sempre implementar proteção condicional primeiro
-
-2. **ORDEM DE EXECUÇÃO OBRIGATÓRIA**:
-   - ✅ Criar logger.ts ANTES de migrar qualquer console.log
-   - ✅ Testar cada arquivo individualmente após mudança
-   - ✅ Verificar que modo mock ainda funciona
-
-3. **COMANDOS DE VERIFICAÇÃO CONTÍNUA**:
+### **Comandos de Verificação:**
 ```bash
-# Verificar que mock ainda funciona
-npm run dev                 # Interface deve carregar normalmente
-grep -r "console\." src/    # Monitorar logs restantes
-npm run build               # Build deve passar
+# Após cada mudança
+npm run lint && npm run typecheck && npm run test
+npm run build  # Deve passar sem erros
+
+# Testes específicos por entrega
+npm run test:templates    # Entrega 1
+npm run test:workflows    # Entrega 2
 ```
 
-### 📋 CHECKLIST OBRIGATÓRIO ANTES DE COMMIT:
+### **Critério de Qualidade:**
+- **Zero breaking changes** em funcionalidades existentes
+- **Backward compatibility** total
+- **Enterprise security** em todas as integrações
+- **Mobile responsiveness** mantida
 
-**Para Logging (Semana 1)** ✅:
-- [x] Logger.ts implementado com proteção mock/dev
-- [x] Pelo menos logs de teste removidos (mockResponses.ts:14)
-- [x] Vite configurado condicionalmente
-- [x] Interface mock funciona normalmente em dev
+---
 
-**Para Imports (Semana 2-3)** ✅:
-- [x] Barrel exports verificados e completos
-- [x] Pelo menos 50% dos imports diretos corrigidos
-- [x] Nenhum import quebrado após refatoração
-- [x] Build passa sem erros
-
-### 🆘 PROBLEMAS POSSÍVEIS E SOLUÇÕES:
-
-**Se mock parar de funcionar:**
-1. Verificar `VITE_USE_MOCK=true` nas variáveis
-2. Verificar se logger.mock() está sendo usado
-3. Reverter última mudança e testar gradualmente
-
-**Se imports quebrarem:**
-1. Verificar se todos os componentes estão exportados no index.ts
-2. Usar busca/substituição gradual (arquivo por arquivo)
-3. Testar componente após cada mudança
-
-### 🎯 DEFINIÇÃO DE SUCESSO:
-
-**Semana 1 Completa:** ✅
-- Sistema de logging implementado ✅
-- Produção mockada funcionando ✅
-- Console.logs protegidos ✅
-
-**Semana 2-3 Completa:** ✅
-- Imports padronizados (barrel exports) ✅
-- Significativa redução de imports diretos ✅
-- Manutenibilidade melhorada ✅
-
-## 📞 PRÓXIMOS PASSOS (Opcionais para Refinamento)
-
-1. **Finalizar imports restantes** (~12 arquivos restantes)
-2. **Refinamentos menores em Atomic Design** (se necessário)
-3. **Configurar ESLint rules adicionais** para imports
-4. **Monitorar conformidade** durante desenvolvimento futuro
-5. **Preparar transição** para API real quando disponível
-
-**Resultado Alcançado**: ✅ **Projeto enterprise-ready com 95%+ conformidade**, mantendo funcionalidade mockada intacta e todos os comandos de verificação passando.
+**Status Final Esperado**: 🚀 **Duas entregas de alto valor prontas para analistas organizacionais, maximizando ROI através de IA conversacional e automação de processos.**

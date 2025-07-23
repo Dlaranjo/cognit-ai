@@ -6,8 +6,9 @@ Diretrizes técnicas para desenvolvimento e manutenção do **Cognit AI Platform
 
 > **📖 Referências**: `PLANNING.md` (arquitetura), `PRD.md` (funcional), `TASKS.md` (status atual)
 
-## 🏗️ Stack Tecnológica
+## 🏗️ Stack Tecnológica Atualizada
 
+### **Base Mantida (Enterprise Ready)**
 - **React 18+** com TypeScript strict mode
 - **Redux Toolkit** para estado global
 - **React Router v6** para roteamento
@@ -16,21 +17,31 @@ Diretrizes técnicas para desenvolvimento e manutenção do **Cognit AI Platform
 - **Vite** como build tool
 - **Vitest** + React Testing Library
 
-## 📁 Estrutura Obrigatória
+### **Novas Integrações Frontend (Entregas 1 & 2)**
+- **MCP Client** para comunicação com servidor MCP externo
+- **Google APIs Client** (Sheets, Drive, Gmail) - via frontend SDKs
+- **n8n Iframe Embedding** com sandbox seguro
+- **PostMessage API** para comunicação com iframe n8n
+
+## 📁 Estrutura Atualizada
 
 ```
 src/
-├── api/              # Configuração HTTP + endpoints
+├── api/              # HTTP + Client SDKs apenas
+│   ├── mcp/          # MCP Client (comunica com servidor externo)
+│   ├── google/       # Google APIs Client SDKs
+│   └── n8n/          # n8n client communication (iframe bridge)
 ├── components/
 │   ├── atoms/        # Button, Input, Icon, Avatar, Badge
 │   ├── molecules/    # SearchBar, MessageBubble, UserProfile
-│   ├── organisms/    # ChatInterface, ConversationList
-│   └── templates/    # Layout base das páginas
-├── pages/            # Páginas roteadas
-├── hooks/            # Custom hooks
-├── redux/            # Estado global (auth, chat, workspace)
+│   ├── organisms/    # ChatInterface, WorkflowCanvas, N8nEmbed
+│   └── templates/    # StudioTemplate, WorkflowTemplate
+├── pages/            # Studio, Workflows, Agents
+├── hooks/            # useN8n, useMCP, useGoogleAPI (frontend hooks)
+├── redux/            # auth, chat, workflows, n8nState
 ├── shared/           # Config, types, utils, constants
-└── styles/           # Design tokens
+├── templates/        # Prompt templates por área empresarial
+└── workflows/        # Workflow UI templates e utilities
 ```
 
 ## 🎨 Atomic Design
@@ -64,11 +75,13 @@ src/
 - types.ts      # Interfaces específicas
 ```
 
-### Módulos Obrigatórios
-- **auth**: user, token, isAuthenticated
-- **chat**: messages, selectedModel, isTyping
-- **conversations**: lista, favorites, searchQuery
-- **workspaces**: lista, currentWorkspace, permissions
+### Módulos Atualizados
+- **auth**: user, token, isAuthenticated, googleAPIs
+- **chat**: messages, selectedModel, isTyping, templates
+- **conversations**: lista, favorites, searchQuery (mantido)
+- **workflows**: n8nState, activeWorkflow, templates
+- **n8n**: connection, sync, iframe, mcpClient
+- **google**: sheets, drive, gmail, authentication
 
 ## 🎯 Design System
 
@@ -111,8 +124,9 @@ fontSize: ['12px', '14px', '16px', '18px', '24px', '32px', '48px']
 ```bash
 npm run lint      # ESLint sem erros
 npm run typecheck # TypeScript sem erros  
-npm run test      # Testes passando
+npm run test      # Testes passando (incluindo MCP/n8n mocks)
 npm run build     # Build funcionando
+npm run n8n:setup # Setup servidor n8n local (desenvolvimento)
 ```
 
 ## ❌ Práticas Proibidas
@@ -124,6 +138,9 @@ npm run build     # Build funcionando
 - Componentes sem tipagem
 - Mutação direta de estado Redux
 - console.log em produção (exceto modo mock - ver seção Logging)
+- **n8n iframe sem sandbox** (segurança crítica)
+- **MCP calls sem error handling** (comunicação externa)
+- **Google APIs sem rate limiting** (quotas organizacionais)
 
 ## 🔄 Ambiente Mockado (Produção Atual)
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Copy, ThumbsUp, ThumbsDown, RotateCcw, Sparkles, Paperclip, FileText, Image, Check, Heart, HeartOff, Edit3, Save, X } from 'lucide-react';
+import { formatFileSize, getFileTypeLabel } from '../../shared/utils/fileUtils';
 
 export interface MessageAttachment {
   id: string;
@@ -65,14 +66,6 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
       });
     };
 
-    const formatFileSize = (bytes: number): string => {
-      if (bytes === 0) return '0 Bytes';
-      const k = 1024;
-      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-      const i = Math.floor(Math.log(bytes) / Math.log(k));
-      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    };
-
     const getFileIcon = (type: string) => {
       if (type.startsWith('image/')) {
         return <Image className="w-4 h-4" />;
@@ -83,25 +76,7 @@ export const MessageBubble = React.memo<MessageBubbleProps>(
       return <Paperclip className="w-4 h-4" />;
     };
 
-    const getFileTypeLabel = (type: string): string => {
-      if (type.startsWith('image/')) {
-        return 'Imagem';
-      } else if (type.includes('pdf')) {
-        return 'PDF';
-      } else if (type.includes('text/')) {
-        return 'Texto';
-      } else if (type.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
-        return 'Word';
-      } else if (type.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
-        return 'Excel';
-      } else if (type.includes('application/vnd.openxmlformats-officedocument.presentationml.presentation')) {
-        return 'PowerPoint';
-      } else if (type.includes('application/zip') || type.includes('application/x-rar')) {
-        return 'Arquivo';
-      } else {
-        return 'Arquivo';
-      }
-    };
+
 
     const handleCopy = () => {
       navigator.clipboard.writeText(content);

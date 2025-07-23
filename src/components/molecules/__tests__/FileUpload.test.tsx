@@ -1,8 +1,12 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { FileUpload } from '../FileUpload';
 
 describe('FileUpload', () => {
+  afterEach(() => {
+    cleanup();
+  });
+
   const createMockFile = (name: string, size: number, type: string) => {
     const file = new File(['content'], name, { type });
     Object.defineProperty(file, 'size', { value: size });
@@ -102,16 +106,23 @@ describe('FileUpload', () => {
 
   it('should display selected files', () => {
     const files = [
-      createMockFile('document.pdf', 1024 * 1024, 'application/pdf'), // 1MB
+      createMockFile('document.pdf', 1048576, 'application/pdf'), // 1MB = 1024*1024
       createMockFile('text.txt', 2048, 'text/plain'), // 2KB
     ];
     
-    render(<FileUpload files={files} />);
+    const { container } = render(<FileUpload files={files} />);
     
     expect(screen.getByText('document.pdf')).toBeInTheDocument();
-    expect(screen.getByText('1 MB')).toBeInTheDocument();
     expect(screen.getByText('text.txt')).toBeInTheDocument();
-    expect(screen.getByText('2 KB')).toBeInTheDocument();
+    
+    // Check for file sizes in this specific container only
+    const fileElements = container.querySelectorAll('p.text-xs.text-neutral-500');
+    const fileSizeTexts = Array.from(fileElements)
+      .map(el => el.textContent)
+      .filter(text => text && /\d+(\.\d+)? (Bytes|KB|MB|GB)/.test(text));
+    
+    expect(fileSizeTexts.some(text => text.includes('1 MB'))).toBe(true);
+    expect(fileSizeTexts.some(text => text.includes('2 KB'))).toBe(true);
   });
 
   it('should call onFileRemove when remove button is clicked', () => {
@@ -174,11 +185,17 @@ describe('FileUpload', () => {
       createMockFile('large.doc', 2 * 1024 * 1024, 'application/msword'), // 2 MB
     ];
     
-    render(<FileUpload files={files} />);
+    const { container } = render(<FileUpload files={files} />);
     
-    expect(screen.getByText('500 Bytes')).toBeInTheDocument();
-    expect(screen.getByText('1.5 KB')).toBeInTheDocument();
-    expect(screen.getByText('2 MB')).toBeInTheDocument();
+    // Check for file sizes in this specific container only
+    const fileElements = container.querySelectorAll('p.text-xs.text-neutral-500');
+    const fileSizeTexts = Array.from(fileElements)
+      .map(el => el.textContent)
+      .filter(text => text && /\d+(\.\d+)? (Bytes|KB|MB|GB)/.test(text));
+    
+    expect(fileSizeTexts.some(text => text.includes('500 Bytes'))).toBe(true);
+    expect(fileSizeTexts.some(text => text.includes('1.5 KB'))).toBe(true);
+    expect(fileSizeTexts.some(text => text.includes('2 MB'))).toBe(true);
   });
 
   it('should support single file mode', () => {
