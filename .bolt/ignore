@@ -1,4 +1,5 @@
-# ===== ESTRATÉGIA OTIMIZADA PARA REDUÇÃO DE TOKENS =====
+# ===== FOCO NA PÁGINA DE WORKFLOWS (AGENTS) =====
+# Configuração para trabalhar apenas com a funcionalidade de workflows
 
 # Dependencies e build artifacts (SEMPRE ignorar)
 node_modules/
@@ -22,7 +23,7 @@ postcss.config.js
 eslint.config.js
 tsconfig*.json
 
-# Documentação (ignorar para trabalho de UX/UI)
+# Documentação (ignorar para reduzir tokens)
 README.md
 docs/
 CLAUDE.md
@@ -30,7 +31,7 @@ PLANNING.md
 PRD.md
 TASKS.md
 
-# Testes (ignorar para trabalho de UX - economiza ~30% tokens)
+# Testes (ignorar para economizar tokens)
 **/__tests__/
 **/*.test.ts
 **/*.test.tsx
@@ -38,29 +39,6 @@ TASKS.md
 **/*.spec.tsx
 src/test/
 setupTests.ts
-
-# API e Backend (ignorar para trabalho de UI - manter apenas chatApi)
-src/api/agentsApi.ts
-src/api/authApi.ts
-src/api/axiosConfig.ts
-src/api/documentApi.ts
-src/api/memberApi.ts
-src/api/projectApi.ts
-src/api/workspaceApi.ts
-src/api/__tests__/
-src/shared/mockData.ts
-
-# Redux (manter apenas slices necessários para o contexto)
-src/redux/store.ts
-src/redux/middleware/
-
-# Types globais (ignorar se não editando tipos)
-src/types/
-src/vite-env.d.ts
-
-# Arquivos de build e deployment
-public/
-index.html
 
 # Version control
 .git/
@@ -81,59 +59,69 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# ===== FOCO NO STUDIO: IGNORAR OUTROS COMPONENTES =====
-# Para trabalhar apenas na página Studio e seus componentes
-
-# Ignorar outras páginas (manter apenas StudioPage)
-src/pages/AgentsPage.tsx
+# ===== IGNORAR PÁGINAS NÃO RELACIONADAS AOS WORKFLOWS =====
 src/pages/AuthPage.tsx
-src/pages/DocumentsPage.tsx
-src/pages/ProjectsPage.tsx
-src/pages/SearchPage.tsx
-src/pages/WorkspacesPage.tsx
+src/pages/StudioPage.tsx
 
-# Ignorar outros templates (manter apenas StudioTemplate)
-src/components/templates/AgentTemplate.tsx
+# ===== IGNORAR TEMPLATES NÃO RELACIONADOS AOS WORKFLOWS =====
 src/components/templates/LoginTemplate.tsx
-src/components/templates/AppTemplate.tsx
+src/components/templates/StudioTemplate.tsx
 
-# Ignorar organisms não relacionados ao Studio
-src/components/organisms/ActionResults.tsx
-src/components/organisms/AgentSelector.tsx
+# ===== IGNORAR ORGANISMS NÃO RELACIONADOS AOS WORKFLOWS =====
+src/components/organisms/ChatInterface.tsx
 src/components/organisms/ConversationList.tsx
 src/components/organisms/ConversationSidebar.tsx
-src/components/organisms/CreateProjectModal.tsx
-src/components/organisms/CreateWorkspaceModal.tsx
 src/components/organisms/DemoAccessSection.tsx
-src/components/organisms/DocumentList.tsx
 src/components/organisms/Header.tsx
 src/components/organisms/LoginCard.tsx
 src/components/organisms/MemberManagement.tsx
-src/components/organisms/ProjectList.tsx
 src/components/organisms/SearchInterface.tsx
-src/components/organisms/WorkspaceList.tsx
+src/components/organisms/StudioChatInterface.tsx
+src/components/organisms/StudioHeader.tsx
+src/components/organisms/StudioHistoryModal.tsx
+src/components/organisms/StudioKnowledgeModal.tsx
 
-# Ignorar molecules não utilizadas no Studio
+# ===== IGNORAR MOLECULES NÃO RELACIONADAS AOS WORKFLOWS =====
 src/components/molecules/DemoUserCard.tsx
 src/components/molecules/GoogleLoginButton.tsx
 src/components/molecules/LoginHeader.tsx
 src/components/molecules/PasswordInput.tsx
 src/components/molecules/UserProfile.tsx
-src/components/molecules/WorkspaceCard.tsx
 src/components/molecules/WorkspaceFilter.tsx
 
-# Ignorar hooks não relacionados ao Studio
+# ===== IGNORAR HOOKS NÃO RELACIONADOS AOS WORKFLOWS =====
 src/hooks/useAuth.ts
+src/hooks/useChat.ts
+src/hooks/useConversations.ts
 src/hooks/useGoogleAuth.ts
+src/hooks/useLoginLogic.ts
+src/hooks/useMessageStreaming.ts
+src/hooks/useStreamProcessor.ts
+src/hooks/useStreaming.ts
 src/hooks/useWorkspaces.ts
-src/hooks/useAgents.ts
-src/hooks/useLocalStorage.ts
-src/hooks/useInfiniteScroll.ts
 
-# Ignorar Redux modules não essenciais para Studio
+# ===== IGNORAR APIs NÃO RELACIONADAS AOS WORKFLOWS =====
+src/api/authApi.ts
+src/api/chatApi.ts
+src/api/documentApi.ts
+src/api/memberApi.ts
+src/api/projectApi.ts
+src/api/workspaceApi.ts
+src/api/__tests__/
+
+# ===== IGNORAR REDUX MODULES NÃO RELACIONADOS AOS WORKFLOWS =====
+src/redux/auth/
+src/redux/chat/
+src/redux/conversations/
+src/redux/ui/
 src/redux/workspaces/
-src/redux/agents/
 
-# Ignorar utils não relacionados ao Studio
+# ===== IGNORAR UTILS NÃO RELACIONADOS AOS WORKFLOWS =====
 src/shared/utils/workspaceUtils.ts
-src/shared/utils/modelUtils.ts
+
+# ===== IGNORAR OUTROS ARQUIVOS NÃO ESSENCIAIS =====
+public/
+index.html
+src/vite-env.d.ts
+src/styles/
+quick-check.sh
