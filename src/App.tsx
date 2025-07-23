@@ -13,10 +13,6 @@ import { AppTemplate } from './components/templates/AppTemplate';
 import {
   AuthPage,
   StudioPage,
-  WorkspacesPage,
-  ProjectsPage,
-  DocumentsPage,
-  SearchPage,
   AgentsPage,
 } from './pages';
 import { Spinner } from './components/atoms';
@@ -59,16 +55,6 @@ function App() {
 
                 {/* Main application routes */}
                 <Route path="studio" element={<StudioPage />} />
-                <Route path="workspaces" element={<WorkspacesPage />} />
-                <Route
-                  path="workspaces/:workspaceId/projects"
-                  element={<ProjectsPage />}
-                />
-                <Route
-                  path="workspaces/:workspaceId/projects/:projectId/documents"
-                  element={<DocumentsPage />}
-                />
-                <Route path="search" element={<SearchPage />} />
                 <Route path="agents" element={<AgentsPage />} />
               </Route>
 

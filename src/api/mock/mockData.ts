@@ -519,3 +519,62 @@ export const mockLLMProviders = [
     supportedFeatures: ['text', 'vision'],
   },
 ];
+
+export const mockTools = [
+  {
+    id: 'calculator',
+    name: 'Calculadora',
+    description: 'Realizar cálculos matemáticos complexos',
+    icon: 'Calculator',
+    color: 'from-blue-500 to-blue-600',
+    category: 'Matemática'
+  },
+  {
+    id: 'web-search',
+    name: 'Busca Web',
+    description: 'Pesquisar informações atualizadas na internet',
+    icon: 'Globe',
+    color: 'from-green-500 to-green-600',
+    category: 'Pesquisa'
+  },
+  {
+    id: 'document-analyzer',
+    name: 'Analisador de Documentos',
+    description: 'Analisar e extrair informações de documentos',
+    icon: 'FileText',
+    color: 'from-purple-500 to-purple-600',
+    category: 'Documentos'
+  },
+  {
+    id: 'image-generator',
+    name: 'Gerador de Imagens',
+    description: 'Criar imagens usando IA generativa',
+    icon: 'Image',
+    color: 'from-pink-500 to-pink-600',
+    category: 'Criativo'
+  },
+  {
+    id: 'code-executor',
+    name: 'Executor de Código',
+    description: 'Executar e testar código em várias linguagens',
+    icon: 'Code',
+    color: 'from-indigo-500 to-indigo-600',
+    category: 'Desenvolvimento'
+  },
+  {
+    id: 'data-analyzer',
+    name: 'Analisador de Dados',
+    description: 'Analisar dados e criar visualizações',
+    icon: 'BarChart3',
+    color: 'from-orange-500 to-orange-600',
+    category: 'Dados'
+  },
+  {
+    id: 'database-query',
+    name: 'Consulta de Banco',
+    description: 'Executar consultas em bancos de dados',
+    icon: 'Database',
+    color: 'from-teal-500 to-teal-600',
+    category: 'Dados'
+  }
+];

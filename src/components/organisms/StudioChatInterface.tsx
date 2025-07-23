@@ -1,107 +1,15 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, ArrowDown, Wrench, Calculator, Globe, FileText, Image, Code, Database, BarChart3 } from 'lucide-react';
-import { MessageBubble } from '../molecules/MessageBubble';
+import { MessageBubble, TypingIndicator, StreamingMessage } from '../molecules';
 import { useChat } from '../../hooks/useChat';
 import { useStreaming } from '../../hooks/useStreaming';
 import { useAppSelector, useAppDispatch } from '../../redux/store';
 import { selectStreamingMessage } from '../../redux/chat/chatSelectors';
 import { removeLastAssistantMessage } from '../../redux/chat/chatReducer';
 import { createAvailableModels, formatFileSize, getPriceBadgeColor, logger } from '../../shared/utils';
-import type { LLMModel, Message } from '../../types';
+import { mockTools } from '../../api/mock/mockData';
+import type { LLMModel, Message, Tool } from '../../types';
 
-// Componente para animação de digitação melhorada
-const TypingIndicator: React.FC<{ modelName: string }> = ({
-  modelName
-}) => {
-  // Use orange theme for typing indicator
-  const orangeColor = 'from-orange-500 to-red-500';
-
-  return (
-  <div className="flex items-start space-x-4 animate-fade-in">
-    <div className={`w-10 h-10 bg-gradient-to-br ${orangeColor} rounded-full flex items-center justify-center shadow-lg`}>
-      <Sparkles className="w-5 h-5 text-white animate-pulse" />
-    </div>
-    <div className="flex-1">
-      <div className="mb-2">
-        <span className="text-sm font-semibold text-gray-700">{modelName}</span>
-      </div>
-      {/* Typing Indicator - No Bubble, Direct Text */}
-      <div className="mr-8 text-base leading-relaxed text-gray-800">
-        <div className="flex items-center space-x-3">
-          <div className="flex space-x-1">
-            <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce"></div>
-            <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-100"></div>
-            <div className="w-2 h-2 bg-orange-400 rounded-full animate-bounce delay-200"></div>
-          </div>
-          <span className="text-sm text-gray-600 font-medium">
-            está pensando...
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  );
-};
-
-// Componente para mensagem em streaming com cursor de digitação
-const StreamingMessage: React.FC<{
-  content: string;
-  modelName: string;
-}> = ({ content, modelName }) => {
-  return (
-    <div className="flex items-start space-x-4 animate-fade-in">
-      <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg">
-        <Sparkles className="w-5 h-5 text-white" />
-      </div>
-      <div className="flex-1">
-        <div className="mb-2">
-          <span className="text-sm font-semibold text-gray-700">{modelName}</span>
-        </div>
-        {/* Streaming Message - No Bubble, Direct Text */}
-        <div className="mr-8 text-base leading-relaxed text-gray-800">
-          <div className="prose prose-sm max-w-none prose-headings:text-gray-800 prose-p:text-gray-800 prose-strong:text-gray-900 prose-code:text-orange-600 prose-code:bg-orange-50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-gray-50 prose-pre:border prose-ul:text-gray-800 prose-ol:text-gray-800 prose-li:text-gray-800 prose-ol:list-decimal prose-ul:list-disc prose-li:list-item">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                code: (props) => {
-                  const { children, ...rest } = props;
-                  const isInline = !String(children).includes('\n');
-                  return isInline ? (
-                    <code className="bg-orange-50 text-orange-600 px-1 py-0.5 rounded text-sm" {...rest}>
-                      {children}
-                    </code>
-                  ) : (
-                    <pre className="bg-gray-50 border rounded p-3 overflow-x-auto">
-                      <code className="text-sm" {...rest}>
-                        {children}
-                      </code>
-                    </pre>
-                  );
-                },
-                h1: ({ children }) => <h1 className="text-xl font-bold text-gray-800 mb-3">{children}</h1>,
-                h2: ({ children }) => <h2 className="text-lg font-bold text-gray-800 mb-2">{children}</h2>,
-                h3: ({ children }) => <h3 className="text-base font-bold text-gray-800 mb-2">{children}</h3>,
-                p: ({ children }) => <p className="text-gray-800 mb-2 last:mb-0">{children}</p>,
-                ul: ({ children }) => <ul className="list-disc ml-4 text-gray-800 mb-3 space-y-1">{children}</ul>,
-                ol: ({ children }) => <ol className="list-decimal ml-4 text-gray-800 mb-3 space-y-1">{children}</ol>,
-                li: ({ children }) => <li className="text-gray-800 ml-2">{children}</li>,
-                strong: ({ children }) => <strong className="font-bold text-gray-900">{children}</strong>,
-                em: ({ children }) => <em className="italic text-gray-800">{children}</em>,
-              }}
-            >
-              {content}
-            </ReactMarkdown>
-            <span className="inline-flex items-center ml-1">
-              <span className="w-0.5 h-4 bg-orange-500 animate-pulse"></span>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 interface StudioChatInterfaceProps {
   className?: string;
 }
@@ -430,74 +338,29 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // Mock tools data
-  const mockTools = [
-    {
-      id: 'calculator',
-      name: 'Calculadora',
-      description: 'Realizar cálculos matemáticos complexos',
-      icon: Calculator,
-      color: 'from-blue-500 to-blue-600',
-      category: 'Matemática'
-    },
-    {
-      id: 'web-search',
-      name: 'Busca Web',
-      description: 'Pesquisar informações atualizadas na internet',
-      icon: Globe,
-      color: 'from-green-500 to-green-600',
-      category: 'Pesquisa'
-    },
-    {
-      id: 'document-analyzer',
-      name: 'Analisador de Documentos',
-      description: 'Analisar e extrair informações de documentos',
-      icon: FileText,
-      color: 'from-purple-500 to-purple-600',
-      category: 'Documentos'
-    },
-    {
-      id: 'image-generator',
-      name: 'Gerador de Imagens',
-      description: 'Criar imagens usando IA generativa',
-      icon: Image,
-      color: 'from-pink-500 to-pink-600',
-      category: 'Criativo'
-    },
-    {
-      id: 'code-executor',
-      name: 'Executor de Código',
-      description: 'Executar e testar código em várias linguagens',
-      icon: Code,
-      color: 'from-indigo-500 to-indigo-600',
-      category: 'Desenvolvimento'
-    },
-    {
-      id: 'data-analyzer',
-      name: 'Analisador de Dados',
-      description: 'Analisar dados e criar visualizações',
-      icon: BarChart3,
-      color: 'from-orange-500 to-orange-600',
-      category: 'Dados'
-    },
-    {
-      id: 'database-query',
-      name: 'Consulta de Banco',
-      description: 'Executar consultas em bancos de dados',
-      icon: Database,
-      color: 'from-teal-500 to-teal-600',
-      category: 'Dados'
-    }
-  ];
 
-  const handleToolSelect = (tool: typeof mockTools[0]) => {
+  const handleToolSelect = (tool: Tool) => {
     console.log('Tool selected:', tool);
     // TODO: Implementar lógica de seleção de ferramenta
     setShowToolsMenu(false);
   };
-  const handleCopyMessage = () => {};
-  const handleLikeMessage = () => {};
-  const handleDislikeMessage = () => {};
+  const handleCopyMessage = (messageContent: string) => {
+    navigator.clipboard.writeText(messageContent).then(() => {
+      logger.mock('Message copied to clipboard');
+    }).catch((error) => {
+      logger.error('Failed to copy message:', error);
+    });
+  };
+  
+  const handleLikeMessage = (messageId: string) => {
+    // TODO: Implementar sistema de feedback quando API estiver disponível
+    logger.mock('Message liked:', messageId);
+  };
+  
+  const handleDislikeMessage = (messageId: string) => {
+    // TODO: Implementar sistema de feedback quando API estiver disponível
+    logger.mock('Message disliked:', messageId);
+  };
 
   const handleEditMessage = async (messageId: string, newContent: string) => {
     try {
@@ -571,9 +434,9 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                   model={message.model}
                   attachments={message.attachments}
                   isStreaming={isStreaming}
-                  onCopy={handleCopyMessage}
-                  onLike={handleLikeMessage}
-                  onDislike={handleDislikeMessage}
+                  onCopy={() => handleCopyMessage(message.content)}
+                  onLike={() => handleLikeMessage(message.id)}
+                  onDislike={() => handleDislikeMessage(message.id)}
                   onEdit={
                     message.role === 'user'
                       ? (newContent: string) => handleEditMessage(message.id, newContent)
@@ -727,30 +590,48 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                         {/* Tools List */}
                         <div className="overflow-y-auto max-h-80">
                           <div className="p-2">
-                            {mockTools.map((tool) => (
-                              <button
-                                key={tool.id}
-                                onClick={() => handleToolSelect(tool)}
-                                className="w-full p-3 rounded-lg text-left transition-all mb-1 hover:bg-orange-50 hover:text-orange-600 group"
-                              >
-                                <div className="flex items-start space-x-3">
-                                  <div className={`w-10 h-10 bg-gradient-to-br ${tool.color} rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow`}>
-                                    <tool.icon className="w-5 h-5 text-white" />
-                                  </div>
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between">
-                                      <div className="font-medium text-gray-900 text-sm">{tool.name}</div>
-                                      <div className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
-                                        {tool.category}
+                            {mockTools.map((tool) => {
+                              // Map icon string to component
+                              const getIconComponent = (iconName: string) => {
+                                const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+                                  Calculator,
+                                  Globe,
+                                  FileText,
+                                  Image,
+                                  Code,
+                                  BarChart3,
+                                  Database,
+                                };
+                                return iconMap[iconName] || Calculator;
+                              };
+                              
+                              const IconComponent = getIconComponent(tool.icon);
+                              
+                              return (
+                                <button
+                                  key={tool.id}
+                                  onClick={() => handleToolSelect(tool)}
+                                  className="w-full p-3 rounded-lg text-left transition-all mb-1 hover:bg-orange-50 hover:text-orange-600 group"
+                                >
+                                  <div className="flex items-start space-x-3">
+                                    <div className={`w-10 h-10 bg-gradient-to-br ${tool.color} rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm group-hover:shadow-md transition-shadow`}>
+                                      <IconComponent className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center justify-between">
+                                        <div className="font-medium text-gray-900 text-sm">{tool.name}</div>
+                                        <div className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">
+                                          {tool.category}
+                                        </div>
+                                      </div>
+                                      <div className="text-xs text-gray-600 mt-1 leading-relaxed">
+                                        {tool.description}
                                       </div>
                                     </div>
-                                    <div className="text-xs text-gray-600 mt-1 leading-relaxed">
-                                      {tool.description}
-                                    </div>
                                   </div>
-                                </div>
-                              </button>
-                            ))}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
 

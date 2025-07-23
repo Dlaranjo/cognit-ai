@@ -10,8 +10,6 @@ export const AppTemplate: React.FC = () => {
 
   const getViewFromPath = (pathname: string) => {
     if (pathname.startsWith('/studio')) return 'studio';
-    if (pathname.startsWith('/workspaces')) return 'workspaces';
-    if (pathname.startsWith('/search')) return 'search';
     if (pathname.startsWith('/agents')) return 'agents';
     return 'studio';
   };

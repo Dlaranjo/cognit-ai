@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, History } from 'lucide-react';
+import { Plus, History, Database } from 'lucide-react';
 import { StudioChatInterface } from '../organisms/StudioChatInterface';
 import { StudioHistoryModal } from '../organisms/StudioHistoryModal';
+import { StudioKnowledgeModal } from '../organisms/StudioKnowledgeModal';
 import { useChat } from '../../hooks/useChat';
 import { useConversations } from '../../hooks/useConversations';
-import { createAvailableModels } from '../../shared/utils/modelUtils';
-import type { LLMModel } from '../../types';
 
 export const StudioTemplate: React.FC = () => {
   // Redux hooks
@@ -18,9 +17,8 @@ export const StudioTemplate: React.FC = () => {
   const { conversations, removeConversation, loadConversations } = useConversations();
 
   // Local UI state
-  const availableModels = createAvailableModels();
-  const [selectedModel] = useState<LLMModel>(availableModels[0]);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [showKnowledgeModal, setShowKnowledgeModal] = useState(false);
 
   // Load conversations on component mount
   useEffect(() => {
@@ -84,6 +82,21 @@ export const StudioTemplate: React.FC = () => {
             <div className="absolute left-full top-1/2 -translate-y-1/2 border-2 border-transparent border-l-gray-900/90"></div>
           </div>
         </button>
+
+        {/* Knowledge Base Button */}
+        <button
+          onClick={() => setShowKnowledgeModal(true)}
+          className="group relative bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:bg-white/90 hover:border-gray-300/60 text-gray-600 hover:text-gray-700 p-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
+          title="Knowledge Base"
+        >
+          <Database className="w-4 h-4" />
+
+          {/* Tooltip */}
+          <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-gray-900/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-150 whitespace-nowrap pointer-events-none delay-75">
+            Knowledge Base
+            <div className="absolute left-full top-1/2 -translate-y-1/2 border-2 border-transparent border-l-gray-900/90"></div>
+          </div>
+        </button>
       </div>
 
       {/* History Modal */}
@@ -91,10 +104,15 @@ export const StudioTemplate: React.FC = () => {
         isOpen={showHistoryModal}
         conversations={conversations}
         currentConversationId={currentConversation?.id}
-        selectedModelName={selectedModel.name}
         onClose={() => setShowHistoryModal(false)}
         onConversationSelect={handleConversationSelect}
         onConversationDelete={handleDeleteConversation}
+      />
+
+      {/* Knowledge Base Modal */}
+      <StudioKnowledgeModal
+        isOpen={showKnowledgeModal}
+        onClose={() => setShowKnowledgeModal(false)}
       />
     </div>
   );

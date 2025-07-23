@@ -447,3 +447,12 @@ export interface LLMModel {
   color: string;
   priceCategory: 'low' | 'medium' | 'high';
 }
+
+export interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  category: string;
+}

@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { Search, Database, Bot, Sparkles } from 'lucide-react';
+import { Bot, Sparkles } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface NavigationItem {
@@ -22,20 +22,6 @@ export const useNavigation = () => {
       icon: Sparkles,
       description: 'Hub de IA',
       path: '/studio',
-    },
-    {
-      id: 'workspaces',
-      label: 'Knowledge Base',
-      icon: Database,
-      description: 'Base de dados',
-      path: '/workspaces',
-    },
-    {
-      id: 'search',
-      label: 'Search Documents',
-      icon: Search,
-      description: 'Buscar arquivos',
-      path: '/search',
     },
     {
       id: 'agents',

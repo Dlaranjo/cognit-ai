@@ -35,6 +35,7 @@ export { WorkspaceList } from './WorkspaceList';
 export { StudioHeader } from './StudioHeader';
 export { StudioChatInterface } from './StudioChatInterface';
 export { StudioHistoryModal } from './StudioHistoryModal';
+export { StudioKnowledgeModal } from './StudioKnowledgeModal';
 
 // Login Components
 export { LoginCard } from './LoginCard';

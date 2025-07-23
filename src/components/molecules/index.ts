@@ -37,3 +37,6 @@ export type { DemoUser } from './DemoUserCard';
 
 export { PasswordInput } from './PasswordInput';
 export type { PasswordInputProps } from './PasswordInput';
+
+export { TypingIndicator } from './TypingIndicator';
+export { StreamingMessage } from './StreamingMessage';
