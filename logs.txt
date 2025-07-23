@@ -1,0 +1,626 @@
+logger.ts:23 [MOCK] Streaming started undefined
+logger.ts:23 [MOCK] 🎯 Mock streaming endpoint called undefined
+logger.ts:23 [MOCK] 📝 Streaming request: {userMessage: 'teste', provider: 'openai', model: 'Gpt 4 Turbo'}
+logger.ts:23 [MOCK] 📤 Returning streaming response undefined
+StudioChatInterface.tsx:146 🔄 Messages useEffect triggered: {messagesLength: 5, shouldAutoScroll: false}
+StudioChatInterface.tsx:153 📝 Last message: {role: 'user', content: 'teste...'}
+StudioChatInterface.tsx:161 👤 User message detected - enabling auto scroll
+StudioChatInterface.tsx:65 🎛️ shouldAutoScroll changed to: true
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: false, streamingMessageLength: 0}
+StudioChatInterface.tsx:192 ❌ Not scrolling during streaming: {shouldAutoScroll: true, hasStreamingMessage: false}
+StudioChatInterface.tsx:164 ⏰ Timeout executed - calling scrollToBottom
+StudioChatInterface.tsx:76 🔄 scrollToBottom called
+StudioChatInterface.tsx:88 📊 Scroll info BEFORE: {scrollTop: 851, scrollHeight: 2303, clientHeight: 945, maxScroll: 1358}
+StudioChatInterface.tsx:103 📊 Scroll info AFTER: {scrollTop: 1358, scrollHeight: 2303, didScroll: true}
+miragejs.js?v=ae2dac3c:12214 Mirage: [201] POST /api/chat/stream
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 5}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 10}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 15}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 20}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 25}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 30}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 35}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 40}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 45}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 50}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 55}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 60}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 65}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 70}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 75}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 80}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 85}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 90}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 95}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 100}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 105}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 110}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 115}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 120}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 125}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 130}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 135}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 140}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 145}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 150}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 155}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 160}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 165}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 170}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 175}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 180}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 185}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 190}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 195}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 200}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 205}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 210}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 215}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 220}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 225}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 230}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 235}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 240}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 245}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 250}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 255}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 260}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 265}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 270}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 275}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 280}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 285}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 290}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 295}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 300}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 305}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 310}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 315}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 320}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 325}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 330}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 335}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 340}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 345}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 350}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 355}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 360}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 365}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 370}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 375}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 380}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 385}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 390}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 395}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 400}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 405}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 410}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 415}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 420}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 425}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 430}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 435}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 440}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 445}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 450}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 455}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 460}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 465}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 470}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 475}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 480}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 485}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 490}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 495}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 500}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 505}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 510}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 515}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 520}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 525}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 530}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 535}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 540}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 545}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 550}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 555}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 560}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 565}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 570}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 575}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 580}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 585}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 590}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 595}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 600}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 605}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 610}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 615}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 620}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 625}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 630}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 635}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 640}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 645}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 650}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 655}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 660}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 665}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 670}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 675}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 680}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 685}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 690}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 695}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 700}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 705}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 710}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 715}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 720}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 725}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 730}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 735}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 740}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 745}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 750}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 755}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 760}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 765}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 770}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 775}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 780}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 785}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 790}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 795}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 800}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 805}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 810}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 815}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 820}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 825}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 830}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 835}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 840}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 845}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 850}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 855}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 860}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 865}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 870}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 875}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 880}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 885}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 890}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 895}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 900}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 905}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 910}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 915}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 920}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 925}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 930}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 935}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 940}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 945}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 950}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 955}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 960}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 965}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 970}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 975}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 980}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 985}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 990}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 995}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 1000}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 1005}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: true, streamingMessageLength: 1009}
+StudioChatInterface.tsx:180 🌊 Streaming message detected - scheduling scroll
+logger.ts:23 [MOCK] Streaming completed undefined
+StudioChatInterface.tsx:188 🧹 Cleaning up streaming timeout
+StudioChatInterface.tsx:146 🔄 Messages useEffect triggered: {messagesLength: 6, shouldAutoScroll: true}
+StudioChatInterface.tsx:153 📝 Last message: {role: 'assistant', content: 'Interessante pergunta! Vou fazer o meu melhor para...'}
+StudioChatInterface.tsx:173 🔄 Streaming useEffect triggered: {shouldAutoScroll: true, hasStreamingMessage: false, streamingMessageLength: 0}
+StudioChatInterface.tsx:192 ❌ Not scrolling during streaming: {shouldAutoScroll: true, hasStreamingMessage: false}

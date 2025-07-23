@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, ArrowDown, Wrench } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, Wrench, ArrowDown } from 'lucide-react';
 import { MessageBubble, TypingIndicator, StreamingMessage } from '../molecules';
 import { ToolsDropdown } from '../molecules/ToolsDropdown';
 import { useChat } from '../../hooks/useChat';
@@ -46,135 +46,87 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [showToolsMenu, setShowToolsMenu] = useState(false);
 
-  // Smart scroll states
-  const [autoScroll, setAutoScroll] = useState(false);
+  // Scroll state
+  const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const [userScrolled, setUserScrolled] = useState(false);
 
+
+
+  // Refs
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = (smooth = true) => {
-    messagesEndRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
+  // Simple scroll to bottom function
+  const scrollToBottom = () => {
+    if (!messagesContainerRef.current) return;
+
+    const container = messagesContainerRef.current;
+    container.scrollTo({
+      top: container.scrollHeight,
+      behavior: 'smooth'
+    });
   };
 
-  const scrollToLatestAssistantMessage = useCallback(() => {
-    if (!messagesContainerRef.current) return;
+  // Check if user is near bottom of scroll
+  const checkIfNearBottom = () => {
+    if (!messagesContainerRef.current) return true;
 
     const container = messagesContainerRef.current;
+    const threshold = 100; // pixels from bottom
+    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
 
-    // Procurar por todas as mensagens renderizadas
-    const messageElements = container.querySelectorAll('[data-message-role]');
-    let lastAssistantMessage = null;
+    return isNearBottom;
+  };
 
-    // Procurar de trás para frente pela última mensagem do assistente
-    for (let i = messageElements.length - 1; i >= 0; i--) {
-      const messageElement = messageElements[i] as HTMLElement;
-
-      // Verificar se esta mensagem é do assistente usando data attribute
-      if (messageElement.dataset.messageRole === 'assistant') {
-        lastAssistantMessage = messageElement;
-        break;
-      }
-    }
-
-    if (lastAssistantMessage) {
-      // Calcular a posição do elemento em relação ao container
-      const containerRect = container.getBoundingClientRect();
-      const elementRect = lastAssistantMessage.getBoundingClientRect();
-
-      // Calcular o scroll necessário para posicionar o elemento no topo
-      const scrollTop = container.scrollTop + (elementRect.top - containerRect.top);
-
-      // Fazer scroll suave para a posição calculada
-      container.scrollTo({
-        top: scrollTop,
-        behavior: 'smooth'
-      });
-    } else {
-      // Fallback: scroll para o final
-      scrollToBottom();
-    }
-  }, []);
-
-  const checkScrollPosition = useCallback(() => {
-    if (!messagesContainerRef.current) return;
-
-    const container = messagesContainerRef.current;
-    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
-
-    setShowScrollButton(!isNearBottom && messages.length > 0);
-  }, [messages.length]);
-
+  // Handle manual scroll by user
   const handleScroll = () => {
-    // Marcar que usuário fez scroll manual (isso vai parar o auto-scroll)
-    setUserScrolled(true);
+    const isNearBottom = checkIfNearBottom();
 
-    // Se estava em auto-scroll, desativar
-    if (autoScroll) {
-      setAutoScroll(false);
+    // If user scrolled away from bottom, disable auto scroll
+    if (!isNearBottom) {
+      setShouldAutoScroll(false);
+      setShowScrollButton(true);
+    } else {
+      // If user scrolled back to bottom, enable auto scroll
+      setShouldAutoScroll(true);
+      setShowScrollButton(false);
     }
-
-    checkScrollPosition();
   };
 
-  const scrollToBottomButton = () => {
-    // Fazer scroll para o final e resetar o estado de scroll manual
+  // Handle scroll button click
+  const handleScrollButtonClick = () => {
     scrollToBottom();
+    setShouldAutoScroll(true);
     setShowScrollButton(false);
-    setUserScrolled(false);
   };
 
-  // ChatGPT-style scroll logic - position assistant response at top of viewport
+  // Auto scroll when user sends a message
   useEffect(() => {
     if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
 
-      // Se a última mensagem é do usuário, fazer scroll para o final e resetar userScrolled
+      // If user sent a message, enable auto scroll and scroll to bottom
+      // This will position for the upcoming assistant response
       if (lastMessage.role === 'user') {
-        setUserScrolled(false);
-        // Usar timeout para garantir que o DOM foi renderizado
+        setShouldAutoScroll(true);
         setTimeout(() => {
           scrollToBottom();
         }, 100);
       }
-      // Se a última mensagem é do assistente e o usuário não fez scroll manual, posicionar no topo da viewport
-      else if (lastMessage.role === 'assistant' && !userScrolled) {
-        // Usar timeout para garantir que o DOM foi renderizado
-        setTimeout(() => {
-          scrollToLatestAssistantMessage();
-        }, 300);
-      }
     }
+  }, [messages]);
 
-    // Verificar a posição do scroll para mostrar/esconder o botão
-    setTimeout(() => {
-      checkScrollPosition();
-    }, 400);
-  }, [messages, userScrolled, checkScrollPosition, scrollToLatestAssistantMessage]);
-
-  // Handle streaming messages - keep assistant response visible during streaming
+  // Auto scroll during streaming (if auto scroll is enabled)
   useEffect(() => {
-    if (streamingMessage && !userScrolled) {
-      // Durante o streaming, manter a mensagem do assistente visível
-      // Use requestAnimationFrame para garantir que o DOM foi atualizado
-      requestAnimationFrame(() => {
-        setTimeout(() => {
-          scrollToLatestAssistantMessage();
-        }, 50);
-      });
+    if (shouldAutoScroll && streamingMessage) {
+      // Execute scroll immediately instead of using timeout that gets cancelled
+      scrollToBottom();
     }
-  }, [streamingMessage, userScrolled, scrollToLatestAssistantMessage]);
+  }, [streamingMessage, shouldAutoScroll]);
 
-  // Reset user scroll state when starting new conversation
-  useEffect(() => {
-    if (messages.length === 0) {
-      setUserScrolled(false);
-      setShowScrollButton(false);
-    }
-  }, [messages.length]);
+
 
   // Sync model selection with Redux
   useEffect(() => {
@@ -232,9 +184,6 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     };
 
     addNewMessage(userMessage);
-
-    // Reset user scroll state when sending a new message
-    setUserScrolled(false);
 
     try {
       // Start streaming the response (this will handle both sending and receiving)
@@ -437,13 +386,14 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
       <div
         ref={messagesContainerRef}
         className="absolute inset-0 overflow-y-auto"
-        style={{ paddingBottom: hasMessages ? '180px' : '160px' }}
+        style={{ paddingBottom: hasMessages ? '110px' : '160px' }}
         onScroll={handleScroll}
+
       >
         {hasMessages ? (
           <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
             {messages.map((message: Message, index: number) => (
-              <div key={message.id} className="group" data-message-role={message.role}>
+              <div key={message.id} className="group">
                 <MessageBubble
                   content={message.content}
                   role={message.role as 'user' | 'assistant'}
@@ -472,12 +422,10 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
             ))}
 
             {streamingMessage ? (
-              <div data-message-role="assistant">
-                <StreamingMessage
-                  content={String(streamingMessage || '')}
-                  modelName={selectedModel.name}
-                />
-              </div>
+              <StreamingMessage
+                content={String(streamingMessage || '')}
+                modelName={selectedModel.name}
+              />
             ) : (isLoading || isStreaming) && (
               <TypingIndicator
                 modelName={selectedModel.name}
@@ -717,11 +665,11 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
         </div>
       </div>
 
-      {/* Smart Scroll Button - ChatGPT Style */}
+      {/* Scroll to bottom button */}
       {showScrollButton && (
         <div className="absolute bottom-44 left-1/2 transform -translate-x-1/2 z-40">
           <button
-            onClick={scrollToBottomButton}
+            onClick={handleScrollButtonClick}
             className="bg-white/20 backdrop-blur-xl border border-white/20 hover:bg-white/30 hover:border-white/30 text-gray-600 hover:text-gray-700 p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
           >
             <ArrowDown className="w-4 h-4" />

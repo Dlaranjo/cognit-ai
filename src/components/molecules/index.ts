@@ -20,7 +20,6 @@ export { Tooltip } from './Tooltip';
 export type { TooltipProps } from './Tooltip';
 
 
-export { WorkspaceCard } from './WorkspaceCard';
 
 export { ModelSelector } from './ModelSelector';
 

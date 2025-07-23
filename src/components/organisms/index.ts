@@ -13,13 +13,6 @@ export { AgentSelector } from './AgentSelector';
 export { ConversationHistory } from './ConversationHistory';
 export { ActionResults } from './ActionResults';
 
-// Document Components
-export { DocumentList } from './DocumentList';
-
-// Project Components
-export { CreateProjectModal } from './CreateProjectModal';
-export { ProjectList } from './ProjectList';
-
 // Search Components
 export { SearchInterface } from './SearchInterface';
 
@@ -27,9 +20,7 @@ export { SearchInterface } from './SearchInterface';
 export { ConversationSidebar } from './ConversationSidebar';
 
 // Workspace Components
-export { CreateWorkspaceModal } from './CreateWorkspaceModal';
 export { MemberManagement } from './MemberManagement';
-export { WorkspaceList } from './WorkspaceList';
 
 // Studio Components
 export { StudioHeader } from './StudioHeader';
