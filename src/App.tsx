@@ -14,6 +14,7 @@ import {
   AuthPage,
   StudioPage,
   AgentsPage,
+  WorkflowsPage,
 } from './pages';
 import { Spinner } from './components/atoms';
 
@@ -56,6 +57,7 @@ function App() {
                 {/* Main application routes */}
                 <Route path="studio" element={<StudioPage />} />
                 <Route path="agents" element={<AgentsPage />} />
+                <Route path="workflows" element={<WorkflowsPage />} />
               </Route>
 
               {/* Catch all route - redirect to studio */}

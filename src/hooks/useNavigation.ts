@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { Bot, Sparkles } from 'lucide-react';
+import { Bot, Sparkles, Workflow } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface NavigationItem {
@@ -33,6 +33,14 @@ export const useNavigation = () => {
       fullDescription: 'Automações de processos com IA',
       path: '/agents',
     },
+    {
+      id: 'workflows',
+      label: 'n8n Workflows',
+      icon: Workflow,
+      description: 'Visual Workflows',
+      fullDescription: 'Editor visual de workflows com n8n',
+      path: '/workflows',
+    },
   ];
 
   const isActive = (path: string): boolean => {
@@ -46,6 +54,7 @@ export const useNavigation = () => {
     const currentPath = location.pathname;
     if (currentPath === '/' || currentPath.startsWith('/studio')) return 'studio';
     if (currentPath.startsWith('/agents')) return 'agents';
+    if (currentPath.startsWith('/workflows')) return 'workflows';
     return 'studio';
   };
 

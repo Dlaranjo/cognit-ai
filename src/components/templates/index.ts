@@ -4,3 +4,4 @@ export { StudioTemplate } from './StudioTemplate';
 export { AgentTemplate } from './AgentTemplate';
 export { LoginTemplate } from './LoginTemplate';
 export { AppTemplate } from './AppTemplate';
+export { WorkflowTemplate } from './WorkflowTemplate';
