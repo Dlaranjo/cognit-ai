@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { logger } from '../shared/utils';
 import { config } from '../shared/config';
 
 // Tipos para retry logic
@@ -84,7 +85,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     if (import.meta.env.DEV) {
-      console.error('🔴 Request Error:', error);
+      logger.dev('🔴 Request Error:', error);
     }
     return Promise.reject(error);
   }
@@ -105,7 +106,7 @@ apiClient.interceptors.response.use(
 
     // Logging em desenvolvimento
     if (import.meta.env.DEV) {
-      console.error(
+      logger.dev(
         `🔴 API Error: ${originalRequest?.method?.toUpperCase()} ${originalRequest?.url}`,
         {
           status: error.response?.status,

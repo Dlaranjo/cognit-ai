@@ -1,4 +1,5 @@
 import { createServer, Response } from 'miragejs';
+import { logger } from '../shared/utils';
 import {
   mockUsers,
   mockAgents,
@@ -157,18 +158,18 @@ export function createMockServer() {
 
       // Chat streaming endpoint
       this.post('/api/chat/stream', async (schema, request) => {
-        console.log('🎯 Mock streaming endpoint called');
+        logger.mock('🎯 Mock streaming endpoint called');
 
         const attrs = JSON.parse(request.requestBody);
         const userMessage = attrs.message;
         const provider = attrs.provider || 'openai';
         const model = attrs.model || 'gpt-4-turbo';
 
-        console.log('📝 Streaming request:', { userMessage, provider, model });
+        logger.mock('📝 Streaming request:', { userMessage, provider, model });
 
         const response = generateMockResponse(userMessage);
 
-        console.log('📤 Returning streaming response');
+        logger.mock('📤 Returning streaming response');
 
         return {
           content: response,

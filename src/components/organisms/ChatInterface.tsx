@@ -1,7 +1,6 @@
 import React from 'react';
 import { Send, Paperclip, Mic, Square } from 'lucide-react';
-import { MessageBubble } from '../molecules/MessageBubble';
-import { FileUpload } from '../molecules/FileUpload';
+import { MessageBubble, FileUpload } from '../molecules';
 import { Button, Spinner, Textarea } from '../atoms';
 
 export interface Message {

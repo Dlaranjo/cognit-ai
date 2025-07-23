@@ -16,6 +16,7 @@ export { useTheme, useThemeInitializer, useSystemThemeListener } from './useThem
 export { useDebounce } from './useDebounce';
 export { useLocalStorage } from './useLocalStorage';
 export { useFileUpload } from './useFileUpload';
+export { useAutoResize } from './useAutoResize';
 
 // Advanced hooks
 export { useGoogleAuth } from './useGoogleAuth';

@@ -1,9 +1,7 @@
 import React from 'react';
 import { useNavigation } from '../../hooks/useNavigation';
 import { useSidebarState } from '../../hooks/useSidebarState';
-import { SidebarHeader } from '../molecules/SidebarHeader';
-import { SidebarNavItem } from '../molecules/SidebarNavItem';
-import { SidebarUserProfile } from '../molecules/SidebarUserProfile';
+import { SidebarHeader, SidebarNavItem, SidebarUserProfile } from '../molecules';
 import type { User } from '../../types';
 
 interface SidebarProps {

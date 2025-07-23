@@ -8,7 +8,7 @@ import { useStreaming } from '../../hooks/useStreaming';
 import { useAppSelector, useAppDispatch } from '../../redux/store';
 import { selectStreamingMessage } from '../../redux/chat/chatSelectors';
 import { removeLastAssistantMessage } from '../../redux/chat/chatReducer';
-import { createAvailableModels, formatFileSize, getPriceBadgeColor } from '../../shared/utils/modelUtils';
+import { createAvailableModels, formatFileSize, getPriceBadgeColor, logger } from '../../shared/utils';
 import type { LLMModel, Message } from '../../types';
 
 // Componente para animação de digitação melhorada
@@ -318,29 +318,29 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
           model: selectedModel.name,
           provider: selectedModel.provider.toLowerCase(),
           onStart: () => {
-            console.log('Streaming started');
+            logger.mock('Streaming started');
           },
           onComplete: () => {
-            console.log('Streaming completed');
+            logger.mock('Streaming completed');
           },
           onError: async (error) => {
-            console.error('Streaming error:', error);
+            logger.error('Streaming error:', error);
             // If streaming fails, fall back to regular message sending
             try {
               await sendQuickMessage(messageContent, files);
             } catch (fallbackError) {
-              console.error('Fallback message sending failed:', fallbackError);
+              logger.error('Fallback message sending failed:', fallbackError);
             }
           },
         }
       );
     } catch (error) {
-      console.error('Failed to send message:', error);
+      logger.error('Failed to send message:', error);
       // If streaming fails completely, fall back to regular message sending
       try {
         await sendQuickMessage(messageContent, files);
       } catch (fallbackError) {
-        console.error('Fallback message sending also failed:', fallbackError);
+        logger.error('Fallback message sending also failed:', fallbackError);
       }
     }
   };
@@ -370,29 +370,29 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
           provider: selectedModel.provider.toLowerCase(),
           isRegeneration: false, // Now we use false since we removed the message
           onStart: () => {
-            console.log('Regeneration streaming started');
+            logger.mock('Regeneration streaming started');
           },
           onComplete: () => {
-            console.log('Regeneration streaming completed');
+            logger.mock('Regeneration streaming completed');
           },
           onError: async (error) => {
-            console.error('Regeneration streaming error:', error);
+            logger.error('Regeneration streaming error:', error);
             // Fallback to regular regeneration
             try {
               await regenerateLastMessage();
             } catch (fallbackError) {
-              console.error('Fallback regeneration failed:', fallbackError);
+              logger.error('Fallback regeneration failed:', fallbackError);
             }
           },
         }
       );
     } catch (error) {
-      console.error('Failed to regenerate message with streaming:', error);
+      logger.error('Failed to regenerate message with streaming:', error);
       // Fallback to regular regeneration
       try {
         await regenerateLastMessage();
       } catch (fallbackError) {
-        console.error('Fallback regeneration also failed:', fallbackError);
+        logger.error('Fallback regeneration also failed:', fallbackError);
       }
     }
   };
@@ -459,23 +459,23 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                 provider: selectedModel.provider.toLowerCase(),
                 isRegeneration: false,
                 onStart: () => {
-                  console.log('Streaming started for edited message');
+                  logger.mock('Streaming started for edited message');
                 },
                 onComplete: () => {
-                  console.log('Streaming completed for edited message');
+                  logger.mock('Streaming completed for edited message');
                 },
                 onError: (error) => {
-                  console.error('Streaming error for edited message:', error);
+                  logger.error('Streaming error for edited message:', error);
                 },
               }
             );
           } catch (error) {
-            console.error('Failed to send edited message:', error);
+            logger.error('Failed to send edited message:', error);
           }
         }, 100);
       }
     } catch (error) {
-      console.error('Failed to edit message:', error);
+      logger.error('Failed to edit message:', error);
     }
   };
 

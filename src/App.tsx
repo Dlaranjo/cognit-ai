@@ -19,7 +19,7 @@ import {
   SearchPage,
   AgentsPage,
 } from './pages';
-import { Spinner } from './components/atoms/Spinner';
+import { Spinner } from './components/atoms';
 
 // Loading component for Suspense
 const PageLoader = () => (

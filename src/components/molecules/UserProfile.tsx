@@ -1,8 +1,6 @@
 import React from 'react';
 import { ChevronDown, Settings, LogOut } from 'lucide-react';
-import { Avatar } from '../atoms/Avatar';
-import { Button } from '../atoms/Button';
-import { Badge } from '../atoms/Badge';
+import { Avatar, Button, Badge } from '../atoms';
 
 export interface UserProfileProps {
   name: string;

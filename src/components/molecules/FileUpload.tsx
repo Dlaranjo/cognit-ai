@@ -1,6 +1,6 @@
 import React from 'react';
 import { Upload, X, File } from 'lucide-react';
-import { Button } from '../atoms/Button';
+import { Button } from '../atoms';
 
 export interface FileUploadProps {
   onFilesSelect?: (files: File[]) => void;
@@ -37,42 +37,47 @@ export const FileUpload = React.memo<FileUploadProps>(
       return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     };
 
+    // Simplified validation functions
+    const isFileSizeValid = (fileSize: number): boolean => 
+      !maxSizeBytes || fileSize <= maxSizeBytes;
+
+    const isFileTypeValid = (file: File): boolean => {
+      if (acceptedTypes.length === 0 || acceptedTypes.includes('*')) return true;
+      
+      const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
+      const mimeType = file.type;
+
+      return acceptedTypes.some(type => 
+        type === mimeType || 
+        type === fileExtension || 
+        (type.endsWith('/*') && mimeType.startsWith(type.slice(0, -1)))
+      );
+    };
+
     const validateFile = (file: File): string | null => {
-      if (maxSizeBytes && file.size > maxSizeBytes) {
+      if (!isFileSizeValid(file.size)) {
         return `Arquivo muito grande. Máximo: ${formatFileSize(maxSizeBytes)}`;
       }
 
-      if (acceptedTypes.length > 0 && !acceptedTypes.includes('*')) {
-        const fileExtension = '.' + file.name.split('.').pop()?.toLowerCase();
-        const mimeType = file.type;
-
-        const isValidType = acceptedTypes.some(
-          (type) =>
-            type === mimeType ||
-            type === fileExtension ||
-            (type.endsWith('/*') && mimeType.startsWith(type.slice(0, -1)))
-        );
-
-        if (!isValidType) {
-          return `Tipo de arquivo não aceito. Aceitos: ${acceptedTypes.join(', ')}`;
-        }
+      if (!isFileTypeValid(file)) {
+        return `Tipo de arquivo não aceito. Aceitos: ${acceptedTypes.join(', ')}`;
       }
 
       return null;
     };
 
-    const handleFiles = (newFiles: File[]) => {
-      if (disabled) return;
-
+    const processFiles = (newFiles: File[]) => {
       const validFiles: File[] = [];
       const errors: string[] = [];
 
       for (const file of newFiles) {
+        // Check file limit
         if (files.length + validFiles.length >= maxFiles) {
           errors.push(`Máximo de ${maxFiles} arquivos permitido`);
           break;
         }
 
+        // Validate individual file
         const error = validateFile(file);
         if (error) {
           errors.push(`${file.name}: ${error}`);
@@ -80,6 +85,14 @@ export const FileUpload = React.memo<FileUploadProps>(
           validFiles.push(file);
         }
       }
+
+      return { validFiles, errors };
+    };
+
+    const handleFiles = (newFiles: File[]) => {
+      if (disabled) return;
+
+      const { validFiles, errors } = processFiles(newFiles);
 
       if (validFiles.length > 0) {
         onFilesSelect?.(validFiles);

@@ -1,4 +1,5 @@
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo } from 'react';
+import { useAutoResize } from '../../hooks';
 
 export interface TextareaProps {
   value?: string;
@@ -56,28 +57,13 @@ export const Textarea: React.FC<TextareaProps> = memo(({
   resize = 'vertical',
   size = 'md',
 }) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    if (autoResize && textareaRef.current) {
-      const textarea = textareaRef.current;
-      
-      // Reset height to auto to get the correct scrollHeight
-      textarea.style.height = 'auto';
-      
-      // Calculate new height
-      const scrollHeight = textarea.scrollHeight;
-      const lineHeight = parseFloat(getComputedStyle(textarea).lineHeight);
-      const paddingTop = parseFloat(getComputedStyle(textarea).paddingTop);
-      const paddingBottom = parseFloat(getComputedStyle(textarea).paddingBottom);
-      
-      const minHeight = (lineHeight * rows) + paddingTop + paddingBottom;
-      const maxHeight = maxRows ? (lineHeight * maxRows) + paddingTop + paddingBottom : Infinity;
-      
-      const newHeight = Math.min(Math.max(scrollHeight, minHeight), maxHeight);
-      textarea.style.height = `${newHeight}px`;
-    }
-  }, [value, autoResize, rows, maxRows]);
+  // Use custom hook for auto-resize functionality
+  const textareaRef = useAutoResize({
+    value: value || '',
+    enabled: autoResize,
+    minRows: rows,
+    maxRows
+  });
 
   const baseClasses = `
     w-full border border-gray-300 rounded-lg transition-colors duration-200

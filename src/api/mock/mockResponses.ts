@@ -11,7 +11,7 @@ export const generateMockResponse = (userMessage: string): string => {
 \`\`\`javascript
 // Exemplo prático
 const exemplo = () => {
-  console.log('Olá, mundo!');
+  // Log removido - era apenas para teste
   return 'Código funcionando!';
 };
 \`\`\`

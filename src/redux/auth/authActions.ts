@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { logger } from '../../shared/utils';
 import {
   authApi,
   type LoginCredentials,
@@ -33,7 +34,7 @@ export const googleAuth = createAsyncThunk<
     localStorage.setItem('refreshToken', response.refreshToken);
     return response;
   } catch (error: unknown) {
-    console.error('❌ Google auth action failed:', error);
+    logger.error('❌ Google auth action failed:', error);
     const errorMessage =
       error instanceof Error ? error.message : 'Google auth failed';
     return rejectWithValue(errorMessage);
@@ -93,7 +94,7 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
       await authApi.logout();
     } catch (error: unknown) {
       // Continue with logout even if API call fails
-      console.warn('Logout API call failed:', error);
+      logger.error('Logout API call failed:', error);
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('refreshToken');

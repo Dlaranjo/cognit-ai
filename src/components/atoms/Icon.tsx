@@ -88,7 +88,8 @@ export const Icon = React.memo<IconProps>(
     const IconComponent = icon || (name ? iconMap[name] : null);
 
     if (!IconComponent) {
-      console.warn(`Icon not found: ${name}`);
+      // Atoms should not have side effects like console warnings
+      // Icon validation should be handled at a higher level if needed
       return null;
     }
 

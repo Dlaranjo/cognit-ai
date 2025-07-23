@@ -4,7 +4,10 @@ export {
   getCapabilities, 
   getProviderColor, 
   createAvailableModels, 
-  formatFileSize 
+  formatFileSize,
+  getPriceBadgeColor
 } from './modelUtils';
 
 export { workspaceUtils } from './workspaceUtils';
+
+export { logger } from './logger';
