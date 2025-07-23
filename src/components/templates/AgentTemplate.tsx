@@ -74,18 +74,18 @@ export const AgentTemplate: React.FC = () => {
     sendAgentMessage,
     clearAgentsError,
   } = useAgents();
-
+  
   const { currentWorkspace } = useWorkspaces();
 
   const handleSendMessage = async () => {
-    if (!message.trim() || !selectedAgent || !currentWorkspace) return;
+    if (!message.trim() || !selectedAgent) return;
 
     try {
       // If no conversation exists, start a new one
       if (!currentConversation) {
         const result = await startNewConversation(
           selectedAgent.id,
-          currentWorkspace.id,
+          currentWorkspace?.id || 'default-workspace',
           `Conversa com ${selectedAgent.name}`
         );
 

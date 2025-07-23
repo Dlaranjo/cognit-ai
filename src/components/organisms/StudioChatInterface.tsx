@@ -65,16 +65,16 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
 
     const container = messagesContainerRef.current;
 
-    // Procurar por elementos com classe 'animate-fade-in' que indicam mensagens
-    const messageElements = container.querySelectorAll('.animate-fade-in');
+    // Procurar por todas as mensagens renderizadas
+    const messageElements = container.querySelectorAll('[data-message-role]');
     let lastAssistantMessage = null;
 
-    // Procurar de trás para frente pela última mensagem que contém "Gpt"
+    // Procurar de trás para frente pela última mensagem do assistente
     for (let i = messageElements.length - 1; i >= 0; i--) {
-      const messageElement = messageElements[i];
+      const messageElement = messageElements[i] as HTMLElement;
 
-      // Verificar se esta mensagem contém "Gpt" (indicador de mensagem do assistente)
-      if (messageElement.textContent?.includes('Gpt') && messageElement.textContent?.includes('Turbo')) {
+      // Verificar se esta mensagem é do assistente usando data attribute
+      if (messageElement.dataset.messageRole === 'assistant') {
         lastAssistantMessage = messageElement;
         break;
       }
@@ -121,18 +121,27 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   };
 
   const scrollToBottomButton = () => {
-    // Apenas fazer scroll para o final, sem ativar auto-scroll
+    // Fazer scroll para o final e resetar o estado de scroll manual
     scrollToBottom();
     setShowScrollButton(false);
+    setUserScrolled(false);
   };
 
   // ChatGPT-style scroll logic - position assistant response at top of viewport
   useEffect(() => {
-    if (messages.length > 0 && !userScrolled) {
+    if (messages.length > 0) {
       const lastMessage = messages[messages.length - 1];
 
-      // Se a última mensagem é do assistente, posicionar no topo da viewport
-      if (lastMessage.role === 'assistant') {
+      // Se a última mensagem é do usuário, fazer scroll para o final e resetar userScrolled
+      if (lastMessage.role === 'user') {
+        setUserScrolled(false);
+        // Usar timeout para garantir que o DOM foi renderizado
+        setTimeout(() => {
+          scrollToBottom();
+        }, 100);
+      }
+      // Se a última mensagem é do assistente e o usuário não fez scroll manual, posicionar no topo da viewport
+      else if (lastMessage.role === 'assistant' && !userScrolled) {
         // Usar timeout para garantir que o DOM foi renderizado
         setTimeout(() => {
           scrollToLatestAssistantMessage();
@@ -150,9 +159,12 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   useEffect(() => {
     if (streamingMessage && !userScrolled) {
       // Durante o streaming, manter a mensagem do assistente visível
-      setTimeout(() => {
-        scrollToLatestAssistantMessage();
-      }, 100);
+      // Use requestAnimationFrame para garantir que o DOM foi atualizado
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          scrollToLatestAssistantMessage();
+        }, 50);
+      });
     }
   }, [streamingMessage, userScrolled, scrollToLatestAssistantMessage]);
 
@@ -220,6 +232,9 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     };
 
     addNewMessage(userMessage);
+
+    // Reset user scroll state when sending a new message
+    setUserScrolled(false);
 
     try {
       // Start streaming the response (this will handle both sending and receiving)
@@ -428,7 +443,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
         {hasMessages ? (
           <div className="max-w-5xl mx-auto px-6 py-8 space-y-8">
             {messages.map((message: Message, index: number) => (
-              <div key={message.id} className="group">
+              <div key={message.id} className="group" data-message-role={message.role}>
                 <MessageBubble
                   content={message.content}
                   role={message.role as 'user' | 'assistant'}
@@ -457,10 +472,12 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
             ))}
 
             {streamingMessage ? (
-              <StreamingMessage
-                content={String(streamingMessage || '')}
-                modelName={selectedModel.name}
-              />
+              <div data-message-role="assistant">
+                <StreamingMessage
+                  content={String(streamingMessage || '')}
+                  modelName={selectedModel.name}
+                />
+              </div>
             ) : (isLoading || isStreaming) && (
               <TypingIndicator
                 modelName={selectedModel.name}

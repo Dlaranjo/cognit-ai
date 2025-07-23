@@ -30,9 +30,9 @@ export const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
   };
 
   return (
-    <div className={`${isExpanded ? 'px-4' : 'px-2'} py-4 border-t border-gray-200 transition-all duration-300 ${className} relative`}>
+    <div className={`${isExpanded ? 'px-4' : 'px-2'} py-4 border-t border-gray-200 transition-[padding] duration-200 ${className} relative`}>
       <div
-        className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-all duration-300 ${isExpanded ? 'cursor-pointer hover:bg-gray-50 rounded-lg p-2 -m-2' : ''} group/profile min-h-[2.5rem]`}
+        className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-[gap,justify-content] duration-200 ${isExpanded ? 'cursor-pointer hover:bg-gray-50 rounded-lg p-2 -m-2' : ''} group/profile min-h-[2.5rem]`}
         onClick={toggleDropdown}
       >
         <Avatar
@@ -44,14 +44,14 @@ export const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
 
         {isExpanded && (
           <>
-            <div className="flex-1 min-w-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100 flex flex-col justify-center">
+            <div className="flex-1 min-w-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 delay-75 flex flex-col justify-center">
               <p className="text-sm font-medium text-gray-900 truncate leading-tight">
                 {user.name}
               </p>
               <p className="text-xs text-gray-500 truncate leading-tight">{user.role}</p>
             </div>
             <ChevronUp
-              className={`w-4 h-4 text-gray-400 transition-transform duration-200 opacity-0 group-hover:opacity-100 flex-shrink-0 ${showDropdown ? 'rotate-180' : ''}`}
+              className={`w-4 h-4 text-gray-400 transition-all duration-200 opacity-0 group-hover:opacity-100 flex-shrink-0 ${showDropdown ? 'rotate-180' : ''}`}
             />
           </>
         )}

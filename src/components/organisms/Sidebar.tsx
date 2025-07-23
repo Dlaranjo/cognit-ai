@@ -7,15 +7,7 @@ import type { User } from '../../types';
 interface SidebarProps {
   currentUser: User;
   currentView?: string;
-  onViewChange?: (
-    view:
-      | 'studio'
-      | 'workspaces'
-      | 'projects'
-      | 'documents'
-      | 'search'
-      | 'agents'
-  ) => void;
+  onViewChange?: (view: 'studio' | 'agents') => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
@@ -24,7 +16,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
 
   return (
     <div
-      className={`${isExpanded ? 'w-64' : 'w-16'} bg-gray-50 border-r border-gray-200 flex flex-col h-full transition-all duration-300 ease-in-out group`}
+      className={`${isExpanded ? 'w-48' : 'w-16'} bg-gray-50 border-r border-gray-200 flex flex-col h-full transition-[width] duration-200 ease-out group`}
       onMouseEnter={expand}
       onMouseLeave={collapse}
     >
@@ -32,7 +24,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentUser }) => {
       <SidebarHeader isExpanded={isExpanded} />
 
       {/* Navigation */}
-      <div className={`flex-1 ${isExpanded ? 'px-4' : 'px-2'} py-4 space-y-2 transition-all duration-300`}>
+      <div className={`flex-1 ${isExpanded ? 'px-3' : 'px-2'} py-4 space-y-2 transition-[padding] duration-200`}>
         {navigationItems.map((item) => (
           <SidebarNavItem
             key={item.id}

@@ -15,22 +15,14 @@ export const AppTemplate: React.FC = () => {
   };
 
   const getHeaderTitle = (pathname: string) => {
-    if (pathname.startsWith('/studio')) return 'Cognit Studio';
-    if (pathname === '/workspaces') return 'Knowledge Base';
-    if (pathname.includes('/projects') && !pathname.includes('/documents'))
-      return 'Projects';
-    if (pathname.includes('/documents')) return 'Documents';
-    if (pathname.startsWith('/search')) return 'Search';
-    if (pathname.startsWith('/agents')) return 'AI Agents';
+    if (pathname.startsWith('/studio')) return 'Studio';
+    if (pathname.startsWith('/agents')) return 'Workflows';
     return 'COGNIT';
   };
 
   const getHeaderSubtitle = (pathname: string) => {
     if (pathname.startsWith('/studio'))
       return 'Converse com os melhores modelos de IA';
-    if (pathname === '/workspaces') return 'Manage your knowledge portfolios';
-    if (pathname.startsWith('/search'))
-      return 'Search across your knowledge base';
     if (pathname.startsWith('/agents'))
       return 'AI-powered assistants for your tasks';
     return '';

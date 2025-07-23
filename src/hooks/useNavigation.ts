@@ -7,6 +7,7 @@ export interface NavigationItem {
   label: string;
   icon: LucideIcon;
   description: string;
+  fullDescription?: string;
   badge?: string;
   gradient?: boolean;
   path: string;
@@ -18,16 +19,18 @@ export const useNavigation = () => {
   const navigationItems: NavigationItem[] = [
     {
       id: 'studio',
-      label: 'Cognit Studio',
+      label: 'Studio',
       icon: Sparkles,
-      description: 'Hub de IA',
+      description: 'Cognit Studio',
+      fullDescription: 'Assistente de IA para o dia-a-dia',
       path: '/studio',
     },
     {
       id: 'agents',
-      label: 'AI Agents',
+      label: 'Workflows',
       icon: Bot,
-      description: 'Assistentes IA',
+      description: 'AI Workflows',
+      fullDescription: 'Automações de processos com IA',
       path: '/agents',
     },
   ];
@@ -42,8 +45,6 @@ export const useNavigation = () => {
   const getCurrentView = (): string => {
     const currentPath = location.pathname;
     if (currentPath === '/' || currentPath.startsWith('/studio')) return 'studio';
-    if (currentPath.startsWith('/workspaces')) return 'workspaces';
-    if (currentPath.startsWith('/search')) return 'search';
     if (currentPath.startsWith('/agents')) return 'agents';
     return 'studio';
   };
