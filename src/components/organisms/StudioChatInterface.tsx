@@ -798,6 +798,49 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                       </div>
                     </>
                   )}
+                  {/* Tools Button */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowToolsMenu(!showToolsMenu)}
+                      disabled={Boolean(isLoading)}
+                      className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
+                      title="Ferramentas"
+                    >
+                      <div className="w-5 h-5 flex items-center justify-center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="3"/>
+                          <path d="M12 1v6m0 6v6"/>
+                          <path d="m21 12-6 0m-6 0-6 0"/>
+                        </svg>
+                      </div>
+                    </button>
+
+                    {/* Tools Dropdown */}
+                    {showToolsMenu && (
+                      <>
+                        <div className="fixed inset-0 z-10" onClick={() => setShowToolsMenu(false)} />
+                        <div className="absolute bottom-full left-0 mb-2 w-64 bg-white rounded-xl border border-gray-200 shadow-lg z-20 overflow-hidden">
+                          {/* Tools List - Clean Style */}
+                          <div className="py-2">
+                            {mockTools.map((tool) => (
+                              <button
+                                key={tool.id}
+                                onClick={() => handleToolSelect(tool)}
+                                className="w-full px-4 py-3 text-left transition-colors hover:bg-orange-50 hover:text-orange-600 group flex items-center space-x-3"
+                              >
+                                <div className="w-5 h-5 text-gray-600 group-hover:text-orange-600 flex-shrink-0">
+                                  <tool.icon className="w-5 h-5" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium text-gray-900 group-hover:text-orange-700 text-sm">{tool.name}</div>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 {/* Send/Stop Button */}
