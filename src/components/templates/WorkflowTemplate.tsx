@@ -17,6 +17,7 @@ interface WorkflowNode {
 export const WorkflowTemplate: React.FC = () => {
   const [selectedNode, setSelectedNode] = useState<WorkflowNode | null>(null);
   const [isAIAssistantExpanded, setIsAIAssistantExpanded] = useState(true);
+  const [isWorkflowRunning, setIsWorkflowRunning] = useState(false);
 
   const handleNodeSelect = (node: WorkflowNode | null) => {
     setSelectedNode(node);
@@ -30,22 +31,30 @@ export const WorkflowTemplate: React.FC = () => {
   const handleCreateWorkflow = (description: string) => {
     console.log('Creating workflow:', description);
     // Here you would create a new workflow based on the AI description
+    // For now, we'll just close the AI assistant to show the created workflow
+    setIsAIAssistantExpanded(false);
   };
 
   const toggleAIAssistant = () => {
     setIsAIAssistantExpanded(!isAIAssistantExpanded);
   };
 
+  const toggleWorkflowRun = () => {
+    setIsWorkflowRunning(!isWorkflowRunning);
+  };
+
   return (
-    <div className="h-full flex">
+    <div className="h-full flex bg-gray-50">
       {/* Main Canvas Area */}
       <div className="flex-1 flex">
         <WorkflowCanvas
           onNodeSelect={handleNodeSelect}
           selectedNode={selectedNode}
+          isRunning={isWorkflowRunning}
+          onToggleRun={toggleWorkflowRun}
         />
         
-        {/* Properties Panel */}
+        {/* Properties Panel - Only show when node is selected */}
         {selectedNode && (
           <WorkflowPropertiesPanel
             selectedNode={selectedNode}
@@ -55,7 +64,7 @@ export const WorkflowTemplate: React.FC = () => {
         )}
       </div>
 
-      {/* AI Assistant */}
+      {/* AI Assistant - Always visible but collapsible */}
       <WorkflowAIAssistant
         isExpanded={isAIAssistantExpanded}
         onToggle={toggleAIAssistant}

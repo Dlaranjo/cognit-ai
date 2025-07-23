@@ -18,7 +18,8 @@ import {
   ArrowRight,
   Trash2,
   Copy,
-  Edit3
+  Edit3,
+  MoreHorizontal
 } from 'lucide-react';
 import { Button } from '../atoms';
 
@@ -36,57 +37,48 @@ interface WorkflowNode {
 interface WorkflowCanvasProps {
   onNodeSelect?: (node: WorkflowNode | null) => void;
   selectedNode?: WorkflowNode | null;
+  isRunning?: boolean;
+  onToggleRun?: () => void;
 }
 
 export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   onNodeSelect,
-  selectedNode
+  selectedNode,
+  isRunning = false,
+  onToggleRun
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
-  const [isRunning, setIsRunning] = useState(false);
 
-  // Mock workflow nodes
+  // Simplified mock workflow nodes
   const [nodes, setNodes] = useState<WorkflowNode[]>([
     {
       id: 'trigger-1',
       type: 'trigger',
-      title: 'Webhook Trigger',
-      description: 'Recebe dados via HTTP',
-      icon: Globe,
-      color: 'from-green-500 to-emerald-600',
+      title: 'Email Received',
+      description: 'Quando um email é recebido',
+      icon: Mail,
+      color: 'from-blue-500 to-blue-600',
       position: { x: 100, y: 200 },
       connected: true
     },
     {
       id: 'condition-1',
       type: 'condition',
-      title: 'IF Condition',
-      description: 'Verifica se email contém "urgente"',
+      title: 'Check Priority',
+      description: 'Se contém "urgente"',
       icon: Zap,
-      color: 'from-yellow-500 to-orange-600',
+      color: 'from-yellow-500 to-orange-500',
       position: { x: 350, y: 200 },
       connected: true
     },
     {
       id: 'action-1',
       type: 'action',
-      title: 'Send Email',
-      description: 'Envia notificação por email',
-      icon: Mail,
-      color: 'from-blue-500 to-indigo-600',
-      position: { x: 600, y: 150 },
-      connected: true
-    },
-    {
-      id: 'action-2',
-      type: 'action',
       title: 'Create Task',
-      description: 'Cria tarefa no projeto',
+      description: 'Criar tarefa no projeto',
       icon: FileText,
-      color: 'from-purple-500 to-pink-600',
-      position: { x: 600, y: 250 },
+      color: 'from-green-500 to-green-600',
+      position: { x: 600, y: 200 },
       connected: false
     }
   ]);
@@ -101,17 +93,11 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
     }
   }, [onNodeSelect]);
 
-  const toggleWorkflow = () => {
-    setIsRunning(!isRunning);
-  };
-
   const renderConnection = (from: WorkflowNode, to: WorkflowNode) => {
-    const startX = from.position.x + 120; // Node width
-    const startY = from.position.y + 40; // Half node height
+    const startX = from.position.x + 140;
+    const startY = from.position.y + 35;
     const endX = to.position.x;
-    const endY = to.position.y + 40;
-
-    const midX = (startX + endX) / 2;
+    const endY = to.position.y + 35;
 
     return (
       <svg
@@ -119,19 +105,30 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         className="absolute inset-0 pointer-events-none"
         style={{ zIndex: 1 }}
       >
-        <path
-          d={`M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`}
-          stroke="#e5e7eb"
+        <defs>
+          <marker
+            id="arrowhead"
+            markerWidth="10"
+            markerHeight="7"
+            refX="9"
+            refY="3.5"
+            orient="auto"
+          >
+            <polygon
+              points="0 0, 10 3.5, 0 7"
+              fill="#9ca3af"
+            />
+          </marker>
+        </defs>
+        <line
+          x1={startX}
+          y1={startY}
+          x2={endX}
+          y2={endY}
+          stroke="#d1d5db"
           strokeWidth="2"
-          fill="none"
-          className="transition-colors duration-200"
-        />
-        <circle
-          cx={endX}
-          cy={endY}
-          r="4"
-          fill="#6b7280"
-          className="transition-colors duration-200"
+          markerEnd="url(#arrowhead)"
+          className={isRunning ? 'animate-pulse' : ''}
         />
       </svg>
     );
@@ -139,54 +136,48 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
 
   return (
     <div className="h-full flex flex-col bg-gray-50">
-      {/* Toolbar */}
+      {/* Simplified Toolbar */}
       <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200">
+        <div className="flex items-center space-x-3">
+          <h2 className="text-lg font-semibold text-gray-900">Email to Task Workflow</h2>
+          <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm ${
+            isRunning 
+              ? 'bg-green-100 text-green-700' 
+              : 'bg-gray-100 text-gray-600'
+          }`}>
+            <div className={`w-2 h-2 rounded-full ${
+              isRunning ? 'bg-green-500 animate-pulse' : 'bg-gray-400'
+            }`} />
+            <span>{isRunning ? 'Running' : 'Stopped'}</span>
+          </div>
+        </div>
+
         <div className="flex items-center space-x-2">
           <Button
             variant={isRunning ? "secondary" : "primary"}
             size="sm"
-            onClick={toggleWorkflow}
-            className="flex items-center space-x-2"
+            onClick={onToggleRun}
           >
             {isRunning ? (
               <>
-                <Pause className="w-4 h-4" />
-                <span>Pausar</span>
+                <Pause className="w-4 h-4 mr-2" />
+                Stop
               </>
             ) : (
               <>
-                <Play className="w-4 h-4" />
-                <span>Executar</span>
+                <Play className="w-4 h-4 mr-2" />
+                Run
               </>
             )}
           </Button>
           
-          <div className="w-px h-6 bg-gray-300" />
-          
           <Button variant="outline" size="sm">
             <Save className="w-4 h-4 mr-2" />
-            Salvar
+            Save
           </Button>
           
-          <Button variant="outline" size="sm">
-            <Download className="w-4 h-4 mr-2" />
-            Exportar
-          </Button>
-          
-          <Button variant="outline" size="sm">
-            <Upload className="w-4 h-4 mr-2" />
-            Importar
-          </Button>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <div className="flex items-center space-x-2 text-sm text-gray-600">
-            <div className={`w-2 h-2 rounded-full ${isRunning ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-            <span>{isRunning ? 'Executando' : 'Parado'}</span>
-          </div>
-          
-          <Button variant="outline" size="sm">
-            <Settings className="w-4 h-4" />
+          <Button variant="ghost" size="sm">
+            <MoreHorizontal className="w-4 h-4" />
           </Button>
         </div>
       </div>
@@ -194,17 +185,17 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
       {/* Canvas */}
       <div 
         ref={canvasRef}
-        className="flex-1 relative overflow-hidden cursor-grab active:cursor-grabbing"
+        className="flex-1 relative overflow-hidden"
         onClick={handleCanvasClick}
       >
-        {/* Grid Background */}
+        {/* Subtle Grid Background */}
         <div 
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0 opacity-20"
           style={{
             backgroundImage: `
               radial-gradient(circle, #e5e7eb 1px, transparent 1px)
             `,
-            backgroundSize: '20px 20px'
+            backgroundSize: '24px 24px'
           }}
         />
 
@@ -221,70 +212,56 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         {nodes.map((node) => (
           <div
             key={node.id}
-            className={`absolute w-30 h-20 rounded-lg border-2 transition-all duration-200 cursor-pointer group ${
+            className={`absolute w-35 h-18 rounded-xl border-2 transition-all duration-200 cursor-pointer group ${
               selectedNode?.id === node.id 
-                ? 'border-orange-500 shadow-lg scale-105' 
-                : 'border-gray-300 hover:border-gray-400 hover:shadow-md'
+                ? 'border-orange-500 shadow-lg scale-105 z-10' 
+                : 'border-gray-200 hover:border-gray-300 hover:shadow-md z-0'
             }`}
             style={{
               left: node.position.x,
               top: node.position.y,
-              zIndex: selectedNode?.id === node.id ? 10 : 2
             }}
             onClick={(e) => {
               e.stopPropagation();
               handleNodeClick(node);
             }}
           >
-            <div className={`h-full bg-gradient-to-r ${node.color} rounded-md p-3 text-white relative overflow-hidden`}>
+            <div className="h-full bg-white rounded-xl p-4 relative overflow-hidden border border-gray-100">
               {/* Running indicator */}
               {isRunning && node.connected && (
-                <div className="absolute top-1 right-1">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                <div className="absolute top-2 right-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                 </div>
               )}
               
-              <div className="flex items-start space-x-2">
-                <node.icon className="w-5 h-5 flex-shrink-0 mt-0.5" />
+              <div className="flex items-start space-x-3">
+                <div className={`w-10 h-10 bg-gradient-to-r ${node.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                  <node.icon className="w-5 h-5 text-white" />
+                </div>
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-sm font-semibold truncate">{node.title}</h4>
-                  <p className="text-xs opacity-90 truncate">{node.description}</p>
+                  <h4 className="text-sm font-semibold text-gray-900 truncate">{node.title}</h4>
+                  <p className="text-xs text-gray-500 truncate mt-1">{node.description}</p>
                 </div>
               </div>
 
               {/* Connection points */}
               {node.type !== 'trigger' && (
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1">
-                  <div className="w-2 h-2 bg-white rounded-full border border-gray-300" />
+                  <div className="w-3 h-3 bg-gray-300 rounded-full border-2 border-white" />
                 </div>
               )}
               
               {node.connected && (
                 <div className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-1">
-                  <div className="w-2 h-2 bg-white rounded-full border border-gray-300" />
+                  <div className="w-3 h-3 bg-gray-300 rounded-full border-2 border-white" />
                 </div>
               )}
-            </div>
-
-            {/* Node actions (visible on hover) */}
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-              <div className="flex items-center space-x-1 bg-white rounded-lg shadow-lg border border-gray-200 px-2 py-1">
-                <button className="p-1 hover:bg-gray-100 rounded">
-                  <Copy className="w-3 h-3 text-gray-600" />
-                </button>
-                <button className="p-1 hover:bg-gray-100 rounded">
-                  <Edit3 className="w-3 h-3 text-gray-600" />
-                </button>
-                <button className="p-1 hover:bg-red-100 rounded">
-                  <Trash2 className="w-3 h-3 text-red-600" />
-                </button>
-              </div>
             </div>
           </div>
         ))}
 
         {/* Add Node Button */}
-        <div className="absolute bottom-6 right-6">
+        <div className="absolute bottom-8 right-8">
           <Button
             variant="primary"
             size="lg"
@@ -302,14 +279,14 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
                 <Bot className="w-10 h-10 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Crie seu primeiro workflow
+                Create Your First Workflow
               </h3>
               <p className="text-gray-600 mb-6">
-                Use o assistente de IA para criar workflows automatizados através de comandos naturais.
+                Use natural language to describe what you want to automate, and I'll help you build it.
               </p>
               <Button variant="primary" size="lg">
-                <Plus className="w-5 h-5 mr-2" />
-                Novo Workflow
+                <MessageSquare className="w-5 h-5 mr-2" />
+                Start with AI Assistant
               </Button>
             </div>
           </div>

@@ -3,21 +3,14 @@ import {
   Bot, 
   Send, 
   Sparkles, 
-  Lightbulb, 
-  Code, 
-  Zap,
   MessageSquare,
-  ChevronDown,
-  ChevronUp,
-  Copy,
-  ThumbsUp,
-  ThumbsDown,
-  RotateCcw,
-  Paperclip,
+  ChevronRight,
+  ChevronLeft,
+  Lightbulb,
+  Zap,
   X
 } from 'lucide-react';
 import { Button, Textarea } from '../atoms';
-import { MessageBubble } from '../molecules';
 
 interface AIMessage {
   id: string;
@@ -25,7 +18,6 @@ interface AIMessage {
   content: string;
   timestamp: Date;
   suggestions?: string[];
-  codeExample?: string;
   workflowPreview?: {
     nodes: string[];
     description: string;
@@ -48,20 +40,16 @@ export const WorkflowAIAssistant: React.FC<WorkflowAIAssistantProps> = ({
     {
       id: '1',
       type: 'assistant',
-      content: `Olá! Sou seu assistente de workflows de IA. Posso te ajudar a:
+      content: `Hi! I'm your workflow AI assistant. I can help you create automation workflows using natural language.
 
-• **Criar workflows** através de comandos naturais
-• **Explicar conceitos** do n8n e automação
-• **Otimizar** workflows existentes
-• **Resolver problemas** de configuração
-
-Como posso te ajudar hoje?`,
+Try saying something like:
+"Create a workflow that monitors emails and creates tasks for urgent ones"`,
       timestamp: new Date(),
       suggestions: [
-        'Crie um workflow que monitore emails e crie tarefas',
-        'Como conectar uma API externa?',
-        'Explique como funcionam os triggers',
-        'Otimize meu workflow atual'
+        'Monitor emails and create tasks',
+        'Send notifications when files are uploaded',
+        'Sync data between two systems',
+        'Process form submissions'
       ]
     }
   ]);
@@ -102,89 +90,51 @@ Como posso te ajudar hoje?`,
   const generateAIResponse = (userMessage: string): AIMessage => {
     const lowerMessage = userMessage.toLowerCase();
 
-    if (lowerMessage.includes('workflow') && (lowerMessage.includes('email') || lowerMessage.includes('tarefa'))) {
+    if (lowerMessage.includes('email') && (lowerMessage.includes('task') || lowerMessage.includes('urgent'))) {
       return {
         id: Date.now().toString(),
         type: 'assistant',
-        content: `Perfeito! Vou criar um workflow que monitora emails e cria tarefas automaticamente.
+        content: `Perfect! I'll create a workflow that monitors emails and creates tasks for urgent ones.
 
-**Workflow sugerido:**
+Here's what the workflow will do:
+1. **Email Trigger** - Monitor incoming emails
+2. **Check Priority** - Look for "urgent" in subject
+3. **Create Task** - Add task to your project
 
-1. **Trigger**: Webhook ou Email Trigger
-2. **Condição**: Verificar se o email contém palavras-chave
-3. **Ação**: Criar tarefa no sistema de projetos
-4. **Notificação**: Enviar confirmação por email
-
-Quer que eu crie este workflow para você?`,
+Would you like me to create this workflow?`,
         timestamp: new Date(),
         workflowPreview: {
-          nodes: ['Email Trigger', 'IF Condition', 'Create Task', 'Send Notification'],
-          description: 'Monitora emails e cria tarefas baseado em critérios específicos'
+          nodes: ['Email Trigger', 'Check Priority', 'Create Task'],
+          description: 'Monitors emails and creates tasks for urgent messages'
         },
         suggestions: [
-          'Sim, criar este workflow',
-          'Modificar as condições',
-          'Adicionar mais ações',
-          'Explicar cada etapa'
+          'Yes, create this workflow',
+          'Modify the conditions',
+          'Add email notifications',
+          'Show me other examples'
         ]
       };
     }
 
-    if (lowerMessage.includes('api') || lowerMessage.includes('conectar')) {
+    if (lowerMessage.includes('file') || lowerMessage.includes('upload')) {
       return {
         id: Date.now().toString(),
         type: 'assistant',
-        content: `Para conectar APIs externas no n8n, você pode usar:
+        content: `Great idea! I can help you create a workflow that responds to file uploads.
 
-**HTTP Request Node:**
-- Método: GET, POST, PUT, DELETE
-- Headers: Autenticação, Content-Type
-- Body: Dados a enviar
+This workflow could:
+- Monitor a specific folder or cloud storage
+- Send notifications to team members
+- Process or analyze the uploaded files
+- Move files to appropriate folders
 
-**Exemplo de configuração:**`,
-        timestamp: new Date(),
-        codeExample: `{
-  "method": "POST",
-  "url": "https://api.exemplo.com/data",
-  "headers": {
-    "Authorization": "Bearer {{$node.Webhook.json.token}}",
-    "Content-Type": "application/json"
-  },
-  "body": {
-    "title": "{{$node.Webhook.json.title}}",
-    "description": "{{$node.Webhook.json.description}}"
-  }
-}`,
-        suggestions: [
-          'Como autenticar com API key?',
-          'Tratar erros de API',
-          'Exemplo com webhook',
-          'Testar conexão'
-        ]
-      };
-    }
-
-    if (lowerMessage.includes('trigger')) {
-      return {
-        id: Date.now().toString(),
-        type: 'assistant',
-        content: `**Triggers** são o ponto de partida dos workflows. Eles "escutam" eventos e iniciam a execução:
-
-**Tipos principais:**
-
-• **Webhook Trigger**: Recebe dados via HTTP
-• **Cron Trigger**: Executa em horários programados  
-• **Manual Trigger**: Execução manual
-• **File Trigger**: Monitora arquivos
-• **Email Trigger**: Monitora emails
-
-**Dica**: Sempre teste seus triggers antes de ativar o workflow!`,
+What specific action would you like to take when files are uploaded?`,
         timestamp: new Date(),
         suggestions: [
-          'Como configurar webhook?',
-          'Agendar execução diária',
-          'Monitorar pasta de arquivos',
-          'Trigger de email'
+          'Send email notifications',
+          'Process images automatically',
+          'Backup to cloud storage',
+          'Create approval workflow'
         ]
       };
     }
@@ -193,22 +143,20 @@ Quer que eu crie este workflow para você?`,
     return {
       id: Date.now().toString(),
       type: 'assistant',
-      content: `Entendi sua pergunta! Vou te ajudar com isso.
+      content: `I understand you want to create an automation workflow. 
 
-Para workflows de automação, é importante pensar em:
+To help you better, could you describe:
+- What should trigger the workflow?
+- What actions should it perform?
+- Any specific conditions or rules?
 
-1. **Trigger**: O que inicia o processo?
-2. **Condições**: Quando executar as ações?
-3. **Ações**: O que fazer com os dados?
-4. **Tratamento de erros**: Como lidar com falhas?
-
-Pode me dar mais detalhes sobre o que você quer automatizar?`,
+For example: "When a form is submitted, send an email and save to database"`,
       timestamp: new Date(),
       suggestions: [
-        'Automatizar emails',
-        'Integrar sistemas',
-        'Processar dados',
-        'Criar notificações'
+        'Monitor emails for keywords',
+        'Process form submissions',
+        'Sync data between apps',
+        'Schedule regular reports'
       ]
     };
   };
@@ -227,7 +175,7 @@ Pode me dar mais detalhes sobre o que você quer automatizar?`,
 
   return (
     <div className={`bg-white border-l border-gray-200 flex flex-col transition-all duration-300 ${
-      isExpanded ? 'w-96' : 'w-12'
+      isExpanded ? 'w-96' : 'w-16'
     }`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
@@ -239,17 +187,19 @@ Pode me dar mais detalhes sobre o que você quer automatizar?`,
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">AI Assistant</h3>
-                <p className="text-xs text-gray-500">Workflow Helper</p>
+                <p className="text-xs text-gray-500">Create workflows with natural language</p>
               </div>
             </div>
             <Button variant="ghost" size="sm" onClick={onToggle}>
-              <ChevronDown className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" />
             </Button>
           </>
         ) : (
-          <Button variant="ghost" size="sm" onClick={onToggle} className="w-full">
-            <ChevronUp className="w-4 h-4" />
-          </Button>
+          <div className="w-full flex justify-center">
+            <Button variant="ghost" size="sm" onClick={onToggle} className="w-full flex justify-center">
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+          </div>
         )}
       </div>
 
@@ -258,105 +208,77 @@ Pode me dar mais detalhes sobre o que você quer automatizar?`,
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((msg) => (
-              <div key={msg.id}>
-                <MessageBubble
-                  content={msg.content}
-                  role={msg.type}
-                  timestamp={msg.timestamp}
-                  model="Workflow AI"
-                  onCopy={() => navigator.clipboard.writeText(msg.content)}
-                />
-
-                {/* Code Example */}
-                {msg.codeExample && (
-                  <div className="mt-3 ml-12">
-                    <div className="bg-gray-900 rounded-lg p-4 relative">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-gray-400">JSON</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => navigator.clipboard.writeText(msg.codeExample!)}
-                          className="text-gray-400 hover:text-white"
-                        >
-                          <Copy className="w-3 h-3" />
-                        </Button>
-                      </div>
-                      <pre className="text-sm text-gray-100 overflow-x-auto">
-                        <code>{msg.codeExample}</code>
-                      </pre>
-                    </div>
-                  </div>
-                )}
-
-                {/* Workflow Preview */}
-                {msg.workflowPreview && (
-                  <div className="mt-3 ml-12">
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
-                      <div className="flex items-center space-x-2 mb-3">
-                        <Zap className="w-4 h-4 text-orange-600" />
-                        <span className="text-sm font-medium text-orange-900">
-                          Preview do Workflow
-                        </span>
-                      </div>
-                      <p className="text-sm text-orange-800 mb-3">
-                        {msg.workflowPreview.description}
-                      </p>
-                      <div className="flex items-center space-x-2">
-                        {msg.workflowPreview.nodes.map((node, index) => (
-                          <React.Fragment key={node}>
-                            <div className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-md">
-                              {node}
-                            </div>
-                            {index < msg.workflowPreview!.nodes.length - 1 && (
-                              <div className="w-4 h-px bg-orange-300" />
-                            )}
-                          </React.Fragment>
-                        ))}
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="mt-3 text-orange-700 border-orange-300 hover:bg-orange-100"
-                        onClick={() => onCreateWorkflow?.(msg.workflowPreview!.description)}
-                      >
-                        <Sparkles className="w-3 h-3 mr-1" />
-                        Criar Workflow
-                      </Button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Suggestions */}
-                {msg.suggestions && (
-                  <div className="mt-3 ml-12 space-y-2">
-                    {msg.suggestions.map((suggestion, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleSuggestionClick(suggestion)}
-                        className="block w-full text-left px-3 py-2 text-sm bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-gray-700"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
-                )}
+              <div key={msg.id} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                  msg.type === 'user' 
+                    ? 'bg-orange-500 text-white' 
+                    : 'bg-gray-100 text-gray-900'
+                }`}>
+                  <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                </div>
               </div>
             ))}
 
+            {/* Workflow Preview */}
+            {messages[messages.length - 1]?.workflowPreview && (
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <div className="flex items-center space-x-2 mb-3">
+                  <Zap className="w-4 h-4 text-orange-600" />
+                  <span className="text-sm font-medium text-orange-900">
+                    Workflow Preview
+                  </span>
+                </div>
+                <p className="text-sm text-orange-800 mb-3">
+                  {messages[messages.length - 1].workflowPreview!.description}
+                </p>
+                <div className="flex items-center space-x-2 mb-3">
+                  {messages[messages.length - 1].workflowPreview!.nodes.map((node, index) => (
+                    <React.Fragment key={node}>
+                      <div className="px-2 py-1 bg-orange-100 text-orange-800 text-xs rounded-md">
+                        {node}
+                      </div>
+                      {index < messages[messages.length - 1].workflowPreview!.nodes.length - 1 && (
+                        <ChevronRight className="w-3 h-3 text-orange-600" />
+                      )}
+                    </React.Fragment>
+                  ))}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-orange-700 border-orange-300 hover:bg-orange-100"
+                  onClick={() => onCreateWorkflow?.(messages[messages.length - 1].workflowPreview!.description)}
+                >
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Create This Workflow
+                </Button>
+              </div>
+            )}
+
+            {/* Suggestions */}
+            {messages[messages.length - 1]?.suggestions && (
+              <div className="space-y-2">
+                <p className="text-xs text-gray-500 font-medium">Suggestions:</p>
+                {messages[messages.length - 1].suggestions!.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleSuggestionClick(suggestion)}
+                    className="block w-full text-left px-3 py-2 text-sm bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors text-gray-700"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Typing Indicator */}
             {isTyping && (
-              <div className="flex items-start space-x-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-white" />
-                </div>
-                <div className="flex-1">
-                  <div className="bg-gray-100 rounded-2xl px-4 py-3 max-w-xs">
-                    <div className="flex space-x-1">
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
-                    </div>
+              <div className="flex justify-start">
+                <div className="bg-gray-100 rounded-lg px-4 py-2">
+                  <div className="flex space-x-1">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
                   </div>
                 </div>
               </div>
@@ -374,7 +296,7 @@ Pode me dar mais detalhes sobre o que você quer automatizar?`,
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyDown={handleKeyPress}
-                  placeholder="Descreva o workflow que você quer criar..."
+                  placeholder="Describe the workflow you want to create..."
                   rows={2}
                   className="resize-none"
                 />
@@ -390,20 +312,10 @@ Pode me dar mais detalhes sobre o que você quer automatizar?`,
               </Button>
             </div>
 
-            {/* Quick Actions */}
+            {/* Quick Examples */}
             <div className="flex items-center space-x-2 mt-3">
-              <Button variant="ghost" size="sm" className="text-xs">
-                <Lightbulb className="w-3 h-3 mr-1" />
-                Exemplos
-              </Button>
-              <Button variant="ghost" size="sm" className="text-xs">
-                <Code className="w-3 h-3 mr-1" />
-                Documentação
-              </Button>
-              <Button variant="ghost" size="sm" className="text-xs">
-                <MessageSquare className="w-3 h-3 mr-1" />
-                Suporte
-              </Button>
+              <Lightbulb className="w-4 h-4 text-gray-400" />
+              <span className="text-xs text-gray-500">Try: "Monitor emails and create tasks"</span>
             </div>
           </div>
         </>

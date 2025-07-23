@@ -1,17 +1,15 @@
 import React from 'react';
 import { 
   Settings, 
-  Code, 
-  Database, 
-  Zap, 
-  Mail, 
-  Calendar,
   X,
   Save,
   Play,
   AlertCircle,
   CheckCircle,
-  Clock
+  Clock,
+  Mail,
+  Zap,
+  FileText
 } from 'lucide-react';
 import { Button, Input, Textarea, Toggle } from '../atoms';
 
@@ -41,17 +39,11 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
     name: selectedNode?.title || '',
     description: selectedNode?.description || '',
     enabled: true,
-    retryOnFailure: true,
-    maxRetries: 3,
-    timeout: 30,
     // Node-specific properties
-    webhookUrl: 'https://api.cognit.com/webhook/abc123',
-    httpMethod: 'POST',
-    emailTo: 'admin@cognit.com',
-    emailSubject: 'Notificação Urgente',
-    condition: 'email.subject.includes("urgente")',
-    taskTitle: 'Nova tarefa criada automaticamente',
-    taskProject: 'Projeto Principal'
+    emailAddress: 'support@cognit.com',
+    condition: 'subject.includes("urgent")',
+    taskTitle: 'Urgent: {{email.subject}}',
+    projectId: 'main-project'
   });
 
   const handleSave = () => {
@@ -60,7 +52,7 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
     }
   };
 
-  const renderNodeSpecificProperties = () => {
+  const renderNodeConfiguration = () => {
     if (!selectedNode) return null;
 
     switch (selectedNode.type) {
@@ -69,33 +61,17 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Webhook URL
+                Email Address to Monitor
               </label>
               <Input
-                value={properties.webhookUrl}
-                onChange={(e) => setProperties(prev => ({ ...prev, webhookUrl: e.target.value }))}
-                placeholder="https://api.cognit.com/webhook/..."
-                className="font-mono text-sm"
+                value={properties.emailAddress}
+                onChange={(e) => setProperties(prev => ({ ...prev, emailAddress: e.target.value }))}
+                placeholder="support@cognit.com"
+                type="email"
               />
               <p className="text-xs text-gray-500 mt-1">
-                URL que receberá os dados do webhook
+                The email address that will trigger this workflow
               </p>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Método HTTP
-              </label>
-              <select 
-                value={properties.httpMethod}
-                onChange={(e) => setProperties(prev => ({ ...prev, httpMethod: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              >
-                <option value="POST">POST</option>
-                <option value="GET">GET</option>
-                <option value="PUT">PUT</option>
-                <option value="DELETE">DELETE</option>
-              </select>
             </div>
           </div>
         );
@@ -105,17 +81,16 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Condição
+                Condition
               </label>
-              <Textarea
+              <Input
                 value={properties.condition}
                 onChange={(e) => setProperties(prev => ({ ...prev, condition: e.target.value }))}
-                placeholder="email.subject.includes('urgente')"
-                rows={3}
+                placeholder='subject.includes("urgent")'
                 className="font-mono text-sm"
               />
               <p className="text-xs text-gray-500 mt-1">
-                Expressão JavaScript para avaliar a condição
+                JavaScript expression to evaluate
               </p>
             </div>
 
@@ -123,12 +98,11 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
               <div className="flex items-start space-x-2">
                 <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
                 <div className="text-sm text-blue-800">
-                  <p className="font-medium mb-1">Variáveis disponíveis:</p>
+                  <p className="font-medium mb-1">Available variables:</p>
                   <ul className="text-xs space-y-1">
-                    <li><code>email.subject</code> - Assunto do email</li>
-                    <li><code>email.body</code> - Corpo do email</li>
-                    <li><code>email.from</code> - Remetente</li>
-                    <li><code>data.*</code> - Dados do webhook</li>
+                    <li><code>subject</code> - Email subject</li>
+                    <li><code>body</code> - Email content</li>
+                    <li><code>from</code> - Sender email</li>
                   </ul>
                 </div>
               </div>
@@ -137,91 +111,38 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
         );
 
       case 'action':
-        if (selectedNode.title.includes('Email')) {
-          return (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Para
-                </label>
-                <Input
-                  value={properties.emailTo}
-                  onChange={(e) => setProperties(prev => ({ ...prev, emailTo: e.target.value }))}
-                  placeholder="admin@cognit.com"
-                  type="email"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Assunto
-                </label>
-                <Input
-                  value={properties.emailSubject}
-                  onChange={(e) => setProperties(prev => ({ ...prev, emailSubject: e.target.value }))}
-                  placeholder="Notificação do sistema"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Corpo do email
-                </label>
-                <Textarea
-                  value="Nova mensagem urgente recebida:\n\n{{email.subject}}\n\nDe: {{email.from}}"
-                  onChange={() => {}}
-                  rows={4}
-                  placeholder="Conteúdo do email..."
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Use {{variavel}} para inserir dados dinâmicos
-                </p>
-              </div>
+        return (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Task Title
+              </label>
+              <Input
+                value={properties.taskTitle}
+                onChange={(e) => setProperties(prev => ({ ...prev, taskTitle: e.target.value }))}
+                placeholder="Urgent: {{email.subject}}"
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Use {{variable}} for dynamic content
+              </p>
             </div>
-          );
-        } else {
-          return (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Título da tarefa
-                </label>
-                <Input
-                  value={properties.taskTitle}
-                  onChange={(e) => setProperties(prev => ({ ...prev, taskTitle: e.target.value }))}
-                  placeholder="Nova tarefa"
-                />
-              </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Projeto
-                </label>
-                <select 
-                  value={properties.taskProject}
-                  onChange={(e) => setProperties(prev => ({ ...prev, taskProject: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                >
-                  <option value="Projeto Principal">Projeto Principal</option>
-                  <option value="Suporte">Suporte</option>
-                  <option value="Desenvolvimento">Desenvolvimento</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Descrição
-                </label>
-                <Textarea
-                  value="Tarefa criada automaticamente pelo workflow.\n\nDetalhes: {{email.body}}"
-                  onChange={() => {}}
-                  rows={3}
-                  placeholder="Descrição da tarefa..."
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Project
+              </label>
+              <select 
+                value={properties.projectId}
+                onChange={(e) => setProperties(prev => ({ ...prev, projectId: e.target.value }))}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              >
+                <option value="main-project">Main Project</option>
+                <option value="support">Support</option>
+                <option value="development">Development</option>
+              </select>
             </div>
-          );
-        }
+          </div>
+        );
 
       default:
         return null;
@@ -252,30 +173,27 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
         {/* Basic Properties */}
         <div className="space-y-4">
-          <h4 className="font-medium text-gray-900 flex items-center">
-            <Settings className="w-4 h-4 mr-2" />
-            Configurações Gerais
-          </h4>
+          <h4 className="font-medium text-gray-900">General Settings</h4>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Nome
+              Name
             </label>
             <Input
               value={properties.name}
               onChange={(e) => setProperties(prev => ({ ...prev, name: e.target.value }))}
-              placeholder="Nome do node"
+              placeholder="Node name"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Descrição
+              Description
             </label>
             <Textarea
               value={properties.description}
               onChange={(e) => setProperties(prev => ({ ...prev, description: e.target.value }))}
-              placeholder="Descrição do que este node faz"
+              placeholder="What this node does"
               rows={2}
             />
           </div>
@@ -283,10 +201,10 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
           <div className="flex items-center justify-between">
             <div>
               <label className="text-sm font-medium text-gray-700">
-                Ativo
+                Enabled
               </label>
               <p className="text-xs text-gray-500">
-                Node será executado no workflow
+                Node will execute in workflow
               </p>
             </div>
             <Toggle
@@ -296,80 +214,23 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
           </div>
         </div>
 
-        {/* Node-specific Properties */}
+        {/* Node Configuration */}
         <div className="space-y-4">
-          <h4 className="font-medium text-gray-900 flex items-center">
-            <Code className="w-4 h-4 mr-2" />
-            Configurações Específicas
-          </h4>
-          {renderNodeSpecificProperties()}
+          <h4 className="font-medium text-gray-900">Configuration</h4>
+          {renderNodeConfiguration()}
         </div>
 
-        {/* Error Handling */}
+        {/* Execution Status */}
         <div className="space-y-4">
-          <h4 className="font-medium text-gray-900 flex items-center">
-            <AlertCircle className="w-4 h-4 mr-2" />
-            Tratamento de Erros
-          </h4>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="text-sm font-medium text-gray-700">
-                Tentar novamente em caso de erro
-              </label>
-              <p className="text-xs text-gray-500">
-                Reexecutar automaticamente se falhar
-              </p>
-            </div>
-            <Toggle
-              checked={properties.retryOnFailure}
-              onChange={(checked) => setProperties(prev => ({ ...prev, retryOnFailure: checked }))}
-            />
-          </div>
-
-          {properties.retryOnFailure && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Máximo de tentativas
-              </label>
-              <Input
-                type="number"
-                value={properties.maxRetries}
-                onChange={(e) => setProperties(prev => ({ ...prev, maxRetries: parseInt(e.target.value) }))}
-                min="1"
-                max="10"
-              />
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Timeout (segundos)
-            </label>
-            <Input
-              type="number"
-              value={properties.timeout}
-              onChange={(e) => setProperties(prev => ({ ...prev, timeout: parseInt(e.target.value) }))}
-              min="5"
-              max="300"
-            />
-          </div>
-        </div>
-
-        {/* Execution History */}
-        <div className="space-y-4">
-          <h4 className="font-medium text-gray-900 flex items-center">
-            <Clock className="w-4 h-4 mr-2" />
-            Histórico de Execução
-          </h4>
+          <h4 className="font-medium text-gray-900">Recent Executions</h4>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between p-3 bg-green-50 border border-green-200 rounded-lg">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-4 h-4 text-green-600" />
                 <div>
-                  <p className="text-sm font-medium text-green-900">Sucesso</p>
-                  <p className="text-xs text-green-700">Há 2 minutos</p>
+                  <p className="text-sm font-medium text-green-900">Success</p>
+                  <p className="text-xs text-green-700">2 minutes ago</p>
                 </div>
               </div>
               <span className="text-xs text-green-600">0.8s</span>
@@ -379,22 +240,11 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
               <div className="flex items-center space-x-2">
                 <CheckCircle className="w-4 h-4 text-green-600" />
                 <div>
-                  <p className="text-sm font-medium text-green-900">Sucesso</p>
-                  <p className="text-xs text-green-700">Há 15 minutos</p>
+                  <p className="text-sm font-medium text-green-900">Success</p>
+                  <p className="text-xs text-green-700">15 minutes ago</p>
                 </div>
               </div>
               <span className="text-xs text-green-600">1.2s</span>
-            </div>
-
-            <div className="flex items-center justify-between p-3 bg-red-50 border border-red-200 rounded-lg">
-              <div className="flex items-center space-x-2">
-                <X className="w-4 h-4 text-red-600" />
-                <div>
-                  <p className="text-sm font-medium text-red-900">Erro</p>
-                  <p className="text-xs text-red-700">Há 1 hora</p>
-                </div>
-              </div>
-              <span className="text-xs text-red-600">Timeout</span>
             </div>
           </div>
         </div>
@@ -409,7 +259,7 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
           className="w-full"
         >
           <Save className="w-4 h-4 mr-2" />
-          Salvar Configurações
+          Save Changes
         </Button>
         
         <Button
@@ -418,7 +268,7 @@ export const WorkflowPropertiesPanel: React.FC<WorkflowPropertiesPanelProps> = (
           className="w-full"
         >
           <Play className="w-4 h-4 mr-2" />
-          Testar Node
+          Test Node
         </Button>
       </div>
     </div>
