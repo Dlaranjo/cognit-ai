@@ -40,7 +40,7 @@ export const Avatar = React.memo<AvatarProps>(
     };
 
     const baseClasses =
-      'inline-flex items-center justify-center rounded-full bg-neutral-100 text-neutral-600 font-medium overflow-hidden';
+      'inline-flex items-center justify-center rounded-full bg-orange-100 text-orange-600 font-medium overflow-hidden';
 
     const classes = [baseClasses, sizeClasses[size], className].join(' ');
 

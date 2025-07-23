@@ -1,16 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { 
-  Bot, 
-  Send, 
-  Sparkles, 
-  MessageSquare,
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import {
+  Bot,
+  Send,
+  Sparkles,
   ChevronRight,
   ChevronLeft,
   Lightbulb,
-  Zap,
-  X
+  Zap
 } from 'lucide-react';
 import { Button, Textarea } from '../atoms';
+import { useWorkflows } from '../../hooks/useWorkflows';
+import { logger } from '../../shared/utils';
 
 interface AIMessage {
   id: string;
@@ -25,16 +25,24 @@ interface AIMessage {
 }
 
 interface WorkflowAIAssistantProps {
-  isExpanded: boolean;
-  onToggle: () => void;
-  onCreateWorkflow?: (description: string) => void;
+  className?: string;
 }
 
-export const WorkflowAIAssistant: React.FC<WorkflowAIAssistantProps> = ({
-  isExpanded,
-  onToggle,
-  onCreateWorkflow
-}) => {
+/**
+ * WorkflowAIAssistant - Organism Component (Atomic Design)
+ *
+ * Responsabilidade: Lógica de negócio + composição de molecules/atoms
+ * - Gerencia estado local da conversa com IA
+ * - Conectado ao Redux para criar workflows
+ * - Contém lógica de expansão/colapso
+ * - Otimizado com React.memo e useCallback/useMemo
+ */
+const WorkflowAIAssistantComponent: React.FC<WorkflowAIAssistantProps> = () => {
+  const {
+    createNewWorkflow,
+  } = useWorkflows();
+
+  const [isExpanded, setIsExpanded] = useState(true);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState<AIMessage[]>([
     {
@@ -57,6 +65,11 @@ Try saying something like:
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const toggleExpanded = useCallback(() => {
+    logger.dev('Toggling AI assistant:', { currentState: isExpanded });
+    setIsExpanded(!isExpanded);
+  }, [isExpanded]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -65,29 +78,7 @@ Try saying something like:
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!message.trim()) return;
-
-    const userMessage: AIMessage = {
-      id: Date.now().toString(),
-      type: 'user',
-      content: message,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setMessage('');
-    setIsTyping(true);
-
-    // Simulate AI response
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(message);
-      setMessages(prev => [...prev, aiResponse]);
-      setIsTyping(false);
-    }, 1500);
-  };
-
-  const generateAIResponse = (userMessage: string): AIMessage => {
+  const generateAIResponse = useCallback((userMessage: string): AIMessage => {
     const lowerMessage = userMessage.toLowerCase();
 
     if (lowerMessage.includes('email') && (lowerMessage.includes('task') || lowerMessage.includes('urgent'))) {
@@ -143,7 +134,7 @@ What specific action would you like to take when files are uploaded?`,
     return {
       id: Date.now().toString(),
       type: 'assistant',
-      content: `I understand you want to create an automation workflow. 
+      content: `I understand you want to create an automation workflow.
 
 To help you better, could you describe:
 - What should trigger the workflow?
@@ -159,24 +150,46 @@ For example: "When a form is submitted, send an email and save to database"`,
         'Schedule regular reports'
       ]
     };
-  };
+  }, []);
 
-  const handleSuggestionClick = (suggestion: string) => {
+  const handleSendMessage = useCallback(async () => {
+    if (!message.trim()) return;
+
+    const userMessage: AIMessage = {
+      id: Date.now().toString(),
+      type: 'user',
+      content: message,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setMessage('');
+    setIsTyping(true);
+
+    // Simulate AI response
+    setTimeout(() => {
+      const aiResponse = generateAIResponse(message);
+      setMessages(prev => [...prev, aiResponse]);
+      setIsTyping(false);
+    }, 1500);
+  }, [message, generateAIResponse]);
+
+  const handleSuggestionClick = useCallback((suggestion: string) => {
     setMessage(suggestion);
     textareaRef.current?.focus();
-  };
+  }, []);
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
-  };
+  }, [handleSendMessage]);
 
   return (
     <div className={`bg-white border-l border-gray-200 flex flex-col transition-all duration-300 ${
-      isExpanded ? 'w-96' : 'w-16'
-    }`}>
+      isExpanded ? 'w-full lg:w-96' : 'w-full lg:w-16'
+    } ${!isExpanded ? 'lg:h-full h-16' : 'h-full'}`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200">
         {isExpanded ? (
@@ -190,13 +203,13 @@ For example: "When a form is submitted, send an email and save to database"`,
                 <p className="text-xs text-gray-500">Create workflows with natural language</p>
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={onToggle}>
+            <Button variant="ghost" size="sm" onClick={toggleExpanded}>
               <ChevronRight className="w-4 h-4" />
             </Button>
           </>
         ) : (
           <div className="w-full flex justify-center">
-            <Button variant="ghost" size="sm" onClick={onToggle} className="w-full flex justify-center">
+            <Button variant="ghost" size="sm" onClick={toggleExpanded} className="w-full flex justify-center">
               <ChevronLeft className="w-4 h-4" />
             </Button>
           </div>
@@ -247,7 +260,22 @@ For example: "When a form is submitted, send an email and save to database"`,
                   variant="outline"
                   size="sm"
                   className="text-orange-700 border-orange-300 hover:bg-orange-100"
-                  onClick={() => onCreateWorkflow?.(messages[messages.length - 1].workflowPreview!.description)}
+                  onClick={() => {
+                    const lastMessage = messages[messages.length - 1];
+                    if (lastMessage.workflowPreview) {
+                      logger.dev('Creating workflow from AI suggestion:', {
+                        description: lastMessage.workflowPreview.description
+                      });
+                      createNewWorkflow({
+                        name: 'AI Generated Workflow',
+                        description: lastMessage.workflowPreview.description,
+                        nodes: [],
+                        connections: [],
+                        isActive: false,
+                      });
+                      setIsExpanded(false);
+                    }
+                  }}
                 >
                   <Sparkles className="w-3 h-3 mr-1" />
                   Create This Workflow
@@ -323,3 +351,6 @@ For example: "When a form is submitted, send an email and save to database"`,
     </div>
   );
 };
+
+export const WorkflowAIAssistant = React.memo(WorkflowAIAssistantComponent);
+WorkflowAIAssistant.displayName = 'WorkflowAIAssistant';

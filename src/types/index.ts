@@ -341,6 +341,7 @@ export interface RootState {
   workspaces: WorkspacesState;
   ui: UIState;
   agents: AgentsState;
+  workflows: import('../redux/workflows/workflowsTypes').WorkflowsState;
 }
 
 export interface AuthState {

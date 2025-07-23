@@ -34,5 +34,5 @@ export { DemoAccessSection } from './DemoAccessSection';
 
 // Workflow Components
 export { WorkflowCanvas } from './WorkflowCanvas';
-export { WorkflowPropertiesPanel } from './WorkflowPropertiesPanel';
 export { WorkflowAIAssistant } from './WorkflowAIAssistant';
+export { WorkflowNodeModal } from './WorkflowNodeModal';

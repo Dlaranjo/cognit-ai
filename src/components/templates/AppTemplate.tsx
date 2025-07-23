@@ -10,26 +10,26 @@ export const AppTemplate: React.FC = () => {
 
   const getViewFromPath = (pathname: string) => {
     if (pathname.startsWith('/studio')) return 'studio';
-    if (pathname.startsWith('/agents')) return 'agents';
+    if (pathname.startsWith('/workflows')) return 'workflows';
     return 'studio';
   };
 
   const getHeaderTitle = (pathname: string) => {
     if (pathname.startsWith('/studio')) return 'Studio';
-    if (pathname.startsWith('/agents')) return 'Workflows';
+    if (pathname.startsWith('/workflows')) return 'Workflows';
     return 'COGNIT';
   };
 
   const getHeaderSubtitle = (pathname: string) => {
     if (pathname.startsWith('/studio'))
       return 'Converse com os melhores modelos de IA';
-    if (pathname.startsWith('/agents'))
-      return 'AI-powered assistants for your tasks';
+    if (pathname.startsWith('/workflows'))
+      return 'Editor visual de workflows com n8n';
     return '';
   };
 
   const currentView = getViewFromPath(location.pathname);
-  const showHeader = currentView !== 'studio';
+  const showHeader = currentView !== 'studio' && currentView !== 'workflows';
 
   if (!user) {
     return null;

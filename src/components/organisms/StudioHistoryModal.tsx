@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { History, X, Search, MessageSquare, Calendar, Trash2, Star, StarOff, Clock, Bot } from 'lucide-react';
+import { History, X, Search, MessageSquare, Trash2 } from 'lucide-react';
 import { Input } from '../atoms/Input';
-import { Badge } from '../atoms/Badge';
 import type { Conversation } from '../../types';
 
 interface StudioHistoryModalProps {
@@ -13,7 +12,7 @@ interface StudioHistoryModalProps {
   onConversationDelete: (conversationId: string) => void;
 }
 
-type FilterType = 'all' | 'favorites' | 'today' | 'week' | 'month';
+type FilterType = 'all' | 'today' | 'week' | 'month';
 
 export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
   isOpen,
@@ -25,17 +24,6 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
-
-  const toggleFavorite = (conversationId: string) => {
-    const newFavorites = new Set(favorites);
-    if (newFavorites.has(conversationId)) {
-      newFavorites.delete(conversationId);
-    } else {
-      newFavorites.add(conversationId);
-    }
-    setFavorites(newFavorites);
-  };
 
   const filteredConversations = useMemo(() => {
     let filtered = conversations;
@@ -57,9 +45,6 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
     const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
     switch (activeFilter) {
-      case 'favorites':
-        filtered = filtered.filter(conv => favorites.has(conv.id));
-        break;
       case 'today':
         filtered = filtered.filter(conv => new Date(conv.updatedAt) >= today);
         break;
@@ -75,7 +60,7 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
     return filtered.sort((a, b) => 
       new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     );
-  }, [conversations, searchQuery, activeFilter, favorites]);
+  }, [conversations, searchQuery, activeFilter]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -114,11 +99,10 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
   };
 
   const filters = [
-    { key: 'all' as FilterType, label: 'Todas', icon: MessageSquare },
-    { key: 'favorites' as FilterType, label: 'Favoritas', icon: Star },
-    { key: 'today' as FilterType, label: 'Hoje', icon: Clock },
-    { key: 'week' as FilterType, label: 'Semana', icon: Calendar },
-    { key: 'month' as FilterType, label: 'Mês', icon: Calendar },
+    { key: 'all' as FilterType, label: 'Todas' },
+    { key: 'today' as FilterType, label: 'Hoje' },
+    { key: 'week' as FilterType, label: 'Semana' },
+    { key: 'month' as FilterType, label: 'Mês' },
   ];
 
   if (!isOpen) return null;
@@ -148,9 +132,9 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
         </div>
 
         {/* Search and Filters */}
-        <div className="p-6 border-b border-gray-100 bg-gray-50/50">
+        <div className="p-4 border-b border-gray-100">
           {/* Search Bar */}
-          <div className="relative mb-4">
+          <div className="relative mb-3">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <Input
               type="text"
@@ -162,24 +146,18 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
           </div>
 
           {/* Filter Buttons */}
-          <div className="flex flex-wrap gap-2">
-            {filters.map(({ key, label, icon: Icon }) => (
+          <div className="flex gap-2">
+            {filters.map(({ key, label }) => (
               <button
                 key={key}
                 onClick={() => setActiveFilter(key)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   activeFilter === key
-                    ? 'bg-orange-500 text-white shadow-lg shadow-orange-200'
-                    : 'bg-white text-gray-600 hover:bg-orange-50 hover:text-orange-600 border border-gray-200'
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-orange-50 hover:text-orange-600'
                 }`}
               >
-                <Icon className="w-4 h-4" />
-                <span>{label}</span>
-                {key === 'favorites' && favorites.size > 0 && (
-                  <Badge variant="secondary" size="sm" className="bg-white/20 text-white border-white/30">
-                    {favorites.size}
-                  </Badge>
-                )}
+                {label}
               </button>
             ))}
           </div>
@@ -188,101 +166,62 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
         {/* Conversations List */}
         <div className="flex-1 overflow-y-auto">
           {filteredConversations.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-              <MessageSquare className="w-12 h-12 mb-4 text-gray-300" />
-              <h3 className="text-lg font-medium mb-2">
-                {searchQuery ? 'Nenhuma conversa encontrada' : 'Nenhuma conversa ainda'}
+            <div className="flex flex-col items-center justify-center h-48 text-gray-500">
+              <MessageSquare className="w-10 h-10 mb-3 text-gray-300" />
+              <h3 className="font-medium mb-1">
+                {searchQuery ? 'Nenhuma conversa encontrada' : 'Nenhuma conversa'}
               </h3>
-              <p className="text-sm text-center max-w-md">
+              <p className="text-sm text-center">
                 {searchQuery 
-                  ? 'Tente ajustar sua busca ou filtros'
-                  : 'Suas conversas aparecerão aqui conforme você usar o chat'
+                  ? 'Tente ajustar sua busca'
+                  : 'Suas conversas aparecerão aqui'
                 }
               </p>
             </div>
           ) : (
-            <div className="p-4 space-y-2">
+            <div className="p-3 space-y-2">
               {filteredConversations.map((conversation) => (
                 <div
                   key={conversation.id}
-                  className={`group relative bg-white rounded-xl border transition-all duration-200 hover:shadow-md hover:border-orange-200 cursor-pointer ${
+                  className={`group relative rounded-lg border transition-all duration-200 hover:shadow-sm cursor-pointer ${
                     currentConversationId === conversation.id
-                      ? 'border-orange-300 bg-orange-50 shadow-sm'
-                      : 'border-gray-200 hover:bg-orange-50/50'
+                      ? 'border-orange-300 bg-orange-50/70'
+                      : 'border-gray-200 hover:border-orange-200 hover:bg-orange-50/30'
                   }`}
                   onClick={() => handleConversationSelect(conversation.id)}
                 >
-                  <div className="p-4">
-                    <div className="flex items-start justify-between mb-3">
+                  <div className="p-3">
+                    <div className="flex items-start justify-between mb-2">
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-gray-900 truncate mb-1">
+                        <h3 className="font-medium text-gray-900 truncate text-sm">
                           {conversation.title || 'Conversa sem título'}
                         </h3>
-                        <div className="flex items-center space-x-3 text-sm text-gray-500">
-                          <div className="flex items-center space-x-1">
-                            <MessageSquare className="w-3 h-3" />
-                            <span>{conversation.messages.length} mensagens</span>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <Clock className="w-3 h-3" />
-                            <span>{formatDate(conversation.updatedAt)}</span>
-                          </div>
-                          {conversation.model && (
-                            <div className="flex items-center space-x-1">
-                              <Bot className="w-3 h-3" />
-                              <span>{conversation.model}</span>
-                            </div>
-                          )}
+                        <div className="flex items-center space-x-2 text-xs text-gray-500 mt-1">
+                          <span>{conversation.messages.length} msgs</span>
+                          <span>•</span>
+                          <span>{formatDate(conversation.updatedAt)}</span>
                         </div>
                       </div>
 
-                      {/* Action Buttons */}
-                      <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleFavorite(conversation.id);
-                          }}
-                          className={`p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
-                            favorites.has(conversation.id)
-                              ? 'text-yellow-500 hover:bg-yellow-50'
-                              : 'text-gray-400 hover:text-yellow-500 hover:bg-yellow-50'
-                          }`}
-                          title={favorites.has(conversation.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
-                        >
-                          {favorites.has(conversation.id) ? (
-                            <Star className="w-4 h-4 fill-current" />
-                          ) : (
-                            <StarOff className="w-4 h-4" />
-                          )}
-                        </button>
-
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (confirm('Tem certeza que deseja excluir esta conversa?')) {
-                              onConversationDelete(conversation.id);
-                            }
-                          }}
-                          className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all duration-200 hover:scale-105"
-                          title="Excluir conversa"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
+                      {/* Action Button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (confirm('Excluir esta conversa?')) {
+                            onConversationDelete(conversation.id);
+                          }
+                        }}
+                        className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-all duration-200"
+                        title="Excluir conversa"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
                     </div>
 
                     {/* Preview */}
-                    <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
+                    <p className="text-xs text-gray-600 line-clamp-2 leading-relaxed">
                       {getConversationPreview(conversation)}
                     </p>
-
-                    {/* Current Indicator */}
-                    {currentConversationId === conversation.id && (
-                      <div className="absolute top-4 right-4">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></div>
-                      </div>
-                    )}
                   </div>
                 </div>
               ))}
@@ -291,16 +230,13 @@ export const StudioHistoryModal: React.FC<StudioHistoryModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-gray-100 bg-gray-50/50">
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <div className="flex items-center space-x-4">
-              <span>💡 Dica: Use Ctrl+H para abrir o histórico rapidamente</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span>Total: {conversations.length} conversas</span>
+        {conversations.length > 0 && (
+          <div className="px-4 py-3 border-t border-gray-100 bg-gray-50/30">
+            <div className="text-center text-xs text-gray-500">
+              {filteredConversations.length} de {conversations.length} conversas
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

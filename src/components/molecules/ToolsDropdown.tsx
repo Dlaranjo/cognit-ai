@@ -7,7 +7,6 @@ import {
   Code, 
   BarChart3, 
   Database,
-  Search,
   Wrench
 } from 'lucide-react';
 
@@ -45,23 +44,9 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
   tools,
   className = '',
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
 
-  // Filtrar ferramentas baseado na busca
-  const filteredTools = tools.filter(tool =>
-    tool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    tool.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Focar no input quando abrir
-  useEffect(() => {
-    if (isOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [isOpen]);
 
   // Navegação por teclado
   useEffect(() => {
@@ -75,19 +60,19 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
         case 'ArrowDown':
           e.preventDefault();
           setFocusedIndex(prev => 
-            prev < filteredTools.length - 1 ? prev + 1 : 0
+            prev < tools.length - 1 ? prev + 1 : 0
           );
           break;
         case 'ArrowUp':
           e.preventDefault();
           setFocusedIndex(prev => 
-            prev > 0 ? prev - 1 : filteredTools.length - 1
+            prev > 0 ? prev - 1 : tools.length - 1
           );
           break;
         case 'Enter':
           e.preventDefault();
-          if (focusedIndex >= 0 && filteredTools[focusedIndex]) {
-            onToolSelect(filteredTools[focusedIndex]);
+          if (focusedIndex >= 0 && tools[focusedIndex]) {
+            onToolSelect(tools[focusedIndex]);
             onClose();
           }
           break;
@@ -96,7 +81,7 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, focusedIndex, filteredTools, onToolSelect, onClose]);
+  }, [isOpen, focusedIndex, tools, onToolSelect, onClose]);
 
   // Fechar ao clicar fora
   useEffect(() => {
@@ -128,29 +113,12 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
         ref={dropdownRef}
         className={`absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-50 overflow-hidden animate-fade-in ${className}`}
       >
-        {/* Header com busca */}
-        <div className="p-3 border-b border-gray-100">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Buscar ferramentas..."
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setFocusedIndex(-1);
-              }}
-              className="w-full pl-10 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-200 focus:border-orange-400 transition-colors"
-            />
-          </div>
-        </div>
 
         {/* Lista de ferramentas */}
         <div className="max-h-80 overflow-y-auto">
-          {filteredTools.length > 0 ? (
+          {tools.length > 0 ? (
             <div className="p-1">
-              {filteredTools.map((tool, index) => {
+              {tools.map((tool, index) => {
                 const IconComponent = getIconComponent(tool.icon);
                 const isFocused = index === focusedIndex;
                 
@@ -179,9 +147,6 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
                       <div className="font-medium text-sm truncate">
                         {tool.name}
                       </div>
-                      <div className="text-xs text-gray-500 truncate">
-                        {tool.description}
-                      </div>
                     </div>
                   </button>
                 );
@@ -197,12 +162,6 @@ export const ToolsDropdown: React.FC<ToolsDropdownProps> = ({
           )}
         </div>
 
-        {/* Footer com dica */}
-        <div className="px-3 py-2 bg-gray-50 border-t border-gray-100">
-          <p className="text-xs text-gray-500 text-center">
-            Use ↑↓ para navegar, Enter para selecionar
-          </p>
-        </div>
       </div>
     </>
   );

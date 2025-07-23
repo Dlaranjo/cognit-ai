@@ -13,7 +13,6 @@ import { AppTemplate } from './components/templates/AppTemplate';
 import {
   AuthPage,
   StudioPage,
-  AgentsPage,
   WorkflowsPage,
 } from './pages';
 import { Spinner } from './components/atoms';
@@ -56,7 +55,6 @@ function App() {
 
                 {/* Main application routes */}
                 <Route path="studio" element={<StudioPage />} />
-                <Route path="agents" element={<AgentsPage />} />
                 <Route path="workflows" element={<WorkflowsPage />} />
               </Route>
 

@@ -18,6 +18,7 @@ import { conversationsReducer } from './conversations/conversationsReducer';
 import { workspacesReducer } from './workspaces/workspacesReducer';
 import { uiReducer } from './ui/uiReducer';
 import agentsReducer from './agents/agentsReducer';
+import workflowsReducer from './workflows/workflowsReducer';
 import type { RootState } from '../types';
 
 // Combine reducers
@@ -28,6 +29,7 @@ const rootReducer = combineReducers({
   workspaces: workspacesReducer,
   ui: uiReducer,
   agents: agentsReducer,
+  workflows: workflowsReducer,
 });
 
 // Persist configuration
@@ -35,7 +37,7 @@ const persistConfig = {
   key: 'root',
   storage,
   whitelist: ['auth', 'ui'], // Only persist auth and ui state
-  blacklist: ['chat', 'conversations', 'workspaces', 'agents'], // Don't persist these
+  blacklist: ['chat', 'conversations', 'workspaces', 'agents', 'workflows'], // Don't persist these
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

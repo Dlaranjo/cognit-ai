@@ -522,28 +522,12 @@ export const mockLLMProviders = [
 
 export const mockTools = [
   {
-    id: 'calculator',
-    name: 'Calculadora',
-    description: 'Realizar cálculos matemáticos complexos',
-    icon: 'Calculator',
-    color: 'from-blue-500 to-blue-600',
-    category: 'Matemática'
-  },
-  {
     id: 'web-search',
     name: 'Busca Web',
     description: 'Pesquisar informações atualizadas na internet',
     icon: 'Globe',
     color: 'from-green-500 to-green-600',
     category: 'Pesquisa'
-  },
-  {
-    id: 'document-analyzer',
-    name: 'Analisador de Documentos',
-    description: 'Analisar e extrair informações de documentos',
-    icon: 'FileText',
-    color: 'from-purple-500 to-purple-600',
-    category: 'Documentos'
   },
   {
     id: 'image-generator',
@@ -563,7 +547,7 @@ export const mockTools = [
   },
   {
     id: 'data-analyzer',
-    name: 'Analisador de Dados',
+    name: 'Analista de Dados',
     description: 'Analisar dados e criar visualizações',
     icon: 'BarChart3',
     color: 'from-orange-500 to-orange-600',
@@ -576,5 +560,13 @@ export const mockTools = [
     icon: 'Database',
     color: 'from-teal-500 to-teal-600',
     category: 'Dados'
+  },
+  {
+    id: 'slide-creator',
+    name: 'Criador de Slides',
+    description: 'Criar apresentações automáticas com tema da Cognit AI',
+    icon: 'FileText',
+    color: 'from-orange-500 to-red-500',
+    category: 'Apresentação'
   }
 ];

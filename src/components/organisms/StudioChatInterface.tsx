@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Send, Paperclip, X, ChevronDown, Sparkles, Search, Square, Wrench, ArrowDown } from 'lucide-react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Send, Paperclip, X, ChevronDown, Sparkles, Square, Wrench, ArrowDown, Calculator, Globe, FileText, Image, Code, BarChart3, Database } from 'lucide-react';
 import { MessageBubble, TypingIndicator, StreamingMessage } from '../molecules';
 import { ToolsDropdown } from '../molecules/ToolsDropdown';
 import { useChat } from '../../hooks/useChat';
@@ -7,7 +7,7 @@ import { useStreaming } from '../../hooks/useStreaming';
 import { useAppSelector, useAppDispatch } from '../../redux/store';
 import { selectStreamingMessage } from '../../redux/chat/chatSelectors';
 import { removeLastAssistantMessage } from '../../redux/chat/chatReducer';
-import { createAvailableModels, getPriceBadgeColor, logger } from '../../shared/utils';
+import { createAvailableModels, logger } from '../../shared/utils';
 import { formatFileSize, getFileIcon, getFileTypeLabel } from '../../shared/utils/fileUtils';
 import { mockTools } from '../../api/mock/mockData';
 import type { LLMModel, Message, Tool } from '../../types';
@@ -43,8 +43,9 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   const [message, setMessage] = useState('');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [showModelSelector, setShowModelSelector] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [showToolsMenu, setShowToolsMenu] = useState(false);
+  const [focusedModelIndex, setFocusedModelIndex] = useState(-1);
+  const [selectedTool, setSelectedTool] = useState<Tool | null>(null);
 
   // Scroll state
   const [shouldAutoScroll, setShouldAutoScroll] = useState(true);
@@ -136,18 +137,11 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
     }
   }, [reduxSelectedModel, selectedModel.id, availableModels]);
 
-  const handleModelSelect = (model: LLMModel) => {
+  const handleModelSelect = useCallback((model: LLMModel) => {
     setSelectedModel(model);
     changeModel(model.id);
-    setSearchQuery('');
-  };
+  }, [changeModel]);
 
-  // Filter models based on search query
-  const filteredModels = availableModels.filter(model => 
-    model.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    model.provider.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    model.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handleSendOrStop = () => {
     if (isStreaming || streamingMessage) {
@@ -307,7 +301,7 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
 
   const handleToolSelect = (tool: Tool) => {
     console.log('Tool selected:', tool);
-    // TODO: Implementar lógica de seleção de ferramenta
+    setSelectedTool(tool);
     setShowToolsMenu(false);
   };
   const handleCopyMessage = (messageContent: string) => {
@@ -377,6 +371,50 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
   useEffect(() => {
     adjustTextareaHeight();
   }, [message]);
+
+  // Navegação por teclado no seletor de modelos
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!showModelSelector) return;
+
+      switch (e.key) {
+        case 'Escape':
+          setShowModelSelector(false);
+          setFocusedModelIndex(-1);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          setFocusedModelIndex(prev => 
+            prev < availableModels.length - 1 ? prev + 1 : 0
+          );
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          setFocusedModelIndex(prev => 
+            prev > 0 ? prev - 1 : availableModels.length - 1
+          );
+          break;
+        case 'Enter':
+          e.preventDefault();
+          if (focusedModelIndex >= 0 && availableModels[focusedModelIndex]) {
+            handleModelSelect(availableModels[focusedModelIndex]);
+            setShowModelSelector(false);
+            setFocusedModelIndex(-1);
+          }
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showModelSelector, focusedModelIndex, availableModels, handleModelSelect]);
+
+  // Reset focused index when dropdown closes
+  useEffect(() => {
+    if (!showModelSelector) {
+      setFocusedModelIndex(-1);
+    }
+  }, [showModelSelector]);
 
   const hasMessages = messages && Array.isArray(messages) && messages.length > 0;
 
@@ -544,6 +582,30 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                     tools={mockTools}
                   />
                 </div>
+
+                {/* Selected Tool Badge */}
+                {selectedTool && (
+                  <div className="flex items-center space-x-2 text-orange-600 px-2 py-1 rounded-md text-sm font-medium hover:bg-orange-50 transition-colors cursor-pointer">
+                    <div className="w-4 h-4 flex items-center justify-center">
+                      {selectedTool.icon === 'Calculator' ? <Calculator className="w-3.5 h-3.5" /> :
+                       selectedTool.icon === 'Globe' ? <Globe className="w-3.5 h-3.5" /> :
+                       selectedTool.icon === 'FileText' ? <FileText className="w-3.5 h-3.5" /> :
+                       selectedTool.icon === 'Image' ? <Image className="w-3.5 h-3.5" /> :
+                       selectedTool.icon === 'Code' ? <Code className="w-3.5 h-3.5" /> :
+                       selectedTool.icon === 'BarChart3' ? <BarChart3 className="w-3.5 h-3.5" /> :
+                       selectedTool.icon === 'Database' ? <Database className="w-3.5 h-3.5" /> : 
+                       <Wrench className="w-3.5 h-3.5" />}
+                    </div>
+                    <span>{selectedTool.name}</span>
+                    <button
+                      onClick={() => setSelectedTool(null)}
+                      className="w-4 h-4 rounded hover:bg-orange-100 flex items-center justify-center transition-colors"
+                      title="Remover ferramenta"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Right side controls */}
@@ -561,71 +623,50 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                   {/* Model Dropdown */}
                   {showModelSelector && (
                     <>
-                      <div className="fixed inset-0 z-10" onClick={() => setShowModelSelector(false)} />
-                      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-80 overflow-hidden">
-                        {/* Search Header */}
-                        <div className="p-3 border-b border-gray-100">
-                          <div className="relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                            <input
-                              type="text"
-                              placeholder="Pesquisar modelo..."
-                              value={searchQuery}
-                              onChange={(e) => setSearchQuery(e.target.value)}
-                              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                              autoFocus
-                            />
+                      <div className="fixed inset-0 z-40" onClick={() => setShowModelSelector(false)} />
+                      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-50 overflow-hidden animate-fade-in">
+                        {/* Models List */}
+                        <div className="max-h-80 overflow-y-auto">
+                          <div className="p-1">
+                            {availableModels.map((model, index) => {
+                              const isFocused = index === focusedModelIndex;
+                              const isSelected = selectedModel.id === model.id;
+                              
+                              return (
+                              <button
+                                key={model.id}
+                                onClick={() => {
+                                  handleModelSelect(model);
+                                  setShowModelSelector(false);
+                                  setFocusedModelIndex(-1);
+                                }}
+                                onMouseEnter={() => setFocusedModelIndex(index)}
+                                className={`group/model relative w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left transition-all duration-150 ${
+                                  isFocused || isSelected
+                                    ? 'bg-orange-50 text-orange-700'
+                                    : 'text-gray-700 hover:bg-gray-50'
+                                }`}
+                              >
+                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
+                                  isFocused || isSelected
+                                    ? 'bg-orange-500 text-white'
+                                    : 'bg-gray-100 text-gray-600'
+                                }`}>
+                                  <div className="text-xs font-bold">
+                                    {model.provider === 'OpenAI' ? 'AI' :
+                                     model.provider === 'Anthropic' ? 'AN' :
+                                     model.provider === 'Google' ? 'GO' : 'ME'}
+                                  </div>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium text-sm truncate">{model.name}</div>
+                                </div>
+                              </button>
+                              );
+                            })}
                           </div>
                         </div>
 
-                        {/* Models List */}
-                        <div className="overflow-y-auto max-h-64">
-                          {filteredModels.length > 0 ? (
-                            <div className="p-2">
-                              {filteredModels.map((model) => (
-                                <button
-                                  key={model.id}
-                                  onClick={() => {
-                                    handleModelSelect(model);
-                                    setShowModelSelector(false);
-                                  }}
-                                  className={`w-full p-3 rounded-lg text-left transition-all mb-1 ${
-                                    selectedModel.id === model.id
-                                      ? 'bg-orange-50 text-orange-700 border border-orange-200'
-                                      : 'hover:bg-orange-50 hover:text-orange-600'
-                                  }`}
-                                >
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-center justify-between">
-                                      <div>
-                                        <div className="font-medium text-gray-900 text-sm">{model.name}</div>
-                                        <div className="text-xs text-gray-500 flex items-center space-x-2">
-                                          <span>{model.provider}</span>
-                                          <span>•</span>
-                                          <span title="Janela de contexto">📄 {(model.contextWindow / 1000).toFixed(0)}K</span>
-                                        </div>
-                                      </div>
-                                      <div className="flex items-center space-x-2">
-                                        <div className={`text-xs px-2 py-0.5 rounded-full ${getPriceBadgeColor(model.priceCategory)}`}>
-                                          {model.pricing.input === 0 ? 'Gratuito' : 
-                                           model.priceCategory === 'low' ? '💰' :
-                                           model.priceCategory === 'medium' ? '💰💰' : '💰💰💰'}
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="text-xs text-gray-600 mt-1 truncate" title={model.description}>
-                                      {model.description}
-                                    </div>
-                                  </div>
-                                </button>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="p-4 text-center text-gray-500 text-sm">
-                              Nenhum modelo encontrado para "{searchQuery}"
-                            </div>
-                          )}
-                        </div>
                       </div>
                     </>
                   )}

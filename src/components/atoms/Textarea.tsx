@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, forwardRef, useImperativeHandle } from 'react';
 import { useAutoResize } from '../../hooks';
 
 export interface TextareaProps {
@@ -36,7 +36,7 @@ const resizeClasses = {
   both: 'resize',
 };
 
-export const Textarea: React.FC<TextareaProps> = memo(({
+export const Textarea = memo(forwardRef<HTMLTextAreaElement, TextareaProps>(({
   value = '',
   onChange,
   placeholder,
@@ -56,14 +56,17 @@ export const Textarea: React.FC<TextareaProps> = memo(({
   onKeyDown,
   resize = 'vertical',
   size = 'md',
-}) => {
+}, ref) => {
   // Use custom hook for auto-resize functionality
-  const textareaRef = useAutoResize({
+  const internalRef = useAutoResize({
     value: value || '',
     enabled: autoResize,
     minRows: rows,
     maxRows
   });
+
+  // Expose the internal ref to the parent component
+  useImperativeHandle(ref, () => internalRef.current!, [internalRef]);
 
   const baseClasses = `
     w-full border border-gray-300 rounded-lg transition-colors duration-200
@@ -92,7 +95,7 @@ export const Textarea: React.FC<TextareaProps> = memo(({
       )}
       
       <textarea
-        ref={textareaRef}
+        ref={internalRef}
         id={id}
         name={name}
         value={value}
@@ -119,6 +122,6 @@ export const Textarea: React.FC<TextareaProps> = memo(({
       )}
     </div>
   );
-});
+}));
 
 Textarea.displayName = 'Textarea';

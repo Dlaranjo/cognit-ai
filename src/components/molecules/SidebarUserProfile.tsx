@@ -32,7 +32,7 @@ export const SidebarUserProfile: React.FC<SidebarUserProfileProps> = ({
   return (
     <div className={`${isExpanded ? 'px-4' : 'px-2'} py-4 border-t border-gray-200 transition-[padding] duration-200 ${className} relative`}>
       <div
-        className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-[gap,justify-content] duration-200 ${isExpanded ? 'cursor-pointer hover:bg-gray-50 rounded-lg p-2 -m-2' : ''} group/profile min-h-[2.5rem]`}
+        className={`flex items-center ${isExpanded ? 'space-x-3' : 'justify-center'} transition-[gap,justify-content] duration-200 ${isExpanded ? 'cursor-pointer hover:bg-gray-50 rounded-lg p-2 -m-2' : ''} group/profile`}
         onClick={toggleDropdown}
       >
         <Avatar

@@ -1,204 +1,157 @@
-# Claude Code - Diretrizes Técnicas
+# CLAUDE - Checklist de Validação Técnica
 
 ## 🎯 Objetivo
 
-Diretrizes técnicas para desenvolvimento e manutenção do **Cognit AI Platform** seguindo padrões enterprise com Atomic Design.
+Checklist técnico obrigatório para validação de conformidade do **Cognit AI Platform** durante code review e refatoração sistemática.
 
-> **📖 Referências**: `PLANNING.md` (arquitetura), `PRD.md` (funcional), `TASKS.md` (status atual)
+> **📖 Referências**: `PLANNING.md` (metodologia), `PRD.md` (problemas identificados), `TASKS.md` (roadmap revisão)
 
-## 🏗️ Stack Tecnológica Atualizada
+## 🚨 **PROBLEMAS CRÍTICOS A VALIDAR**
 
-### **Base Mantida (Enterprise Ready)**
-- **React 18+** com TypeScript strict mode
-- **Redux Toolkit** para estado global
-- **React Router v6** para roteamento
-- **Axios** para HTTP com interceptors
-- **Tailwind CSS** + Design System
-- **Vite** como build tool
-- **Vitest** + React Testing Library
+**Conformidade Atual**: 73% → **Meta**: 95%+
 
-### **Novas Integrações Frontend (Entregas 1 & 2)**
-- **MCP Client** para comunicação com servidor MCP externo
-- **Google APIs Client** (Sheets, Drive, Gmail) - via frontend SDKs
-- **n8n Iframe Embedding** com sandbox seguro
-- **PostMessage API** para comunicação com iframe n8n
+### ❌ Logging System (CRÍTICO)
+- **Problema**: 47+ console.logs sem proteção
+- **Localizar**: `grep -r "console\." src/`
+- **Corrigir**: Usar `logger.dev()`, `logger.error()`
+- **Arquivo**: `src/shared/utils/logger.ts`
 
-## 📁 Estrutura Atualizada
+### ❌ Import Patterns (ALTO)  
+- **Problema**: Barrel exports inconsistentes
+- **Localizar**: `grep -r "from.*components.*/" src/`
+- **Corrigir**: Usar `from '@/components/atoms'`
+- **Validar**: `index.ts` em cada pasta components/
 
-```
-src/
-├── api/              # HTTP + Client SDKs apenas
-│   ├── mcp/          # MCP Client (comunica com servidor externo)
-│   ├── google/       # Google APIs Client SDKs
-│   └── n8n/          # n8n client communication (iframe bridge)
-├── components/
-│   ├── atoms/        # Button, Input, Icon, Avatar, Badge
-│   ├── molecules/    # SearchBar, MessageBubble, UserProfile
-│   ├── organisms/    # ChatInterface, WorkflowCanvas, N8nEmbed
-│   └── templates/    # StudioTemplate, WorkflowTemplate
-├── pages/            # Studio, Workflows, Agents
-├── hooks/            # useN8n, useMCP, useGoogleAPI (frontend hooks)
-├── redux/            # auth, chat, workflows, n8nState
-├── shared/           # Config, types, utils, constants
-├── templates/        # Prompt templates por área empresarial
-└── workflows/        # Workflow UI templates e utilities
-```
+### ⚠️ TypeScript Strict (ALTO)
+- **Problema**: Tipos implícitos e `any`
+- **Localizar**: `grep -r ": any" src/`
+- **Corrigir**: Interfaces explícitas
+- **Garantir**: 100% strict mode compliance
 
-## 🎨 Atomic Design
+## ✅ Checklist de Validação por Arquivo
 
-### Atoms (Elementos UI Básicos)
-- **Responsabilidade**: Apenas UI, sem lógica de negócio
-- **Props**: Totalmente tipadas e reutilizáveis
-- **Exemplos**: Button, Input, Icon, Avatar, Badge
-
-### Molecules (Composição de Atoms)
-- **Responsabilidade**: Combinações funcionais de atoms
-- **Estado**: Local simples permitido
-- **Exemplos**: SearchBar, MessageBubble, UserProfile
-
-### Organisms (Lógica + Composição)
-- **Responsabilidade**: Lógica de negócio + molecules/atoms
-- **Estado**: Conectados ao Redux quando necessário
-- **Exemplos**: ChatInterface, ConversationList, Header
-
-### Templates (Layout)
-- **Responsabilidade**: Estrutura de página + composição organisms
-- **Exemplos**: StudioTemplate, LoginTemplate
-
-## ⚙️ Redux - Módulos
-
-### Estrutura Padrão
+### **1. LOGGING COMPLIANCE**
 ```typescript
-// Cada módulo deve ter:
-- actions.ts    # Async actions (createAsyncThunk)
-- reducer.ts    # Slice (createSlice)  
-- types.ts      # Interfaces específicas
+// ❌ PROIBIDO
+console.log("Debug info");
+console.error("Error occurred");
+
+// ✅ OBRIGATÓRIO  
+import { logger } from '@/shared/utils/logger';
+logger.dev("Debug info", data);
+logger.error("Error occurred", error);
 ```
 
-### Módulos Atualizados
-- **auth**: user, token, isAuthenticated, googleAPIs
-- **chat**: messages, selectedModel, isTyping, templates
-- **conversations**: lista, favorites, searchQuery (mantido)
-- **workflows**: n8nState, activeWorkflow, templates
-- **n8n**: connection, sync, iframe, mcpClient
-- **google**: sheets, drive, gmail, authentication
-
-## 🎯 Design System
-
-### Tokens
+### **2. IMPORT PATTERNS**
 ```typescript
+// ✅ CORRETO - Barrel exports
+import { Button, Input } from '@/components/atoms';
+import { SearchBar } from '@/components/molecules';
+import { ChatInterface } from '@/components/organisms';
+
+// ❌ EVITAR - Imports diretos desnecessários
+import Button from '@/components/atoms/Button';
+import Input from '@/components/atoms/Input';
+```
+
+### **3. TYPESCRIPT STRICT**
+```typescript
+// ✅ CORRETO - Props totalmente tipadas
+interface ButtonProps {
+  variant: 'primary' | 'secondary';
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+// ❌ PROIBIDO - any ou tipos implícitos
+const handleClick = (data: any) => { ... }
+const handleClick = (data) => { ... } // implícito
+```
+
+## 📁 Atomic Design - Estrutura Obrigatória
+
+```
+src/components/
+├── atoms/        # ✅ UI básico: Button, Input, Icon, Avatar
+├── molecules/    # ✅ Combinações: SearchBar, MessageBubble  
+├── organisms/    # ✅ Lógica + UI: ChatInterface, Header
+└── templates/    # ✅ Layout: StudioTemplate, LoginTemplate
+```
+
+### **4. ATOMIC DESIGN COMPLIANCE**
+- **atoms/**: Sem lógica de negócio, apenas UI
+- **molecules/**: Estado local simples permitido
+- **organisms/**: Conectados ao Redux quando necessário  
+- **templates/**: Estrutura de página + composição
+
+## 🎨 Design System - Tokens Obrigatórios
+
+```typescript
+// CORES PADRÃO - NÃO ALTERAR
 colors: {
   primary: '#FF6B35',      // Laranja Cognit
   secondary: '#2D3748',    // Cinza escuro
-  success: '#48BB78',      // Verde
+  success: '#48BB78',      // Verde  
   warning: '#ED8936',      // Laranja warning
   error: '#E53E3E',        // Vermelho
 }
 
-spacing: ['4px', '8px', '16px', '24px', '32px', '48px', '64px']
-fontSize: ['12px', '14px', '16px', '18px', '24px', '32px', '48px']
+// USAR CLASSES TAILWIND CORRESPONDENTES
+'bg-primary' 'text-secondary' 'border-success'
 ```
 
-## ✅ Padrões de Qualidade
+## ⚙️ Comandos de Verificação OBRIGATÓRIOS
 
-### TypeScript
-- **Strict mode** ativado
-- **Zero `any`** - sempre tipar especificamente
-- **Props tipadas** em todos os componentes
-- **Interfaces** bem definidas
-
-### Performance
-- **React.memo** para componentes puros
-- **useMemo/useCallback** quando necessário
-- **Lazy loading** de rotas
-- **Code splitting** por feature
-
-### Testes
-- **80%+ coverage** para utils e hooks
-- **Render + interactions** para componentes
-- **Actions/reducers** para Redux
-- **Mocks** para APIs externas
-
-## 🚀 Comandos Obrigatórios
-
+### **SEMPRE Executar Após Mudanças**
 ```bash
-npm run lint      # ESLint sem erros
+npm run lint      # ESLint deve passar 100%
 npm run typecheck # TypeScript sem erros  
-npm run test      # Testes passando (incluindo MCP/n8n mocks)
-npm run build     # Build funcionando
-npm run n8n:setup # Setup servidor n8n local (desenvolvimento)
+npm run test      # Testes não podem quebrar
+npm run build     # Build deve funcionar
 ```
 
-## ❌ Práticas Proibidas
-
-- Usar `any` em TypeScript
-- Acessar `process.env` diretamente (usar config.ts)
-- setState em useEffect sem cleanup
-- Commits sem passar comandos de verificação
-- Componentes sem tipagem
-- Mutação direta de estado Redux
-- console.log em produção (exceto modo mock - ver seção Logging)
-- **n8n iframe sem sandbox** (segurança crítica)
-- **MCP calls sem error handling** (comunicação externa)
-- **Google APIs sem rate limiting** (quotas organizacionais)
-
-## 🔄 Ambiente Mockado (Produção Atual)
-
-⚠️ **IMPORTANTE**: O projeto atualmente usa **dados mockados em produção** até a API real ser desenvolvida.
-
-### Configuração de Mock
-```typescript
-// Variáveis de ambiente atuais
-VITE_USE_MOCK=true          # Ativa modo mock
-VITE_API_BASE_URL=mock      # Indica modo mock ativo
-```
-
-### Sistema de Logging para Mock
-```typescript
-// src/shared/utils/logger.ts - DEVE SER IMPLEMENTADO
-const isDev = import.meta.env.DEV;
-const isMockMode = import.meta.env.VITE_USE_MOCK === 'true';
-
-export const logger = {
-  // Permitido em desenvolvimento OU modo mock
-  mock: (message: string, data?: any) => {
-    if (isDev || isMockMode) {
-      console.log(`[MOCK] ${message}`, data);
-    }
-  },
-  
-  // Logs de desenvolvimento protegidos
-  dev: (message: string, data?: any) => {
-    if (isDev) {
-      console.log(`[DEV] ${message}`, data);
-    }
-  },
-  
-  // Errors sempre permitidos
-  error: (message: string, error?: any) => {
-    console.error(`[ERROR] ${message}`, error);
-  }
-};
-```
-
-## 📊 Status Atual - REFATORAÇÃO NECESSÁRIA
-
-⚠️ **Conformidade com Diretrizes**: 73% (Requer Ação)
-
-### ✅ Conformes
-- **TypeScript**: 100% strict, zero `any`
-- **Atomic Design**: 92% implementado
-- **Redux**: 92% estrutura completa
-- **Funcionalidades**: 100% operacionais
-
-### ❌ Não Conformes (Requerem Correção)
-- **Logging**: 0% - 47 console.logs sem proteção
-- **Imports**: 65% - Barrel exports não utilizados consistentemente
-
-### 🔧 Comandos de Verificação
+### **Busca de Problemas**
 ```bash
-npm run lint         # ❌ Falhas por console.logs  
-npm run typecheck    # ✅ Passa
-npm run test         # ✅ 27+ testes passando
-npm run build        # ✅ Passa (mas inclui console.logs)
+# Localizar console.logs
+grep -r "console\." src/ --include="*.ts" --include="*.tsx"
+
+# Localizar imports diretos
+grep -r "from.*components.*/" src/ --include="*.ts" --include="*.tsx"  
+
+# Localizar tipos any
+grep -r ": any" src/ --include="*.ts" --include="*.tsx"
 ```
+
+## ❌ Práticas PROIBIDAS
+
+- **Usar `any`** em TypeScript - sempre tipos explícitos
+- **console.log direto** - usar logger.dev() ou logger.error()
+- **Imports diretos** - usar barrel exports consistentemente  
+- **Componentes sem tipagem** - sempre interface/type
+- **Mutação direta Redux** - usar createSlice
+- **Quebrar funcionalidades** - testar sempre após mudanças
+
+## 📊 Status de Conformidade
+
+### **Meta: 73% → 95%+**
+
+**✅ Mantidos (Não Alterar)**
+- Funcionalidades: 100% operacionais
+- TypeScript: 100% strict mode
+- Architecture: 92% Atomic Design
+
+**❌ Críticos (Corrigir Obrigatoriamente)**  
+- Logging: 0% conforme (47 console.logs)
+- Imports: 65% conforme (inconsistente)
+
+## 🎯 Fluxo de Validação
+
+**Para cada arquivo revisado:**
+
+1. ✅ **Localizar problemas** (grep console.log, imports, any)
+2. ✅ **Aplicar correções** (logger, barrel exports, tipos)
+3. ✅ **Executar comandos** (lint, typecheck, test, build)
+4. ✅ **Validar funcionalidade** (não quebrar features)
+5. ✅ **Documentar mudanças** (o que foi corrigido)
+
+**🚨 CRÍTICO**: Projeto em produção - zero quebras permitidas.

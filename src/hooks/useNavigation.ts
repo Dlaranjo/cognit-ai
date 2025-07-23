@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { Bot, Sparkles, Workflow } from 'lucide-react';
+import { Sparkles, Workflow } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 export interface NavigationItem {
@@ -26,16 +26,8 @@ export const useNavigation = () => {
       path: '/studio',
     },
     {
-      id: 'agents',
-      label: 'Workflows',
-      icon: Bot,
-      description: 'AI Workflows',
-      fullDescription: 'Automações de processos com IA',
-      path: '/agents',
-    },
-    {
       id: 'workflows',
-      label: 'n8n Workflows',
+      label: 'Workflows',
       icon: Workflow,
       description: 'Visual Workflows',
       fullDescription: 'Editor visual de workflows com n8n',
@@ -53,7 +45,6 @@ export const useNavigation = () => {
   const getCurrentView = (): string => {
     const currentPath = location.pathname;
     if (currentPath === '/' || currentPath.startsWith('/studio')) return 'studio';
-    if (currentPath.startsWith('/agents')) return 'agents';
     if (currentPath.startsWith('/workflows')) return 'workflows';
     return 'studio';
   };

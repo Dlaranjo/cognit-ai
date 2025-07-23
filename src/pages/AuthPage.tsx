@@ -21,7 +21,7 @@ export const AuthPage: React.FC = () => {
           id: '1',
           email: email,
           name: email.split('@')[0],
-          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=6366f1&color=fff`
+          avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(email.split('@')[0])}&background=ea580c&color=fff`
         };
         
         // Set dummy tokens in localStorage

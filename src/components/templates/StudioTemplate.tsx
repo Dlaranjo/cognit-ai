@@ -87,13 +87,13 @@ export const StudioTemplate: React.FC = () => {
         <button
           onClick={() => setShowKnowledgeModal(true)}
           className="group relative bg-white/80 backdrop-blur-sm border border-gray-200/50 hover:bg-white/90 hover:border-gray-300/60 text-gray-600 hover:text-gray-700 p-2.5 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110 active:scale-95"
-          title="Knowledge Base"
+          title="Base de Conhecimento"
         >
           <Database className="w-4 h-4" />
 
           {/* Tooltip */}
           <div className="absolute right-full mr-2 top-1/2 -translate-y-1/2 bg-gray-900/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-all duration-150 whitespace-nowrap pointer-events-none delay-75">
-            Knowledge Base
+            Base de Conhecimento
             <div className="absolute left-full top-1/2 -translate-y-1/2 border-2 border-transparent border-l-gray-900/90"></div>
           </div>
         </button>
