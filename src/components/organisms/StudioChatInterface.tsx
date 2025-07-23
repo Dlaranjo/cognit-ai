@@ -613,18 +613,104 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                   rows={1}
                 />
               </div>
+            </div>
 
-              {/* Controls */}
-              <div className="flex items-center space-x-2 ml-4">
-                {/* File Upload */}
-                <button
-                  onClick={handleFileSelect}
-                  disabled={Boolean(isLoading)}
-                  className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
-                  title="Anexar arquivo"
-                >
-                  <Paperclip className="w-5 h-5" />
-                </button>
+            {/* Bottom Controls */}
+            <div className="flex items-center justify-between px-4 pb-4">
+              {/* File Upload - Left side */}
+              <button
+                onClick={handleFileSelect}
+                disabled={Boolean(isLoading)}
+                className="p-2 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-lg transition-colors disabled:opacity-50"
+                title="Anexar arquivo"
+              >
+                <Paperclip className="w-5 h-5" />
+              </button>
+
+              {/* Right side controls */}
+              <div className="flex items-center space-x-3">
+                {/* Model Selector */}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowModelSelector(!showModelSelector)}
+                    className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                  >
+                    <span>{selectedModel.name}</span>
+                    <ChevronDown className={`w-3 h-3 transition-transform ${showModelSelector ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  {/* Model Dropdown */}
+                  {showModelSelector && (
+                    <>
+                      <div className="fixed inset-0 z-10" onClick={() => setShowModelSelector(false)} />
+                      <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-80 overflow-hidden">
+                        {/* Search Header */}
+                        <div className="p-3 border-b border-gray-100">
+                          <div className="relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            <input
+                              type="text"
+                              placeholder="Pesquisar modelo..."
+                              value={searchQuery}
+                              onChange={(e) => setSearchQuery(e.target.value)}
+                              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                              autoFocus
+                            />
+                          </div>
+                        </div>
+
+                        {/* Models List */}
+                        <div className="overflow-y-auto max-h-64">
+                          {filteredModels.length > 0 ? (
+                            <div className="p-2">
+                              {filteredModels.map((model) => (
+                                <button
+                                  key={model.id}
+                                  onClick={() => {
+                                    handleModelSelect(model);
+                                    setShowModelSelector(false);
+                                  }}
+                                  className={`w-full p-3 rounded-lg text-left transition-all mb-1 ${
+                                    selectedModel.id === model.id
+                                      ? 'bg-orange-50 text-orange-700 border border-orange-200'
+                                      : 'hover:bg-orange-50 hover:text-orange-600'
+                                  }`}
+                                >
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between">
+                                      <div>
+                                        <div className="font-medium text-gray-900 text-sm">{model.name}</div>
+                                        <div className="text-xs text-gray-500 flex items-center space-x-2">
+                                          <span>{model.provider}</span>
+                                          <span>•</span>
+                                          <span title="Janela de contexto">📄 {(model.contextWindow / 1000).toFixed(0)}K</span>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center space-x-2">
+                                        <div className={`text-xs px-2 py-0.5 rounded-full ${getPriceBadgeColor(model.priceCategory)}`}>
+                                          {model.pricing.input === 0 ? 'Gratuito' : 
+                                           model.priceCategory === 'low' ? '💰' :
+                                           model.priceCategory === 'medium' ? '💰💰' : '💰💰💰'}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="text-xs text-gray-600 mt-1 truncate" title={model.description}>
+                                      {model.description}
+                                    </div>
+                                  </div>
+                                </button>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="p-4 text-center text-gray-500 text-sm">
+                              Nenhum modelo encontrado para "{searchQuery}"
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
 
                 {/* Send/Stop Button */}
                 <button
@@ -644,97 +730,6 @@ export const StudioChatInterface: React.FC<StudioChatInterfaceProps> = ({
                     <Send className="w-5 h-5" />
                   )}
                 </button>
-              </div>
-            </div>
-
-            {/* Bottom Controls */}
-            <div className="flex items-center justify-between px-4 pb-4">
-              {/* Model Selector */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowModelSelector(!showModelSelector)}
-                  className="flex items-center space-x-2 px-3 py-1.5 text-sm text-gray-600 hover:text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                >
-                  <span>{selectedModel.name}</span>
-                  <ChevronDown className={`w-3 h-3 transition-transform ${showModelSelector ? 'rotate-180' : ''}`} />
-                </button>
-
-                {/* Model Dropdown */}
-                {showModelSelector && (
-                  <>
-                    <div className="fixed inset-0 z-10" onClick={() => setShowModelSelector(false)} />
-                    <div className="absolute bottom-full left-0 mb-2 w-80 bg-white rounded-xl border border-gray-200 shadow-xl z-20 max-h-80 overflow-hidden">
-                      {/* Search Header */}
-                      <div className="p-3 border-b border-gray-100">
-                        <div className="relative">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                          <input
-                            type="text"
-                            placeholder="Pesquisar modelo..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                            autoFocus
-                          />
-                        </div>
-                      </div>
-
-                      {/* Models List */}
-                      <div className="overflow-y-auto max-h-64">
-                        {filteredModels.length > 0 ? (
-                          <div className="p-2">
-                            {filteredModels.map((model) => (
-                              <button
-                                key={model.id}
-                                onClick={() => {
-                                  handleModelSelect(model);
-                                  setShowModelSelector(false);
-                                }}
-                                className={`w-full p-3 rounded-lg text-left transition-all mb-1 ${
-                                  selectedModel.id === model.id
-                                    ? 'bg-orange-50 text-orange-700 border border-orange-200'
-                                    : 'hover:bg-orange-50 hover:text-orange-600'
-                                }`}
-                              >
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center justify-between">
-                                    <div>
-                                      <div className="font-medium text-gray-900 text-sm">{model.name}</div>
-                                      <div className="text-xs text-gray-500 flex items-center space-x-2">
-                                        <span>{model.provider}</span>
-                                        <span>•</span>
-                                        <span title="Janela de contexto">📄 {(model.contextWindow / 1000).toFixed(0)}K</span>
-                                      </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                      <div className={`text-xs px-2 py-0.5 rounded-full ${getPriceBadgeColor(model.priceCategory)}`}>
-                                        {model.pricing.input === 0 ? 'Gratuito' : 
-                                         model.priceCategory === 'low' ? '💰' :
-                                         model.priceCategory === 'medium' ? '💰💰' : '💰💰💰'}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className="text-xs text-gray-600 mt-1 truncate" title={model.description}>
-                                    {model.description}
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        ) : (
-                          <div className="p-4 text-center text-gray-500 text-sm">
-                            Nenhum modelo encontrado para "{searchQuery}"
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {/* Keyboard Shortcut */}
-              <div className="text-xs text-gray-400">
-                ⏎ Enter para enviar
               </div>
             </div>
           </div>
